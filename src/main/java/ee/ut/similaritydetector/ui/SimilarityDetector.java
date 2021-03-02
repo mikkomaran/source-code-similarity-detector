@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.java.ee.ut.similaritydetector.ui.controllers.MainController;
 
-public class Main extends Application {
+public class SimilarityDetector extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
