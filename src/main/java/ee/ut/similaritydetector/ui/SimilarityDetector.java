@@ -14,7 +14,6 @@ public class SimilarityDetector extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("../../../../../resources/ee/ut/similaritydetector/fxml/main.fxml"));
         primaryStage.setTitle("Source code similarity detector");
         Scene scene = new Scene(root, 1000, 700);
-        //scene.getStylesheets().add(getClass().getResource("../../../../../resources/ee/ut/similaritydetector/style/style.scss").toExternalForm());
         primaryStage.setScene(scene);
 
         primaryStage.show();

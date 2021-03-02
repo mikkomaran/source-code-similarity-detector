@@ -16,13 +16,13 @@
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <bottom>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" BorderPane.alignment="CENTER">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <Button fx:id="startButton" mnemonicParsing="false" onAction="#startAnalysis" prefHeight="34.0" prefWidth="85.0" text="Start analysis" />
                <ProgressBar fx:id="progressBar" prefHeight="20.0" prefWidth="300.0" progress="0.0" />
-               <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="36.0" text="0%" textAlignment="CENTER" />
+               <Label fx:id="progressPercentageLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="36.0" text="0%" textAlignment="CENTER" />
             </VBox>
          </bottom>
          <top>

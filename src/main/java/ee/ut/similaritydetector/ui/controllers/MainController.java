@@ -1,5 +1,6 @@
 package main.java.ee.ut.similaritydetector.ui.controllers;
 
+import javafx.concurrent.Task;
 import javafx.scene.layout.VBox;
 import main.java.ee.ut.similaritydetector.backend.Analyser;
 import javafx.fxml.FXML;
@@ -10,7 +11,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 
 
@@ -42,7 +42,7 @@ public class MainController {
         progressBar.setVisible(false);
         startButton.setVisible(false);
         fileArea.setVisible(false);
-        //fileNameLabel.setVisible(false);
+        progressPercentageLabel.setVisible(false);
     }
 
     @FXML
@@ -50,14 +50,16 @@ public class MainController {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("ZIP files (*.zip)", "*.zip");
         fileChooser.getExtensionFilters().add(extFilter);
+        if (zipDirectoryPath != null){
+            fileChooser.setInitialDirectory(zipDirectoryPath.getParent().toFile());
+        }
         File zipDirectory = fileChooser.showOpenDialog(stage);
         // If a zip file was selected
         if (zipDirectory != null) {
             zipDirectoryPath = zipDirectory.toPath();
-            System.out.println(zipDirectoryPath);
+            //System.out.println(zipDirectoryPath);
             fileNameLabel.setText(zipDirectoryPath.getFileName().toString());
             fileChooserButton.setVisible(false);
-            //fileNameLabel.setVisible(true);
             fileArea.setVisible(true);
             startButton.setVisible(true);
         }
@@ -66,11 +68,15 @@ public class MainController {
     @FXML
     private void startAnalysis() {
         progressBar.setVisible(true);
+        progressPercentageLabel.setVisible(true);
+        startButton.setVisible(false);
 
-        //Starts the code analysis on the backend service
+        //Starts the backend similarity analysis on a new thread
         Analyser analyser = new Analyser(zipDirectoryPath);
-        analyser.startAnalysis();
-
+        progressBar.progressProperty().bind(analyser.progressProperty());
+        Thread analyserThread = new Thread(analyser, "analyser_thread");
+        analyserThread.setDaemon(true);
+        analyserThread.start();
     }
 
 }
