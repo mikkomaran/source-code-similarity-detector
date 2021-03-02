@@ -12,6 +12,8 @@ import javafx.stage.Window;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.text.NumberFormat;
+import java.util.Formatter;
 
 
 public class MainController {
@@ -74,6 +76,7 @@ public class MainController {
         //Starts the backend similarity analysis on a new thread
         Analyser analyser = new Analyser(zipDirectoryPath);
         progressBar.progressProperty().bind(analyser.progressProperty());
+        progressPercentageLabel.textProperty().bind(analyser.progressProperty().multiply(100).asString("%.0f%%"));
         Thread analyserThread = new Thread(analyser, "analyser_thread");
         analyserThread.setDaemon(true);
         analyserThread.start();
