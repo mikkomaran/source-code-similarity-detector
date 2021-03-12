@@ -62,7 +62,8 @@ public class Analyser extends Task<Void> {
                         similarCount++;
                         solution1.similarSolutions.add(solution2);
                         solution2.similarSolutions.add(solution1);
-                        System.out.println(solution1.getExerciseName() + ": " + solution1.getAuthor() + ", " + solution2.getAuthor() + " - " + similarity);
+                        System.out.println(solution1.getExerciseName() + ": " + solution1.getAuthor() + ", " +
+                                solution2.getAuthor() + " - " + String.format("%.1f%%", similarity * 100));
                     }
                     analysedSolutionPairsCount++;
                     updateProgress(analysedSolutionPairsCount, totalSolutionPairsCount);
