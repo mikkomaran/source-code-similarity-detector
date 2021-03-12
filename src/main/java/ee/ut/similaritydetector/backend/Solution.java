@@ -1,14 +1,41 @@
 package main.java.ee.ut.similaritydetector.backend;
 
+import java.io.File;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Solution {
 
     private String author;
-    private String solutionName;
-    private List<String> sourceCode;
+    private String exerciseName;
+    private File sourceCodeFile;
+    private File preprocessedCodeFile;
+
+    private String sourceCode;
+    private String preprocessedCode;
+    private List<String> sourceCodeLines;
+
+    public Set<Solution> similarSolutions;
 
     public Solution() {
+        similarSolutions = new HashSet<>();
+    }
+
+    public Set<Solution> getSimilarSolutions() {
+        return similarSolutions;
+    }
+
+    public void setSimilarSolutions(Set<Solution> similarSolutions) {
+        this.similarSolutions = similarSolutions;
+    }
+
+    public String getSourceCode() {
+        return sourceCode;
+    }
+
+    public void setSourceCode(String sourceCode) {
+        this.sourceCode = sourceCode;
     }
 
     public String getAuthor() {
@@ -19,20 +46,44 @@ public class Solution {
         this.author = author;
     }
 
-    public String getSolutionName() {
-        return solutionName;
+    public String getPreprocessedCode() {
+        return preprocessedCode;
     }
 
-    public void setSolutionName(String solutionName) {
-        this.solutionName = solutionName;
+    public void setPreprocessedCode(String preprocessedCode) {
+        this.preprocessedCode = preprocessedCode;
     }
 
-    public List<String> getSourceCode() {
-        return sourceCode;
+    public File getSourceCodeFile() {
+        return sourceCodeFile;
     }
 
-    public void setSourceCode(List<String> sourceCode) {
-        this.sourceCode = sourceCode;
+    public void setSourceCodeFile(File sourceCodeFile) {
+        this.sourceCodeFile = sourceCodeFile;
+    }
+
+    public File getPreprocessedCodeFile() {
+        return preprocessedCodeFile;
+    }
+
+    public void setPreprocessedCodeFile(File preprocessedCodeFile) {
+        this.preprocessedCodeFile = preprocessedCodeFile;
+    }
+
+    public String getExerciseName() {
+        return exerciseName;
+    }
+
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
+    public List<String> getSourceCodeLines() {
+        return sourceCodeLines;
+    }
+
+    public void setSourceCodeLines(List<String> sourceCodeLines) {
+        this.sourceCodeLines = sourceCodeLines;
     }
 
 }
