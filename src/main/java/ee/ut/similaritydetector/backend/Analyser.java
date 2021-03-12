@@ -2,10 +2,10 @@ package main.java.ee.ut.similaritydetector.backend;
 
 import javafx.concurrent.Task;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -14,13 +14,13 @@ import static main.java.ee.ut.similaritydetector.backend.LevenshteinDistance.nor
 public class Analyser extends Task<Void> {
 
     public static final float SimilarityThreshold = 0.9f;
-    private final Path zipDirectoryPath;
+    private final File zipDirectory;
     private int totalSolutionPairsCount;
     private int analysedSolutionPairsCount;
     private int similarCount;
 
-    public Analyser(Path zipDirectoryPath) {
-        this.zipDirectoryPath = zipDirectoryPath;
+    public Analyser(File zipDirectory) {
+        this.zipDirectory = zipDirectory;
         totalSolutionPairsCount = 0;
         analysedSolutionPairsCount = 0;
     }
@@ -32,7 +32,7 @@ public class Analyser extends Task<Void> {
     }
 
     public void startAnalysis() {
-        SolutionParser solutionParser = new SolutionParser(zipDirectoryPath);
+        SolutionParser solutionParser = new SolutionParser(zipDirectory);
         Map<String, List<Solution>> allSolutions = solutionParser.parseSolutions2();
 
         for (String key : allSolutions.keySet()) {
@@ -86,8 +86,6 @@ public class Analyser extends Task<Void> {
     }
 
     /**
-     *
-     *
      * @param solution
      * @return
      */

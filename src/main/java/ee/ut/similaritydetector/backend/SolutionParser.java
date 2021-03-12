@@ -3,7 +3,6 @@ package main.java.ee.ut.similaritydetector.backend;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,23 +12,23 @@ import java.util.zip.ZipInputStream;
 
 public class SolutionParser {
 
-    private final Path contentDirectoryPath;
-    private final Path outputDirectoryPath = Path.of("resources/");
+    private final File contentDirectory;
+    private final File outputDirectory;
 
-    public SolutionParser(Path contentDirectoryPath) {
-        this.contentDirectoryPath = contentDirectoryPath;
+    public SolutionParser(File contentDirectory) {
+        this.contentDirectory = contentDirectory;
+        this.outputDirectory = new File("resources/");
     }
 
     public Map<String, List<Solution>> parseSolutions2() {
         Map<String, List<Solution>> solutions = new HashMap<>();
 
         // File unzipping taken from https://www.baeldung.com/java-compress-and-uncompress
-        File destDir = new File(outputDirectoryPath.toString());
         byte[] buffer = new byte[1024];
-        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(contentDirectoryPath.toFile()), StandardCharsets.UTF_8)) {
+        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(contentDirectory), StandardCharsets.UTF_8)) {
             ZipEntry zipEntry = zis.getNextEntry();
             while (zipEntry != null) {
-                File newFile = newFile(destDir, zipEntry);
+                File newFile = newFile(outputDirectory, zipEntry);
                 if (zipEntry.isDirectory()) {
                     if (!newFile.isDirectory() && !newFile.mkdirs()) {
                         throw new IOException("Failed to create directory " + newFile);
@@ -113,7 +112,7 @@ public class SolutionParser {
     public Map<String, List<Solution>> parseSolutions() {
         Map<String, List<Solution>> solutions = new HashMap<>();
 
-        try (ZipFile zipDirectory = new ZipFile(contentDirectoryPath.toString())) {
+        try (ZipFile zipDirectory = new ZipFile(contentDirectory)) {
             Enumeration<? extends ZipEntry> zipEntries = zipDirectory.entries();
             while (zipEntries.hasMoreElements()) {
                 ZipEntry zipEntry = zipEntries.nextElement();

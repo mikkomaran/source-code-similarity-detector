@@ -1,6 +1,5 @@
 package main.java.ee.ut.similaritydetector.ui.controllers;
 
-import javafx.concurrent.Task;
 import javafx.scene.layout.VBox;
 import main.java.ee.ut.similaritydetector.backend.Analyser;
 import javafx.fxml.FXML;
@@ -11,15 +10,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.text.NumberFormat;
-import java.util.Formatter;
-
 
 public class MainController {
 
     public static Window stage;
-    public static Path zipDirectoryPath;
+    public static File zipDirectory;
 
     //UI elements
     @FXML
@@ -52,15 +47,15 @@ public class MainController {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("ZIP files (*.zip)", "*.zip");
         fileChooser.getExtensionFilters().add(extFilter);
-        if (zipDirectoryPath != null){
-            fileChooser.setInitialDirectory(zipDirectoryPath.getParent().toFile());
+        if (zipDirectory != null){
+            fileChooser.setInitialDirectory(zipDirectory.getParentFile());
         }
         File zipDirectory = fileChooser.showOpenDialog(stage);
         // If a zip file was selected
         if (zipDirectory != null) {
-            zipDirectoryPath = zipDirectory.toPath();
+            MainController.zipDirectory = zipDirectory;
             //System.out.println(zipDirectoryPath);
-            fileNameLabel.setText(zipDirectoryPath.getFileName().toString());
+            fileNameLabel.setText(MainController.zipDirectory.getName());
             fileChooserButton.setVisible(false);
             fileArea.setVisible(true);
             startButton.setVisible(true);
@@ -74,7 +69,7 @@ public class MainController {
         startButton.setVisible(false);
 
         //Starts the backend similarity analysis on a new thread
-        Analyser analyser = new Analyser(zipDirectoryPath);
+        Analyser analyser = new Analyser(zipDirectory);
         progressBar.progressProperty().bind(analyser.progressProperty());
         progressPercentageLabel.textProperty().bind(analyser.progressProperty().multiply(100).asString("%.0f%%"));
         Thread analyserThread = new Thread(analyser, "analyser_thread");
