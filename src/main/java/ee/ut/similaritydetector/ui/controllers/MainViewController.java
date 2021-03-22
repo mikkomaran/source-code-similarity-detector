@@ -11,7 +11,7 @@ import javafx.stage.Window;
 
 import java.io.File;
 
-public class MainController {
+public class MainViewController {
 
     public static Window stage;
     public static File zipDirectory;
@@ -25,13 +25,13 @@ public class MainController {
     private VBox fileArea;
 
     @FXML
-    public Button startButton;
+    private Button startButton;
     @FXML
     private ProgressBar progressBar;
     @FXML
     private Label progressPercentageLabel;
 
-    public MainController() {
+    public MainViewController() {
     }
 
     @FXML
@@ -53,9 +53,9 @@ public class MainController {
         File zipDirectory = fileChooser.showOpenDialog(stage);
         // If a zip file was selected
         if (zipDirectory != null) {
-            MainController.zipDirectory = zipDirectory;
+            MainViewController.zipDirectory = zipDirectory;
             //System.out.println(zipDirectoryPath);
-            fileNameLabel.setText(MainController.zipDirectory.getName());
+            fileNameLabel.setText(MainViewController.zipDirectory.getName());
             fileChooserButton.setVisible(false);
             fileArea.setVisible(true);
             startButton.setVisible(true);
@@ -64,6 +64,7 @@ public class MainController {
 
     @FXML
     private void startAnalysis() {
+        fileArea.setVisible(false);
         progressBar.setVisible(true);
         progressPercentageLabel.setVisible(true);
         startButton.setVisible(false);
@@ -75,6 +76,9 @@ public class MainController {
         Thread analyserThread = new Thread(analyser, "analyser_thread");
         analyserThread.setDaemon(true);
         analyserThread.start();
+
+            // TODO: open results view and present the information
+            // TODO: error message when analysis thread failed
     }
 
 }
