@@ -12,13 +12,16 @@ public class Solution {
     private File sourceCodeFile;
     private File preprocessedCodeFile;
 
-    private String sourceCode;
-    private String preprocessedCode;
-    private List<String> sourceCodeLines;
-
-    public Set<Solution> similarSolutions;
+    private final Set<Solution> similarSolutions;
 
     public Solution() {
+        similarSolutions = new HashSet<>();
+    }
+
+    public Solution(String author, String exerciseName, File sourceCodeFile) {
+        this.author = author;
+        this.exerciseName = exerciseName;
+        this.sourceCodeFile = sourceCodeFile;
         similarSolutions = new HashSet<>();
     }
 
@@ -26,16 +29,8 @@ public class Solution {
         return similarSolutions;
     }
 
-    public void setSimilarSolutions(Set<Solution> similarSolutions) {
-        this.similarSolutions = similarSolutions;
-    }
-
-    public String getSourceCode() {
-        return sourceCode;
-    }
-
-    public void setSourceCode(String sourceCode) {
-        this.sourceCode = sourceCode;
+    public void addSimilarSolution(Solution solution) {
+        similarSolutions.add(solution);
     }
 
     public String getAuthor() {
@@ -44,14 +39,6 @@ public class Solution {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public String getPreprocessedCode() {
-        return preprocessedCode;
-    }
-
-    public void setPreprocessedCode(String preprocessedCode) {
-        this.preprocessedCode = preprocessedCode;
     }
 
     public File getSourceCodeFile() {
@@ -76,14 +63,6 @@ public class Solution {
 
     public void setExerciseName(String exerciseName) {
         this.exerciseName = exerciseName;
-    }
-
-    public List<String> getSourceCodeLines() {
-        return sourceCodeLines;
-    }
-
-    public void setSourceCodeLines(List<String> sourceCodeLines) {
-        this.sourceCodeLines = sourceCodeLines;
     }
 
 }

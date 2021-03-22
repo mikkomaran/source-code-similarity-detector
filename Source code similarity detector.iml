@@ -19,4 +19,11 @@
       </library>
     </orderEntry>
   </component>
+  <component name="PyNamespacePackagesService">
+    <option name="namespacePackageFolders">
+      <list>
+        <option value="$MODULE_DIR$/src/main/python/ee/ut/similaritydetector" />
+      </list>
+    </option>
+  </component>
 </module>

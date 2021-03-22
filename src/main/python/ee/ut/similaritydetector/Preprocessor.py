@@ -40,6 +40,10 @@ source_code_filepath = sys.argv[1]
 preprocessed_code_filepath = source_code_filepath[0: len(source_code_filepath) - 3] + "_preprocessed.py"
 
 with open(source_code_filepath, 'r', encoding="utf-8") as source_code_file:
-    preprocessed_code = preprocess_source_code(source_code_file.read())
-    with open(preprocessed_code_filepath, 'w', encoding="utf-8") as preprocessed_code_file:
-        preprocessed_code_file.write(preprocessed_code)
+    try:
+        preprocessed_code = preprocess_source_code(source_code_file.read())
+        with open(preprocessed_code_filepath, 'w', encoding="utf-8") as preprocessed_code_file:
+            preprocessed_code_file.write(preprocessed_code)
+    # If the source code is syntactically incorrect
+    except IndentationError:
+        sys.stderr.write("Syntactically incorrect program: " + source_code_file.name + "\n")

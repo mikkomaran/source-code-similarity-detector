@@ -20,10 +20,37 @@ public class SolutionParser {
         this.outputDirectory = new File("resources/");
     }
 
-    public Map<String, List<Solution>> parseSolutions2() {
-        Map<String, List<Solution>> solutions = new HashMap<>();
+    /**
+     * <p>Taken from: https://www.baeldung.com/java-compress-and-uncompress [11.03.2021]</p>
+     *
+     * <p>Quote from the source:
+     * "This method guards against writing files to the file system outside of the target folder."</p>
+     */
+    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+        File destFile = new File(destinationDir, zipEntry.getName());
 
-        // File unzipping taken from https://www.baeldung.com/java-compress-and-uncompress
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
+    }
+
+    /**
+     * <p>Parses the zip folder of solutions as a map of lists, where
+     * the key is the exercise name and the list contains all the
+     * solutions to that exercise.</p>
+     *
+     * @return parsed solutions as a {@code Map} where every exercise has a list of solutions
+     */
+    public List<Exercise> parseSolutions() {
+        List<Exercise> exercises = new ArrayList<>();
+        //Map<String, List<Solution>> solutions = new HashMap<>();
+
+        // File unzipping adapted from: https://www.baeldung.com/java-compress-and-uncompress [11.03.2021]
         byte[] buffer = new byte[1024];
         try (ZipInputStream zis = new ZipInputStream(new FileInputStream(contentDirectory), StandardCharsets.UTF_8)) {
             ZipEntry zipEntry = zis.getNextEntry();
@@ -46,9 +73,16 @@ public class SolutionParser {
                         fos.write(buffer, 0, len);
                     }
                     fos.close();
+                    // parse the solution from unzipped file
                     try {
-                        Solution solution = parseSolution2(zipEntry, newFile);
-                        solutions.computeIfAbsent(solution.getExerciseName(), k -> new ArrayList<>()).add(solution);
+                        Solution solution = parseSolution(newFile);
+                        Exercise exercise = exercises.stream().filter(e -> e.getName().equals(solution.getExerciseName())).findAny().orElse(null);
+                        if (exercise != null) {
+                            exercise.addSolution(solution);
+                        } else {
+                            exercises.add(new Exercise(solution.getExerciseName(), solution));
+                        }
+                        //solutions.computeIfAbsent(solution.getExerciseName(), k -> new ArrayList<>()).add(solution);
                     } catch (InvalidPathException | InterruptedException | IOException e) {
                         System.out.println(e.getMessage());
                     }
@@ -58,49 +92,51 @@ public class SolutionParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return solutions;
+        return exercises;
     }
 
-    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
-        File destFile = new File(destinationDir, zipEntry.getName());
-
-        String destDirPath = destinationDir.getCanonicalPath();
-        String destFilePath = destFile.getCanonicalPath();
-
-        if (!destFilePath.startsWith(destDirPath + File.separator)) {
-            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
-        }
-
-        return destFile;
-    }
-
-    private Solution parseSolution2(ZipEntry zipEntry, File sourceCode) throws IOException, InterruptedException {
-        Solution solution = new Solution();
-        Pattern solutionPathPattern = Pattern.compile(".+_(.+)/(.+)");
-        Matcher matcher = solutionPathPattern.matcher(zipEntry.getName());
+    /**
+     * Parses a {@code Solution} from the given {@code ZipEntry}.
+     *
+     * @param sourceCodeFile the source code file of the solution
+     * @return a {@code Solution} parsed from the given {@code ZipEntry}
+     */
+    private Solution parseSolution(File sourceCodeFile) throws IOException, InterruptedException {
+        Solution solution;
+        Pattern solutionFolderPattern = Pattern.compile(".+_(.+)");
+        Matcher matcher = solutionFolderPattern.matcher(sourceCodeFile.getParentFile().getName());
         if (matcher.find()) {
             String author = matcher.group(1);
-            String solutionName = matcher.group(2);
-            solution.setAuthor(author);
-            solution.setExerciseName(solutionName);
+            solution = new Solution(author, sourceCodeFile.getName(), sourceCodeFile);
         } else {
-            throw new InvalidPathException(zipEntry.getName(), " is an invalid file path.");
+            throw new InvalidPathException(sourceCodeFile.getParentFile().getName(), " is an invalid file path.");
         }
-        solution.setSourceCodeFile(sourceCode);
-        removeCommentsPy(sourceCode.getAbsolutePath());
-        String sourceCodePath = sourceCode.getAbsolutePath();
+        removeCommentsPy(sourceCodeFile.getAbsolutePath());
+        String sourceCodePath = sourceCodeFile.getAbsolutePath();
         File preProcessedCodeFile = new File(sourceCodePath.substring(0, sourceCodePath.length() - 3) + "_preprocessed.py");
         solution.setPreprocessedCodeFile(preProcessedCodeFile);
         return solution;
     }
 
+    /**
+     * Runs a python script to preprocess the source code,
+     * removing comments, docstrings, empty lines and trailing whitespace.
+     *
+     * @param filePath the source code filepath
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public void removeCommentsPy(String filePath) throws InterruptedException, IOException {
-        String path = "src/main/python/ee/ut/similaritydetector/Preprocesser.py";
-        String[] command = {"python", path, filePath};
+        String scriptPath = "src/main/python/ee/ut/similaritydetector/Preprocessor.py";
+        String[] command = {"python", scriptPath, filePath};
         ProcessBuilder processBuilder = new ProcessBuilder(command).inheritIO();
         Process process = processBuilder.start();
         process.waitFor();
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                       PREVIOUS SOLUTION                                        //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Parses the zip folder of solutions as a map of lists, where
@@ -109,7 +145,7 @@ public class SolutionParser {
      *
      * @return parsed solutions as a {@code Map} where every exercise has a list of solutions
      */
-    public Map<String, List<Solution>> parseSolutions() {
+    public Map<String, List<Solution>> parseSolutionsOLD() {
         Map<String, List<Solution>> solutions = new HashMap<>();
 
         try (ZipFile zipDirectory = new ZipFile(contentDirectory)) {
@@ -118,7 +154,7 @@ public class SolutionParser {
                 ZipEntry zipEntry = zipEntries.nextElement();
                 if (zipEntry.isDirectory())
                     continue;
-                Solution solution = parseSolution(zipDirectory, zipEntry);
+                Solution solution = parseSolutionOLD(zipDirectory, zipEntry);
                 solutions.computeIfAbsent(solution.getExerciseName(), k -> new ArrayList<>()).add(solution);
             }
 
@@ -136,7 +172,7 @@ public class SolutionParser {
      * @param zipEntry     the {@code ZipEntry} of the solution file
      * @return a {@code Solution} parsed from the given {@code ZipEntry}
      */
-    private Solution parseSolution(ZipFile zipDirectory, ZipEntry zipEntry) {
+    private Solution parseSolutionOLD(ZipFile zipDirectory, ZipEntry zipEntry) {
         Solution solution = new Solution();
         Pattern solutionPathPattern = Pattern.compile(".+_(.+)/(.+)");
         Matcher matcher = solutionPathPattern.matcher(zipEntry.getName());
@@ -150,7 +186,7 @@ public class SolutionParser {
         }
         String sourceCode = parseSourceCode(zipDirectory, zipEntry);
         //List<String> sourceCodeLines = parseSourceCodeLines(zipDirectory, zipEntry);
-        solution.setSourceCode(sourceCode);
+        //solution.setSourceCode(sourceCode);
         //solution.setSourceCodeLines(sourceCodeLines);
 
         return solution;
@@ -189,6 +225,5 @@ public class SolutionParser {
         }
         return sourceCode.toString();
     }
-
 
 }
