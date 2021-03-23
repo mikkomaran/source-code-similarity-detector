@@ -12,6 +12,8 @@ public class SimilarityDetectorLauncher extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../../../../../resources/ee/ut/similaritydetector/fxml/main_view.fxml"));
+        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(800);
         primaryStage.setTitle("Source code similarity detector");
         Scene scene = new Scene(root, 1000, 700);
         primaryStage.setScene(scene);
@@ -21,5 +23,15 @@ public class SimilarityDetectorLauncher extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        /* TODO: siin teha asjad, mida sulgemisel vaja oleks:
+                resources kausta kusutamine?,
+                salvestada äkki ümber sarnased tööd kuhugi?
+         */
+
+        super.stop();
     }
 }

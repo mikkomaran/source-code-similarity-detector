@@ -1,19 +1,25 @@
 package main.java.ee.ut.similaritydetector.ui.controllers;
 
-import javafx.scene.layout.VBox;
-import main.java.ee.ut.similaritydetector.backend.Analyser;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
+import javafx.stage.Stage;
+import main.java.ee.ut.similaritydetector.backend.Analyser;
+import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 public class MainViewController {
 
-    public static Window stage;
+    public static Stage stage;
     public static File zipDirectory;
 
     //UI elements
@@ -47,7 +53,7 @@ public class MainViewController {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("ZIP files (*.zip)", "*.zip");
         fileChooser.getExtensionFilters().add(extFilter);
-        if (zipDirectory != null){
+        if (zipDirectory != null) {
             fileChooser.setInitialDirectory(zipDirectory.getParentFile());
         }
         File zipDirectory = fileChooser.showOpenDialog(stage);
@@ -77,8 +83,28 @@ public class MainViewController {
         analyserThread.setDaemon(true);
         analyserThread.start();
 
-            // TODO: open results view and present the information
-            // TODO: error message when analysis thread failed
+        // TODO: open results view and present the information
+        // TODO: error message when analysis thread failed
+        try {
+            analyserThread.join();
+            openSideBySideView(analyser.getSimilarSolutionClusters());
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openSideBySideView(List<SimilarSolutionCluster> clusters) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "../../../../../../resources/ee/ut/similaritydetector/fxml/side_by_side_view.fxml"));
+        Parent root = loader.load();
+        SideBySideViewController controller = loader.getController();
+        controller.setClusters(clusters);
+        controller.createAccordionItems();
+
+        Scene sideBySideScene = new Scene(root);
+        stage.setScene(sideBySideScene);
+        stage.show();
     }
 
 }
