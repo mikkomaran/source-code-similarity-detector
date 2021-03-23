@@ -33,6 +33,10 @@ public class Analyser extends Task<Void> {
         similarSolutionClusters = new ArrayList<>();
     }
 
+    public List<SimilarSolutionCluster> getSimilarSolutionClusters() {
+        return similarSolutionClusters;
+    }
+
     @Override
     protected Void call() {
         startAnalysis();
@@ -156,6 +160,9 @@ public class Analyser extends Task<Void> {
                 }
                 similarSolutionClusters.add(cluster);
             }
+        }
+        for (SimilarSolutionCluster cluster : similarSolutionClusters) {
+            cluster.createName();
         }
     }
 
