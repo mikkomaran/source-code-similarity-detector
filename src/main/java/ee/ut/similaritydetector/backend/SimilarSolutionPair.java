@@ -23,4 +23,9 @@ public class SimilarSolutionPair {
     public Solution getSecondSolution() {
         return secondSolution;
     }
+
+    @Override
+    public String toString() {
+        return firstSolution.getAuthor() + " & " + secondSolution.getAuthor() + "\t" + String.format("%.1f%%", similarity * 100);
+    }
 }
