@@ -134,64 +134,6 @@ public class SolutionParser {
         process.waitFor();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                       PREVIOUS SOLUTION                                        //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Parses the zip folder of solutions as a map of lists, where
-     * the key is the exercise name and the list contains all the
-     * solutions to that exercise.
-     *
-     * @return parsed solutions as a {@code Map} where every exercise has a list of solutions
-     */
-    public Map<String, List<Solution>> parseSolutionsOLD() {
-        Map<String, List<Solution>> solutions = new HashMap<>();
-
-        try (ZipFile zipDirectory = new ZipFile(contentDirectory)) {
-            Enumeration<? extends ZipEntry> zipEntries = zipDirectory.entries();
-            while (zipEntries.hasMoreElements()) {
-                ZipEntry zipEntry = zipEntries.nextElement();
-                if (zipEntry.isDirectory())
-                    continue;
-                Solution solution = parseSolutionOLD(zipDirectory, zipEntry);
-                solutions.computeIfAbsent(solution.getExerciseName(), k -> new ArrayList<>()).add(solution);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return solutions;
-    }
-
-    /**
-     * Parses a {@code Solution} from the given {@code ZipEntry}.
-     *
-     * @param zipDirectory ZIP directory where the solution file is
-     * @param zipEntry     the {@code ZipEntry} of the solution file
-     * @return a {@code Solution} parsed from the given {@code ZipEntry}
-     */
-    private Solution parseSolutionOLD(ZipFile zipDirectory, ZipEntry zipEntry) {
-        Solution solution = new Solution();
-        Pattern solutionPathPattern = Pattern.compile(".+_(.+)/(.+)");
-        Matcher matcher = solutionPathPattern.matcher(zipEntry.getName());
-        if (matcher.find()) {
-            String author = matcher.group(1);
-            String solutionName = matcher.group(2);
-            solution.setAuthor(author);
-            solution.setExerciseName(solutionName);
-        } else {
-            System.out.println("Invalid filepath");
-        }
-        String sourceCode = parseSourceCode(zipDirectory, zipEntry);
-        //List<String> sourceCodeLines = parseSourceCodeLines(zipDirectory, zipEntry);
-        //solution.setSourceCode(sourceCode);
-        //solution.setSourceCodeLines(sourceCodeLines);
-
-        return solution;
-    }
-
     /**
      * Parses the source code of a zipped solution file as a list of strings,
      * where each code line is a string in the list.
