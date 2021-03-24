@@ -23,7 +23,6 @@ public class MainViewController {
     public static Stage stage;
     public static File zipDirectory;
 
-    //UI elements
     @FXML
     private Button fileChooserButton;
     @FXML

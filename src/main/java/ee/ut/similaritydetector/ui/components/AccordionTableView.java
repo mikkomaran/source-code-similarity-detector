@@ -1,18 +1,18 @@
 package main.java.ee.ut.similaritydetector.ui.components;
 
-import javafx.scene.control.*;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionPair;
 
-import java.io.IOException;
-import java.util.List;
 
 public class AccordionTableView extends TitledPane {
 
-    public AccordionTableView(SimilarSolutionCluster cluster, Label titleLeft, Label titleRight, TextArea lineNumbersLeft,
-                              TextArea lineNumbersRight, TextArea codeAreaLeft, TextArea codeAreaRight) {
+    public AccordionTableView(SimilarSolutionCluster cluster) {
 
         // Creates the table layout
         AnchorPane anchorPane = new AnchorPane();
@@ -55,42 +55,6 @@ public class AccordionTableView extends TitledPane {
         this.setText(cluster.getName());
         this.setContent(anchorPane);
         this.setExpanded(false);
-
-        // Listener for list item getting selected
-        tableView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-            SimilarSolutionPair solutionPair = tableView.getSelectionModel().getSelectedItem();
-            loadSolutionPairSourceCodes(solutionPair, titleLeft, titleRight, lineNumbersLeft, lineNumbersRight, codeAreaLeft, codeAreaRight);
-        });
-    }
-
-    public void loadSolutionPairSourceCodes(SimilarSolutionPair solutionPair, Label titleLeft, Label titleRight, TextArea lineNumbersLeft,
-                                            TextArea lineNumbersRight, TextArea codeAreaLeft, TextArea codeAreaRight) {
-        List<String> sourceCodeLines1 = null;
-        List<String> sourceCodeLines2 = null;
-        try {
-            sourceCodeLines1 = solutionPair.getFirstSolution().getSourceCodeLines();
-            sourceCodeLines2 = solutionPair.getSecondSolution().getSourceCodeLines();
-        } catch (IOException e) {
-            // TODO: error handling
-            e.printStackTrace();
-        }
-        titleLeft.setText(solutionPair.getFirstSolution().getAuthor() + " - " + solutionPair.getFirstSolution().getExerciseName());
-        titleRight.setText(solutionPair.getSecondSolution().getAuthor() + " - " + solutionPair.getSecondSolution().getExerciseName());
-
-        setLineNumbersAndCodeLines(lineNumbersLeft, codeAreaLeft, sourceCodeLines1);
-        setLineNumbersAndCodeLines(lineNumbersRight, codeAreaRight, sourceCodeLines2);
-    }
-
-    private void setLineNumbersAndCodeLines(TextArea lineNumbersArea, TextArea codeLinesArea, List<String> sourceCodeLines) {
-        StringBuilder lineNumbers = new StringBuilder();
-        StringBuilder codeLines = new StringBuilder();
-        for (int i = 0, n = sourceCodeLines.size(); i < n; i++) {
-            String line = sourceCodeLines.get(i);
-            lineNumbers.append(i + 1 < 10 ? "  " : i + 1 < 100 ? " " : "").append(i + 1).append(System.lineSeparator());
-            codeLines.append(line).append(System.lineSeparator());
-        }
-        lineNumbersArea.setText(lineNumbers.toString());
-        codeLinesArea.setText(codeLines.toString());
     }
 
 }
