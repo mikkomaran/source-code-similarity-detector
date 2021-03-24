@@ -5,16 +5,16 @@ import javafx.scene.layout.AnchorPane;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionPair;
 
-public class AccordionItem extends TitledPane {
+public class SolutionClusterItem extends TitledPane {
 
     private final SimilarSolutionCluster cluster;
 
-    public AccordionItem(SimilarSolutionCluster cluster, Label leftLabel, Label rightLabel, TextArea textAreaLeft, TextArea textAreaRight) {
+    public SolutionClusterItem(SimilarSolutionCluster cluster, Label leftLabel, Label rightLabel, TextArea textAreaLeft, TextArea textAreaRight) {
         this.cluster = cluster;
 
         // Creates the layout
         AnchorPane anchorPane = new AnchorPane();
-        ListView<SolutionPairListItem> listView = new ListView<>();
+        ListView<SolutionPairItem> listView = new ListView<>();
         anchorPane.getChildren().add(listView);
         AnchorPane.setTopAnchor(listView, 0.0);
         AnchorPane.setBottomAnchor(listView, 0.0);
@@ -27,16 +27,18 @@ public class AccordionItem extends TitledPane {
 
         // Creates and adds the solution pair items to listView
         for (SimilarSolutionPair pair : cluster.getSolutionPairs()) {
-            SolutionPairListItem listItem = new SolutionPairListItem(pair);
+            SolutionPairItem listItem = new SolutionPairItem(pair);
             listView.getItems().add(listItem);
         }
+
+        // TitledPane header and content
         this.setText(cluster.getName());
         this.setContent(anchorPane);
 
         // Listener for list item getting selected
         listView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-            SolutionPairListItem listItem = listView.getSelectionModel().getSelectedItem();
-            newValue.loadSolutionPairSourceCodes(leftLabel, rightLabel, textAreaLeft, textAreaRight);
+            SolutionPairItem listItem = listView.getSelectionModel().getSelectedItem();
+            listItem.loadSolutionPairSourceCodes(leftLabel, rightLabel, textAreaLeft, textAreaRight);
         });
     }
 

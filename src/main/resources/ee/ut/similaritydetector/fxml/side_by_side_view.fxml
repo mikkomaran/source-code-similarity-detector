@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.ee.ut.similaritydetector.ui.controllers.SideBySideViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="@../style/style.scss" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.ee.ut.similaritydetector.ui.controllers.SideBySideViewController">
    <children>
       <BorderPane prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -24,7 +22,7 @@
                            <children>
                               <AnchorPane>
                                  <children>
-                                    <Label fx:id="leftLabel" text="Label" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <Label fx:id="titleLeft" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <padding>
                                           <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
                                        </padding>
@@ -33,16 +31,20 @@
                               </AnchorPane>
                               <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
-                                    <ScrollPane fx:id="scrollPaneLeft" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <content>
                                           <AnchorPane>
                                              <children>
-                                                <TextArea fx:id="textAreaLeft" editable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <TextArea fx:id="codeAreaLeft" editable="false" focusTraversable="false" styleClass="code-area" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="39.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <font>
                                                       <Font name="Monospaced Regular" size="12.0" />
                                                    </font>
                                                 </TextArea>
-                                                <Separator layoutX="18.0" layoutY="69.0" orientation="VERTICAL" prefHeight="196.0" prefWidth="14.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="1.0" />
+                                                <TextArea fx:id="lineNumbersLeft" editable="false" focusTraversable="false" prefHeight="675.0" prefWidth="40.0" styleClass="line-numbers-area" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <font>
+                                                      <Font name="Monospaced Regular" size="12.0" />
+                                                   </font>
+                                                </TextArea>
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -59,7 +61,7 @@
                            <children>
                               <AnchorPane>
                                  <children>
-                                    <Label fx:id="rightLabel" text="Label" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <Label fx:id="titleRight" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <padding>
                                           <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
                                        </padding>
@@ -68,16 +70,20 @@
                               </AnchorPane>
                               <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
-                                    <ScrollPane fx:id="scrollPaneRight" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <content>
                                           <AnchorPane>
                                              <children>
-                                                <TextArea fx:id="textAreaRight" editable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <TextArea fx:id="codeAreaRight" editable="false" focusTraversable="false" styleClass="code-area" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="39.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <font>
                                                       <Font name="Monospaced Regular" size="12.0" />
                                                    </font>
                                                 </TextArea>
-                                                <Separator orientation="VERTICAL" prefHeight="196.0" prefWidth="14.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="1.0" />
+                                                <TextArea fx:id="lineNumbersRight" editable="false" focusTraversable="false" prefHeight="675.0" prefWidth="40.0" styleClass="line-numbers-area" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <font>
+                                                      <Font name="Monospaced Regular" size="12.0" />
+                                                   </font>
+                                                </TextArea>
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -92,8 +98,7 @@
             </SplitPane>
          </center>
          <left>
-            <Accordion fx:id="accordion" BorderPane.alignment="CENTER">
-            </Accordion>
+            <VBox fx:id="solutionClusterView" BorderPane.alignment="CENTER" />
          </left>
       </BorderPane>
    </children>

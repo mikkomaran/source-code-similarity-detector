@@ -3,6 +3,10 @@ import sys
 import tokenize
 
 
+"""Taken from: https://stackoverflow.com/questions/1769332/script-to-remove-python-comments-docstrings [04.03.2021]
+    Original author: Dan McDougall (https://stackoverflow.com/users/357007/dan-mcdougall) 
+    Modifications made by: Basj (https://stackoverflow.com/users/1422096/basj)
+"""
 def preprocess_source_code(source_code):
     source_code_io = io.StringIO(source_code)
     output = ""

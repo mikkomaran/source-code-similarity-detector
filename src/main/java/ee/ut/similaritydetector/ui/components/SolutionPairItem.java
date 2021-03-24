@@ -7,11 +7,11 @@ import main.java.ee.ut.similaritydetector.backend.SimilarSolutionPair;
 import java.io.IOException;
 import java.util.List;
 
-public class SolutionPairListItem extends Label {
+public class SolutionPairItem extends Label {
 
     private final SimilarSolutionPair solutionPair;
 
-    public SolutionPairListItem(SimilarSolutionPair solutionPair) {
+    public SolutionPairItem(SimilarSolutionPair solutionPair) {
         this.solutionPair = solutionPair;
 
         this.setText(solutionPair.toString());

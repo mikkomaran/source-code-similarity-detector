@@ -1,3 +1,4 @@
+
 #fileNameLabel:hover {
   -fx-cursor: hand;
 }
@@ -10,3 +11,76 @@
   -fx-cursor: hand;
 }
 
+
+///////////////////////////////////////////////////////////
+//                    CLUSTER TABLE
+///////////////////////////////////////////////////////////
+
+#solutionClusterView {
+ // -fx-background-color: #616773;
+}
+
+/*Aligns similarity percentages to the right in cluster table*/
+.percentage-column{
+  -fx-alignment: center;
+}
+
+.no-header .column-header-background {
+  -fx-max-height: 0;
+  -fx-pref-height: 0;
+  -fx-min-height: 0;
+}
+
+
+///////////////////////////////////////////////////////////
+//                   CODE VIEWING AREA
+///////////////////////////////////////////////////////////
+
+#lineNumbersLeft .scroll-bar:vertical, #lineNumbersRight .scroll-bar:vertical {
+  //-fx-opacity: 0;
+}
+
+/*Line numbers area*/
+#lineNumbersLeft .content, #lineNumbersRight .content {
+//  -fx-background-color: #5b606b;
+  -fx-text-alignment: right;
+}
+
+/*Code lines area*/
+#codeAreaLeft .content, #codeAreaRight .content {
+ // -fx-background-color: #454953;
+}
+
+/*Code color*/
+#codeAreaLeft, #codeAreaRight {
+//  -fx-text-fill: #f3f3f3;
+}
+
+
+///////////////////////////////////////////////////////////
+//          Removing :focused pseudo-class effects
+///////////////////////////////////////////////////////////
+
+.text-input:focused {
+  -fx-highlight-fill: -fx-accent;
+  -fx-highlight-text-fill: white;
+  -fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),
+  linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);
+  -fx-background-insets: 0, 1;
+  -fx-background-radius: 3, 2;
+  -fx-prompt-text-fill: transparent;
+}
+
+.text-area:focused .content {
+  -fx-background-color:
+          linear-gradient(from 0px 0px to 0px 4px, derive(-fx-control-inner-background, -8%), -fx-control-inner-background);
+  -fx-background-radius: 2;
+}
+
+.table-row-cell:empty {
+  -fx-background-color: white;
+}
+
+.table-row-cell:empty .table-cell {
+  -fx-border-width: 0px;
+}

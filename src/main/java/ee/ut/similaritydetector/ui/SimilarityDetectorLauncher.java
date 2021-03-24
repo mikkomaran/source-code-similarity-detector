@@ -12,8 +12,8 @@ public class SimilarityDetectorLauncher extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../../../../../resources/ee/ut/similaritydetector/fxml/main_view.fxml"));
-        primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(400);
         primaryStage.setTitle("Source code similarity detector");
         Scene scene = new Scene(root, 1000, 700);
         primaryStage.setScene(scene);

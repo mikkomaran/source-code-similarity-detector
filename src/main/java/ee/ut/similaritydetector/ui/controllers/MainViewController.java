@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+
 public class MainViewController {
 
     public static Stage stage;
@@ -100,11 +101,14 @@ public class MainViewController {
         Parent root = loader.load();
         SideBySideViewController controller = loader.getController();
         controller.setClusters(clusters);
-        controller.createAccordionItems();
+        controller.createClusterItems();
 
-        Scene sideBySideScene = new Scene(root);
+        Scene sideBySideScene = new Scene(root, 1200, 700);
         stage.setScene(sideBySideScene);
         stage.show();
+
+        // Resize cluster table columns
+        controller.resizeClusterTableColumns();
     }
 
 }
