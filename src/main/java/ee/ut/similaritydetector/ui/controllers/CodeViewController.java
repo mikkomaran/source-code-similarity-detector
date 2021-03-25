@@ -118,7 +118,7 @@ public class CodeViewController {
     }
 
     /**
-     * Resizes the columns of the given {@code TableView} to fit column content
+     * Resizes the columns of the given {@code TableView} to fit the size of columns' content.
      *
      * @param table - the {@code TableView} to be resized
      */
@@ -126,8 +126,30 @@ public class CodeViewController {
         double columnsWidth = table.getColumns().stream().mapToDouble(TableColumnBase::getWidth).sum();
         double tableWidth = table.getWidth();
         if (tableWidth > columnsWidth) {
-            TableColumn<?, ?> col = table.getColumns().get(table.getColumns().size() - 1);
-            col.setPrefWidth(col.getWidth() + (tableWidth - columnsWidth) - 4);
+            tableWidth -= 0; // So random vertical scrollbar doesn't appear
+            TableColumn<?, ?> col1 = table.getColumns().get(0);
+            TableColumn<?, ?> col2 = table.getColumns().get(1);
+            TableColumn<?, ?> col3 = table.getColumns().get(2);
+            double nameColumnsWidth = col1.getWidth() + col2.getWidth();
+            double nameColumnsPrefWidth = tableWidth * 0.75;
+            if (nameColumnsWidth < nameColumnsPrefWidth) {
+                if (col1.getWidth() > nameColumnsPrefWidth / 2) {
+                    col2.setPrefWidth(nameColumnsPrefWidth - col1.getWidth());
+                    col3.setPrefWidth(tableWidth - nameColumnsPrefWidth);
+                }
+                if (col2.getWidth() > nameColumnsPrefWidth / 2) {
+                    col1.setPrefWidth(nameColumnsPrefWidth - col2.getWidth());
+                    col3.setPrefWidth(tableWidth - nameColumnsPrefWidth);
+                }
+                else {
+                    col1.setPrefWidth(nameColumnsPrefWidth / 2);
+                    col2.setPrefWidth(nameColumnsPrefWidth / 2);
+                    col3.setPrefWidth(tableWidth - nameColumnsPrefWidth);
+                }
+            }
+            else {
+                col3.setPrefWidth(col3.getWidth() + (tableWidth - columnsWidth));
+            }
         }
     }
 

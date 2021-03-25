@@ -1,5 +1,6 @@
 package main.java.ee.ut.similaritydetector.ui.components;
 
+import javafx.beans.binding.Bindings;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,8 +31,6 @@ public class AccordionTableView extends TitledPane {
         // Table constraints
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tableView.setEditable(false);
-        //tableView.addEventFilter(ScrollEvent.ANY, Event::consume);
-        //tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.getStyleClass().add("no-header");
 
         // Create columns for tableview
@@ -53,6 +52,10 @@ public class AccordionTableView extends TitledPane {
         tableView.getItems().addAll(cluster.getSolutionPairs().stream().sorted(
                 Comparator.comparingDouble(SimilarSolutionPair::getSimilarity).reversed())
                 .collect(Collectors.toList()));
+
+        // To remove empty rows from the bottom of the table we have to set fixed cell size
+        tableView.setFixedCellSize(25);
+        tableView.prefHeightProperty().bind(Bindings.size(tableView.getItems()).multiply(tableView.getFixedCellSize()));
 
         // Sets titledPane header and content and is collapsed in the beginning
         this.setText(cluster.getName());

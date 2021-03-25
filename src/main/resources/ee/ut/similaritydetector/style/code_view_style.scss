@@ -18,7 +18,7 @@
 }
 
 // Removes horizontal scrollbars from cluster tables
-#solutionClusterView .table-view .scroll-bar:horizontal {
+#solutionClusterView .table-view .scroll-bar * {
   -fx-min-width: 0;
   -fx-pref-width: 0;
   -fx-max-width: 0;
@@ -26,7 +26,6 @@
   -fx-pref-height: 0;
   -fx-max-height: 0;
   -fx-opacity: 0;
-  -fx-hbar-policy: never;
 }
 
 ///////////////////////////////////////////////////////////
