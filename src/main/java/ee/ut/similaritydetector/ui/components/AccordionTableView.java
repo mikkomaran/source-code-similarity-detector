@@ -1,5 +1,9 @@
 package main.java.ee.ut.similaritydetector.ui.components;
 
+import com.sun.javafx.collections.ImmutableObservableList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -8,6 +12,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionPair;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 
 public class AccordionTableView extends TitledPane {
@@ -46,10 +54,10 @@ public class AccordionTableView extends TitledPane {
         tableView.getColumns().add(column2);
         tableView.getColumns().add(column3);
 
-        // Adds the solution pair items to tableview
-        for (SimilarSolutionPair pair : cluster.getSolutionPairs()) {
-            tableView.getItems().add(pair);
-        }
+        // Adds the solution pair items to tableview sorted by percentages descending
+        tableView.getItems().addAll(cluster.getSolutionPairs().stream().sorted(
+                Comparator.comparingDouble(SimilarSolutionPair::getSimilarity).reversed())
+                .collect(Collectors.toList()));
 
         // Sets titledPane header and content and is collapsed in the beginning
         this.setText(cluster.getName());

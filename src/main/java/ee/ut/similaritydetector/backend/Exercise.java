@@ -12,6 +12,7 @@ public class Exercise {
     private final List<Solution> solutions;
     private double averageSolutionSourceCodeLength;
     private double averageSolutionPreprocessedCodeLength;
+    private double similarityThreshold = 0.97;
 
     public Exercise(String name, Solution... solutions) {
         this.name = name;
@@ -25,6 +26,10 @@ public class Exercise {
 
     public List<Solution> getSolutions() {
         return solutions;
+    }
+
+    public void addSolution(Solution solution) {
+        solutions.add(solution);
     }
 
     public double getAverageSolutionSourceCodeLength() {
@@ -55,10 +60,16 @@ public class Exercise {
         averageSolutionPreprocessedCodeLength = avgSolutionLength;
     }
 
-
-    public void addSolution(Solution solution) {
-        solutions.add(solution);
+    public double getSimilarityThreshold() {
+        return similarityThreshold;
     }
 
+    public void setSimilarityThreshold(double similarityThreshold) {
+        this.similarityThreshold = similarityThreshold;
+    }
+
+    public void calculateSimilarityThreshold() {
+
+    }
 
 }

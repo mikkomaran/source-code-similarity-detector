@@ -1,15 +1,7 @@
+///////////////////////////////////////////////////////////
+//                     GLOBAL STYLES
+///////////////////////////////////////////////////////////
 
-#fileNameLabel:hover {
-  -fx-cursor: hand;
-}
-
-#zipImg:hover {
-  -fx-cursor: hand;
-}
-
-.button:hover {
-  -fx-cursor: hand;
-}
 
 // Makes all scrollbar backgrounds transparent
 .scroll-bar:horizontal, .scroll-bar:vertical {
@@ -19,59 +11,7 @@
 }
 
 ///////////////////////////////////////////////////////////
-//                    CLUSTER TABLE
-///////////////////////////////////////////////////////////
-
-#solutionClusterView {
- // -fx-background-color: #616773;
-}
-
-/*Aligns similarity percentages to the right in cluster table*/
-.percentage-column{
-  -fx-alignment: center;
-}
-
-.no-header .column-header-background {
-  -fx-max-height: 0;
-  -fx-pref-height: 0;
-  -fx-min-height: 0;
-}
-
-
-///////////////////////////////////////////////////////////
-//                   CODE VIEWING AREA
-///////////////////////////////////////////////////////////
-
-/*Line numbers area*/
-#lineNumbersLeft .content, #lineNumbersRight .content {
-//  -fx-background-color: #5b606b;
-  -fx-text-alignment: right;
-  -fx-cursor: default;
-}
-
-#lineNumbersLeft .scroll-bar:vertical, #lineNumbersRight .scroll-bar:vertical {
-  -fx-pref-width: 1;
-  -fx-opacity: 0;
-}
-
-#lineNumbersLeft .scroll-bar:horizontal, #lineNumbersRight .scroll-bar:horizontal {
-  -fx-pref-height: 1;
-  -fx-opacity: 0;
-}
-
-/*Code lines area*/
-#codeAreaLeft .content, #codeAreaRight .content {
- // -fx-background-color: #454953;
-}
-
-/*Code color*/
-#codeAreaLeft, #codeAreaRight {
-//  -fx-text-fill: #f3f3f3;
-}
-
-
-///////////////////////////////////////////////////////////
-//          Removing :focused pseudo-class effects
+//        Removing :focused pseudo-class effects
 ///////////////////////////////////////////////////////////
 
 .text-input:focused {
@@ -88,12 +28,4 @@
   -fx-background-color:
           linear-gradient(from 0px 0px to 0px 4px, derive(-fx-control-inner-background, -8%), -fx-control-inner-background);
   -fx-background-radius: 2;
-}
-
-.table-row-cell:empty {
-  -fx-background-color: white;
-}
-
-.table-row-cell:empty .table-cell {
-  -fx-border-width: 0px;
 }

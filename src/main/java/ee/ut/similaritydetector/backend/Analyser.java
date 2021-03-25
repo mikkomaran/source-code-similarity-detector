@@ -14,7 +14,7 @@ import static main.java.ee.ut.similaritydetector.backend.LevenshteinDistance.nor
 
 public class Analyser extends Task<Void> {
 
-    public static final float SimilarityThreshold = 0.97f;
+    private double similarityThreshold;
     private final File zipDirectory;
     private final List<SimilarSolutionPair> similarSolutionPairs;
     private final List<SimilarSolutionCluster> similarSolutionClusters;
@@ -26,6 +26,17 @@ public class Analyser extends Task<Void> {
 
     public Analyser(File zipDirectory) {
         this.zipDirectory = zipDirectory;
+        totalSolutionPairsCount = 0;
+        analysedSolutionPairsCount = 0;
+        similarCount = 0;
+        exercises = new ArrayList<>();
+        similarSolutionPairs = new ArrayList<>();
+        similarSolutionClusters = new ArrayList<>();
+    }
+
+    public Analyser(File zipDirectory, double similarityThreshold) {
+        this.zipDirectory = zipDirectory;
+        this.similarityThreshold = similarityThreshold;
         totalSolutionPairsCount = 0;
         analysedSolutionPairsCount = 0;
         similarCount = 0;
@@ -82,8 +93,8 @@ public class Analyser extends Task<Void> {
             Solution solution1 = solutions.get(i);
             for (int j = i + 1; j < solutionCount; j++) {
                 Solution solution2 = solutions.get(j);
-                double similarity = findSimilarity(solution1, solution2);
-                if (similarity > Analyser.SimilarityThreshold) {
+                double similarity = findSimilarity(solution1, solution2, exercise.getSimilarityThreshold());
+                if (similarity > exercise.getSimilarityThreshold()) {
                     similarCount++;
                     solution1.addSimilarSolution(solution2);
                     solution2.addSimilarSolution(solution1);
@@ -102,12 +113,12 @@ public class Analyser extends Task<Void> {
      * @param sol2
      * @return
      */
-    private double findSimilarity(Solution sol1, Solution sol2) {
+    private double findSimilarity(Solution sol1, Solution sol2, double similarityThreshold) {
         double similarity;
         String sol1Code = readSolutionCode(sol1, false);
         String sol2Code = readSolutionCode(sol2, false);
         try {
-            similarity = normalisedLevenshteinSimilarity(sol1Code, sol2Code, SimilarityThreshold);
+            similarity = normalisedLevenshteinSimilarity(sol1Code, sol2Code, (float) similarityThreshold);
         } catch (NullPointerException e) {
             // If at least one of the solution codes could not be read
             similarity = 0;

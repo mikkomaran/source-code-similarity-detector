@@ -1,0 +1,70 @@
+///////////////////////////////////////////////////////////
+//                  CLUSTER TABLES AREA
+///////////////////////////////////////////////////////////
+
+#solutionClusterView {
+  // -fx-background-color: #616773;
+}
+
+/*Aligns similarity percentages to the right in cluster table*/
+.percentage-column{
+  -fx-alignment: center;
+}
+
+.no-header .column-header-background {
+  -fx-max-height: 0;
+  -fx-pref-height: 0;
+  -fx-min-height: 0;
+}
+
+// Removes horizontal scrollbars from cluster tables
+#solutionClusterView .table-view .scroll-bar:horizontal {
+  -fx-min-width: 0;
+  -fx-pref-width: 0;
+  -fx-max-width: 0;
+  -fx-min-height: 0;
+  -fx-pref-height: 0;
+  -fx-max-height: 0;
+  -fx-opacity: 0;
+  -fx-hbar-policy: never;
+}
+
+///////////////////////////////////////////////////////////
+//                  CODE VIEWING AREA
+///////////////////////////////////////////////////////////
+
+/*Line numbers area*/
+#lineNumbersLeft .content, #lineNumbersRight .content {
+  //  -fx-background-color: #5b606b;
+  -fx-text-alignment: right;
+  -fx-cursor: default;
+}
+
+#lineNumbersLeft .scroll-bar:vertical, #lineNumbersRight .scroll-bar:vertical {
+  -fx-pref-width: 1;
+  -fx-opacity: 0;
+}
+
+#lineNumbersLeft .scroll-bar:horizontal, #lineNumbersRight .scroll-bar:horizontal {
+  -fx-pref-height: 1;
+  -fx-opacity: 0;
+}
+
+/*Code lines area*/
+#codeAreaLeft .content, #codeAreaRight .content {
+  // -fx-background-color: #454953;
+}
+
+// Code color
+#codeAreaLeft, #codeAreaRight {
+  //  -fx-text-fill: #f3f3f3;
+}
+
+
+// Makes empty rows plain white
+.table-row-cell:empty {
+  -fx-background-color: white;
+}
+.table-row-cell:empty .table-cell {
+  -fx-border-width: 0px;
+}

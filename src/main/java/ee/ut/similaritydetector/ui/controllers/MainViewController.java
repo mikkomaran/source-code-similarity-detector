@@ -96,9 +96,9 @@ public class MainViewController {
     @FXML
     private void openSideBySideView(List<SimilarSolutionCluster> clusters) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../../../../../resources/ee/ut/similaritydetector/fxml/side_by_side_view.fxml"));
+                "../../../../../../resources/ee/ut/similaritydetector/fxml/code_view.fxml"));
         Parent root = loader.load();
-        SideBySideViewController controller = loader.getController();
+        CodeViewController controller = loader.getController();
         controller.setClusters(clusters);
         controller.createClusterItems();
 

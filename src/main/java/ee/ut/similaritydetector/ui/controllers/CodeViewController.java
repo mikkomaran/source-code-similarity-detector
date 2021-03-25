@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SideBySideViewController {
+public class CodeViewController {
 
     private final List<TableView<SimilarSolutionPair>> clusterTables;
     @FXML
@@ -55,7 +55,7 @@ public class SideBySideViewController {
 
     private List<SimilarSolutionCluster> clusters;
 
-    public SideBySideViewController() {
+    public CodeViewController() {
         clusterTables = new ArrayList<>();
     }
 
