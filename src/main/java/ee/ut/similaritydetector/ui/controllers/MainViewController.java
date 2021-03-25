@@ -84,17 +84,20 @@ public class MainViewController {
         analyserThread.start();
 
         // TODO: open results view and present the information
+        analyser.setOnSucceeded(workerStateEvent -> {
+            try {
+                openCodeView(analyser.getSimilarSolutionClusters());
+            } catch (IOException e) {
+                System.out.println("Failed to open code view:\n" +  e.getMessage());
+            }
+        });
+
         // TODO: error message when analysis thread failed
-        try {
-            analyserThread.join();
-            openSideBySideView(analyser.getSimilarSolutionClusters());
-        } catch (InterruptedException | IOException e) {
-            e.printStackTrace();
-        }
+        //analyser.setOnFailed();
     }
 
     @FXML
-    private void openSideBySideView(List<SimilarSolutionCluster> clusters) throws IOException {
+    private void openCodeView(List<SimilarSolutionCluster> clusters) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "../../../../../../resources/ee/ut/similaritydetector/fxml/code_view.fxml"));
         Parent root = loader.load();

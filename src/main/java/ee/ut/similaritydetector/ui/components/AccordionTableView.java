@@ -1,9 +1,5 @@
 package main.java.ee.ut.similaritydetector.ui.components;
 
-import com.sun.javafx.collections.ImmutableObservableList;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -13,7 +9,6 @@ import javafx.scene.layout.AnchorPane;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionPair;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 

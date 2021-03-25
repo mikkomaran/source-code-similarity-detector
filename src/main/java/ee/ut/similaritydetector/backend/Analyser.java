@@ -51,9 +51,11 @@ public class Analyser extends Task<Void> {
 
     @Override
     protected Void call() {
+        updateProgress(0,100);
         startAnalysis();
         return null;
     }
+
 
     public void startAnalysis() {
         SolutionParser solutionParser = new SolutionParser(zipDirectory);
