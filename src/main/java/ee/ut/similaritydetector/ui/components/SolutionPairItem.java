@@ -30,7 +30,6 @@ public class SolutionPairItem extends Label {
         leftLabel.setText(solutionPair.getFirstSolution().getAuthor() + " - " + solutionPair.getFirstSolution().getExerciseName());
         rightLabel.setText(solutionPair.getSecondSolution().getAuthor() + " - " + solutionPair.getSecondSolution().getExerciseName());
 
-        //TODO: add source codes as text
         setTextAreaText(textAreaLeft, sourceCodeLines1);
         setTextAreaText(textAreaRight, sourceCodeLines2);
     }

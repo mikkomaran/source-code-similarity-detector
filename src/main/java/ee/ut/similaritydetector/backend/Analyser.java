@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +52,12 @@ public class Analyser extends Task<Void> {
             int exerciseSolutionCount = exercise.getSolutions().size();
             totalSolutionPairsCount += exerciseSolutionCount * (exerciseSolutionCount - 1) / 2;
             // Finds the average solution length for this exercise
-            exercise.findAverageSolutionLength();
+            exercise.findAverageSolutionSourceCodeLength();
+            exercise.findAverageSolutionPreprocessedCodeLength();
+            System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionSourceCodeLength() + " preprocessed codes");
+            System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionPreprocessedCodeLength() + " source codes");
+            System.out.println("Preprocessing removed on average " + Math.round(exercise.getAverageSolutionSourceCodeLength()
+                    - exercise.getAverageSolutionPreprocessedCodeLength()) + " characters per solution for exercise " + exercise.getName());
         }
         System.out.println("Total solution pairs: " + totalSolutionPairsCount);
         // Performing the pairwise comparison of solutions for each exercise
@@ -98,8 +104,8 @@ public class Analyser extends Task<Void> {
      */
     private double findSimilarity(Solution sol1, Solution sol2) {
         double similarity;
-        String sol1Code = readSolutionCode(sol1);
-        String sol2Code = readSolutionCode(sol2);
+        String sol1Code = readSolutionCode(sol1, false);
+        String sol2Code = readSolutionCode(sol2, false);
         try {
             similarity = normalisedLevenshteinSimilarity(sol1Code, sol2Code, SimilarityThreshold);
         } catch (NullPointerException e) {
@@ -110,19 +116,49 @@ public class Analyser extends Task<Void> {
     }
 
     /**
+     *
+     *
      * @param solution
+     * @param sourceCodePrioritised
      * @return
      */
-    public static String readSolutionCode(Solution solution) {
+    public static String readSolutionCode(Solution solution, boolean sourceCodePrioritised) {
+        String solutionCode;
+        Path first;
+        Path second;
+        if (sourceCodePrioritised) {
+            first = solution.getSourceCodeFile().toPath();
+            second = solution.getPreprocessedCodeFile().toPath();
+        } else {
+            first = solution.getPreprocessedCodeFile().toPath();
+            second = solution.getSourceCodeFile().toPath();
+        }
+        // We try to read the higher priority code file
+        try {
+            solutionCode = Files.readString(first, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            // If the higher priority code cannot be read or the file doesn't exist
+            // the second priority file is the fallback
+            try {
+                solutionCode = Files.readString(second, StandardCharsets.UTF_8);
+            } catch (IOException ioException) {
+                // If the second priority file also cannot be read or doesn't exist
+                solutionCode = null;
+            }
+        }
+        return solutionCode;
+    }
+
+    public static String readCode(Solution solution) {
         String solutionCode;
         // We try to read the preprocessed code file
         try {
-            solutionCode = Files.readString(solution.getPreprocessedCodeFile().toPath(), StandardCharsets.UTF_8);
+            solutionCode = Files.readString(solution.getSourceCodeFile().toPath(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             // If the preprocessed solution code cannot be read or the file doesn't exist
             // the source code file is the fallback
             try {
-                solutionCode = Files.readString(solution.getSourceCodeFile().toPath(), StandardCharsets.UTF_8);
+                solutionCode = Files.readString(solution.getPreprocessedCodeFile().toPath(), StandardCharsets.UTF_8);
             } catch (IOException ioException) {
                 // If the source code file also cannot be read or doesn't exist
                 solutionCode = null;

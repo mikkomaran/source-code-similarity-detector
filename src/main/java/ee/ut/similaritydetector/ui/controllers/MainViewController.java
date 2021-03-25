@@ -108,6 +108,10 @@ public class MainViewController {
 
         // Resize cluster table columns
         controller.resizeClusterTableColumns();
+
+        // Binds line numbers to move with code area's scrollbar
+        controller.bindLineNumberVerticalScrollToCodeArea(controller.getLineNumbersLeft(), controller.getCodeAreaLeft());
+        controller.bindLineNumberVerticalScrollToCodeArea(controller.getLineNumbersRight(), controller.getCodeAreaRight());
     }
 
 }

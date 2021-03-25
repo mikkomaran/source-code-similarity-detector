@@ -11,6 +11,12 @@
   -fx-cursor: hand;
 }
 
+// Makes all scrollbar backgrounds transparent
+.scroll-bar:horizontal, .scroll-bar:vertical {
+  -fx-opacity: 0.7;
+  -fx-background-color: transparent;
+  -fx-background-size: 0;
+}
 
 ///////////////////////////////////////////////////////////
 //                    CLUSTER TABLE
@@ -36,14 +42,21 @@
 //                   CODE VIEWING AREA
 ///////////////////////////////////////////////////////////
 
-#lineNumbersLeft .scroll-bar:vertical, #lineNumbersRight .scroll-bar:vertical {
-  //-fx-opacity: 0;
-}
-
 /*Line numbers area*/
 #lineNumbersLeft .content, #lineNumbersRight .content {
 //  -fx-background-color: #5b606b;
   -fx-text-alignment: right;
+  -fx-cursor: default;
+}
+
+#lineNumbersLeft .scroll-bar:vertical, #lineNumbersRight .scroll-bar:vertical {
+  -fx-pref-width: 1;
+  -fx-opacity: 0;
+}
+
+#lineNumbersLeft .scroll-bar:horizontal, #lineNumbersRight .scroll-bar:horizontal {
+  -fx-pref-height: 1;
+  -fx-opacity: 0;
 }
 
 /*Code lines area*/

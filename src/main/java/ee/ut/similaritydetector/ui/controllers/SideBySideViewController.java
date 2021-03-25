@@ -17,17 +17,39 @@ public class SideBySideViewController {
 
     private final List<TableView<SimilarSolutionPair>> clusterTables;
     @FXML
-    public TextArea lineNumbersLeft;
-    @FXML
     private VBox solutionClusterView;
+
+    @FXML
+    private ScrollPane scrollPaneLeft;
     @FXML
     private Label titleLeft;
+    @FXML
+    private TextArea lineNumbersLeft;
+    @FXML
+    private TextArea codeAreaLeft;
+
+    public TextArea getLineNumbersLeft() {
+        return lineNumbersLeft;
+    }
+
+    public TextArea getCodeAreaLeft() {
+        return codeAreaLeft;
+    }
+
+    public TextArea getLineNumbersRight() {
+        return lineNumbersRight;
+    }
+
+    public TextArea getCodeAreaRight() {
+        return codeAreaRight;
+    }
+
+    @FXML
+    private ScrollPane scrollPaneRight;
     @FXML
     private Label titleRight;
     @FXML
     private TextArea lineNumbersRight;
-    @FXML
-    private TextArea codeAreaLeft;
     @FXML
     private TextArea codeAreaRight;
 
@@ -48,7 +70,26 @@ public class SideBySideViewController {
 
     @FXML
     private void initialize() {
+        // Binding code area height to the scroll pane's height
+        codeAreaLeft.prefHeightProperty().bind(scrollPaneLeft.heightProperty().subtract(2));
+        codeAreaRight.prefHeightProperty().bind(scrollPaneRight.heightProperty().subtract(2));
 
+        // Restricts selecting text from line numbers area
+        restrictTextSelection(lineNumbersLeft);
+        restrictTextSelection(lineNumbersRight);
+    }
+
+    // Taken from: https://stackoverflow.com/questions/61665296/how-to-disable-text-selection-in-textarea-javafx [25.03.2021]
+    private void restrictTextSelection(TextArea textArea) {
+        textArea.setTextFormatter(new TextFormatter<String>(change -> {
+            change.setAnchor(change.getCaretPosition());
+            return change;
+        }));
+    }
+
+    public void bindLineNumberVerticalScrollToCodeArea(TextArea lineNumbersArea, TextArea codeArea) {
+        ScrollBar scrollBar = (ScrollBar) codeArea.lookup(".scroll-bar:vertical");
+        scrollBar.valueProperty().addListener((src, ov, nv) -> lineNumbersArea.setScrollTop(codeArea.getScrollTop()));
     }
 
     /**
@@ -66,6 +107,7 @@ public class SideBySideViewController {
         }
         // Add custom listeners to each table
         clusterTables.forEach(this::addCustomListener);
+
     }
 
     /**
@@ -78,13 +120,13 @@ public class SideBySideViewController {
     /**
      * Resizes the columns of the given {@code TableView} to fit column content
      *
-     * @param view - the {@code TableView} to be resized
+     * @param table - the {@code TableView} to be resized
      */
-    public void resizeTable(TableView<?> view) {
-        double columnsWidth = view.getColumns().stream().mapToDouble(TableColumnBase::getWidth).sum();
-        double tableWidth = view.getWidth();
+    public void resizeTable(TableView<?> table) {
+        double columnsWidth = table.getColumns().stream().mapToDouble(TableColumnBase::getWidth).sum();
+        double tableWidth = table.getWidth();
         if (tableWidth > columnsWidth) {
-            TableColumn<?, ?> col = view.getColumns().get(view.getColumns().size() - 1);
+            TableColumn<?, ?> col = table.getColumns().get(table.getColumns().size() - 1);
             col.setPrefWidth(col.getWidth() + (tableWidth - columnsWidth) - 4);
         }
     }
@@ -153,6 +195,7 @@ public class SideBySideViewController {
             lineNumbers.append(i + 1 < 10 ? "  " : i + 1 < 100 ? " " : "").append(i + 1).append(System.lineSeparator());
             codeLines.append(line).append(System.lineSeparator());
         }
+        lineNumbers.append(System.lineSeparator());
         lineNumbersArea.setText(lineNumbers.toString());
         codeLinesArea.setText(codeLines.toString());
     }
