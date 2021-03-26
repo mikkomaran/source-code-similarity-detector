@@ -14,10 +14,12 @@ public class SolutionParser {
 
     private final File contentDirectory;
     private final File outputDirectory;
+    private final boolean preprocessSourceCode;
 
-    public SolutionParser(File contentDirectory) {
+    public SolutionParser(File contentDirectory, boolean preprocessSourceCode) {
         this.contentDirectory = contentDirectory;
         this.outputDirectory = new File("resources/");
+        this.preprocessSourceCode = preprocessSourceCode;
     }
 
     /**
@@ -111,10 +113,12 @@ public class SolutionParser {
         } else {
             throw new InvalidPathException(sourceCodeFile.getParentFile().getName(), " is an invalid file path.");
         }
-        removeCommentsPy(sourceCodeFile.getAbsolutePath());
-        String sourceCodePath = sourceCodeFile.getAbsolutePath();
-        File preProcessedCodeFile = new File(sourceCodePath.substring(0, sourceCodePath.length() - 3) + "_preprocessed.py");
-        solution.setPreprocessedCodeFile(preProcessedCodeFile);
+        if (preprocessSourceCode) {
+            preprocessSourceCode(sourceCodeFile.getAbsolutePath());
+            String sourceCodePath = sourceCodeFile.getAbsolutePath();
+            File preProcessedCodeFile = new File(sourceCodePath.substring(0, sourceCodePath.length() - 3) + "_preprocessed.py");
+            solution.setPreprocessedCodeFile(preProcessedCodeFile);
+        }
         return solution;
     }
 
@@ -126,46 +130,12 @@ public class SolutionParser {
      * @throws InterruptedException
      * @throws IOException
      */
-    public void removeCommentsPy(String filePath) throws InterruptedException, IOException {
+    public void preprocessSourceCode(String filePath) throws InterruptedException, IOException {
         String scriptPath = "src/main/python/ee/ut/similaritydetector/Preprocessor.py";
         String[] command = {"python", scriptPath, filePath};
         ProcessBuilder processBuilder = new ProcessBuilder(command).inheritIO();
         Process process = processBuilder.start();
         process.waitFor();
-    }
-
-    /**
-     * Parses the source code of a zipped solution file as a list of strings,
-     * where each code line is a string in the list.
-     *
-     * @param zipDirectory ZIP directory where the solution file is
-     * @param zipEntry     the {@code ZipEntry} of the solution file
-     * @return list of strings of the solution's source code
-     */
-    private List<String> parseSourceCodeLines(ZipFile zipDirectory, ZipEntry zipEntry) {
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zipDirectory.getInputStream(zipEntry)))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                lines.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return lines;
-    }
-
-    private String parseSourceCode(ZipFile zipDirectory, ZipEntry zipEntry) {
-        StringBuilder sourceCode = new StringBuilder();
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zipDirectory.getInputStream(zipEntry)))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sourceCode.append(line).append(System.lineSeparator());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sourceCode.toString();
     }
 
 }

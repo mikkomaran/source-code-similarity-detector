@@ -12,7 +12,7 @@ public class Exercise {
     private final List<Solution> solutions;
     private double averageSolutionSourceCodeLength;
     private double averageSolutionPreprocessedCodeLength;
-    private double similarityThreshold = 0.97;
+    private double similarityThreshold = 0.95;
 
     public Exercise(String name, Solution... solutions) {
         this.name = name;

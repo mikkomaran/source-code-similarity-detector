@@ -7,6 +7,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionPair;
 
@@ -32,6 +33,8 @@ public class AccordionTableView extends TitledPane {
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tableView.setEditable(false);
         tableView.getStyleClass().add("no-header");
+        int cellSize = 25;
+        tableView.setMinHeight(cellSize);
 
         // Create columns for tableview
         TableColumn<SimilarSolutionPair, String> column1 = new TableColumn<>("Author 1");
@@ -54,13 +57,15 @@ public class AccordionTableView extends TitledPane {
                 .collect(Collectors.toList()));
 
         // To remove empty rows from the bottom of the table we have to set fixed cell size
-        tableView.setFixedCellSize(25);
-        tableView.prefHeightProperty().bind(Bindings.size(tableView.getItems()).multiply(tableView.getFixedCellSize()));
+        tableView.setFixedCellSize(cellSize);
+        tableView.prefHeightProperty().bind(Bindings.size(tableView.getItems()).multiply(tableView.getFixedCellSize()).add(1));
 
         // Sets titledPane header and content and is collapsed in the beginning
         this.setText(cluster.getName());
         this.setContent(anchorPane);
         this.setExpanded(false);
+        this.setPrefWidth(400);
+        this.setMinWidth(Region.USE_PREF_SIZE);
     }
 
 }

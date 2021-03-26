@@ -28,22 +28,6 @@ public class CodeViewController {
     @FXML
     private TextArea codeAreaLeft;
 
-    public TextArea getLineNumbersLeft() {
-        return lineNumbersLeft;
-    }
-
-    public TextArea getCodeAreaLeft() {
-        return codeAreaLeft;
-    }
-
-    public TextArea getLineNumbersRight() {
-        return lineNumbersRight;
-    }
-
-    public TextArea getCodeAreaRight() {
-        return codeAreaRight;
-    }
-
     @FXML
     private ScrollPane scrollPaneRight;
     @FXML
@@ -59,13 +43,28 @@ public class CodeViewController {
         clusterTables = new ArrayList<>();
     }
 
-
     public List<TableView<SimilarSolutionPair>> getClusterTables() {
         return clusterTables;
     }
 
     public void setClusters(List<SimilarSolutionCluster> clusters) {
         this.clusters = clusters;
+    }
+
+    public TextArea getLineNumbersLeft() {
+        return lineNumbersLeft;
+    }
+
+    public TextArea getCodeAreaLeft() {
+        return codeAreaLeft;
+    }
+
+    public TextArea getLineNumbersRight() {
+        return lineNumbersRight;
+    }
+
+    public TextArea getCodeAreaRight() {
+        return codeAreaRight;
     }
 
     @FXML
@@ -126,7 +125,7 @@ public class CodeViewController {
         double columnsWidth = table.getColumns().stream().mapToDouble(TableColumnBase::getWidth).sum();
         double tableWidth = table.getWidth();
         if (tableWidth > columnsWidth) {
-            tableWidth -= 0; // So random vertical scrollbar doesn't appear
+            tableWidth -= 4; // So random horizontal scroll doesn't happen
             TableColumn<?, ?> col1 = table.getColumns().get(0);
             TableColumn<?, ?> col2 = table.getColumns().get(1);
             TableColumn<?, ?> col3 = table.getColumns().get(2);
@@ -139,13 +138,12 @@ public class CodeViewController {
                 }
                 if (col2.getWidth() > nameColumnsPrefWidth / 2) {
                     col1.setPrefWidth(nameColumnsPrefWidth - col2.getWidth());
-                    col3.setPrefWidth(tableWidth - nameColumnsPrefWidth);
                 }
                 else {
                     col1.setPrefWidth(nameColumnsPrefWidth / 2);
                     col2.setPrefWidth(nameColumnsPrefWidth / 2);
-                    col3.setPrefWidth(tableWidth - nameColumnsPrefWidth);
                 }
+                col3.setPrefWidth(tableWidth - nameColumnsPrefWidth);
             }
             else {
                 col3.setPrefWidth(col3.getWidth() + (tableWidth - columnsWidth));

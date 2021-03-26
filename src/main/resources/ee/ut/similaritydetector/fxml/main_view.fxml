@@ -2,42 +2,122 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="600.0" prefWidth="800.0" stylesheets="@../style/style.scss, @../style/main_view_style.scss" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.ee.ut.similaritydetector.ui.controllers.MainViewController">
-   <center>
-      <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <Button fx:id="fileChooserButton" alignment="CENTER" mnemonicParsing="false" onAction="#chooseFile" prefHeight="50.0" prefWidth="120.0" text="Choose a ZIP file" />
-         <VBox fx:id="fileArea" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-            <ImageView id="zipImg" fitHeight="100.0" fitWidth="60.0" onMouseClicked="#chooseFile" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../../../../images/zip_icon.png" />
-            </ImageView>
-            <Label fx:id="fileNameLabel" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#chooseFile" prefHeight="45.0" prefWidth="173.0" textAlignment="CENTER" wrapText="true" />
-         </VBox>
-      </StackPane>
-   </center>
-   <bottom>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" BorderPane.alignment="CENTER">
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <Button fx:id="startButton" mnemonicParsing="false" onAction="#startAnalysis" prefHeight="34.0" prefWidth="85.0" text="Start analysis" />
-         <ProgressBar fx:id="progressBar" prefHeight="20.0" prefWidth="300.0" progress="0.0" />
-         <Label fx:id="progressPercentageLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="67.0" text="0%" textAlignment="CENTER" />
-      </VBox>
-   </bottom>
-   <top>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="126.0" prefWidth="328.0" text="Source code similarity detector" textAlignment="CENTER" BorderPane.alignment="BOTTOM_CENTER">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-   </top>
-</BorderPane>
+<VBox prefHeight="600.0" prefWidth="800.0" stylesheets="@../style/style.scss, @../style/main_view_style.scss" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.ee.ut.similaritydetector.ui.controllers.MainViewController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+               <accelerator>
+                  <KeyCodeCombination alt="DOWN" code="F" control="UP" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+               <accelerator>
+                  <KeyCodeCombination alt="DOWN" code="E" control="UP" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+               <accelerator>
+                  <KeyCodeCombination alt="DOWN" code="E" control="UP" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <HBox VBox.vgrow="ALWAYS">
+         <children>
+            <AnchorPane minWidth="-Infinity" prefHeight="575.0" prefWidth="220.0">
+               <children>
+                  <TitledPane animated="false" collapsible="false" prefHeight="605.0" prefWidth="217.0" text="Settings" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <content>
+                      <AnchorPane>
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <CheckBox fx:id="customSimilarityThresholdCheckbox" mnemonicParsing="false" text="Custom similarity threshold">
+                                       <tooltip>
+                                          <Tooltip maxWidth="-Infinity" prefWidth="200.0" text="When selected the user can select an allowed similarity percentage for solutions. Otherwise, it's calculated automatically" wrapText="true" />
+                                       </tooltip></CheckBox>
+                                    <Spinner fx:id="customSimilarityThresholdSpinner" editable="true" prefWidth="75.0">
+                                       <VBox.margin>
+                                          <Insets left="25.0" />
+                                       </VBox.margin>
+                                    </Spinner>
+                                    <Separator prefWidth="200.0" />
+                                    <CheckBox fx:id="preprocessCodeCheckbox" mnemonicParsing="false" text="Preprocess source code">
+                                       <tooltip>
+                                          <Tooltip maxWidth="-Infinity" text="If checked then preprocesses the source code by removing comments and empty lines" textAlignment="JUSTIFY" wrapText="true" />
+                                       </tooltip>
+                                    </CheckBox>
+                                    <Separator prefWidth="200.0" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </TitledPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="605.0" prefWidth="598.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane VBox.vgrow="ALWAYS">
+                           <children>
+                              <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="-125.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <Button fx:id="fileChooserButton" alignment="CENTER" mnemonicParsing="false" onAction="#chooseFile" prefHeight="50.0" prefWidth="120.0" text="Choose a ZIP file" />
+                                 <VBox fx:id="fileArea" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="BOTTOM_CENTER">
+                                    <ImageView id="zipImg" fx:id="zipImg" fitHeight="100.0" fitWidth="60.0" onMouseClicked="#chooseFile" pickOnBounds="true" preserveRatio="true">
+                                       <Image url="@../../../../images/zip_icon.png" />
+                                    </ImageView>
+                                    <Label fx:id="fileNameLabel" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#chooseFile" prefHeight="45.0" prefWidth="173.0" textAlignment="CENTER" wrapText="true" />
+                                 </VBox>
+                              </StackPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="0.0" prefWidth="598.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <Button fx:id="startButton" mnemonicParsing="false" onAction="#startAnalysis" prefHeight="34.0" prefWidth="85.0" text="Start analysis" />
+                                 <ProgressBar fx:id="progressBar" prefHeight="20.0" prefWidth="300.0" progress="0.0" />
+                                 <Label fx:id="progressPercentageLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="67.0" text="0%" textAlignment="CENTER" />
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+   </children>
+</VBox>

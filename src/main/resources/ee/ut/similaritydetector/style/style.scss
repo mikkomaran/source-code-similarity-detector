@@ -2,12 +2,21 @@
 //                     GLOBAL STYLES
 ///////////////////////////////////////////////////////////
 
+.button:hover {
+  -fx-cursor: hand;
+}
 
 // Makes all scrollbar backgrounds transparent
 .scroll-bar:horizontal, .scroll-bar:vertical {
   -fx-opacity: 0.7;
   -fx-background-color: transparent;
   -fx-background-size: 0;
+}
+
+// Tooltips
+.tooltip {
+  -fx-opacity: 0.9;
+  -fx-max-width: 250;
 }
 
 ///////////////////////////////////////////////////////////

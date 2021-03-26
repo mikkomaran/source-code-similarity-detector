@@ -4,15 +4,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import main.java.ee.ut.similaritydetector.backend.Analyser;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
+import main.java.ee.ut.similaritydetector.utils.IntegerStringConverter;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -23,6 +23,15 @@ public class MainViewController {
     public static Stage stage;
     public static File zipDirectory;
 
+    // Settings
+    @FXML
+    private CheckBox customSimilarityThresholdCheckbox;
+    @FXML
+    private Spinner<Integer> customSimilarityThresholdSpinner;
+    @FXML
+    private CheckBox preprocessCodeCheckbox;
+
+    // File choosing
     @FXML
     private Button fileChooserButton;
     @FXML
@@ -30,6 +39,7 @@ public class MainViewController {
     @FXML
     private VBox fileArea;
 
+    // Analyse progress
     @FXML
     private Button startButton;
     @FXML
@@ -46,6 +56,18 @@ public class MainViewController {
         startButton.setVisible(false);
         fileArea.setVisible(false);
         progressPercentageLabel.setVisible(false);
+
+        // Spinner restrictions and bindings
+        customSimilarityThresholdSpinner.visibleProperty().bind(customSimilarityThresholdCheckbox.selectedProperty());
+        customSimilarityThresholdSpinner.managedProperty().bind(customSimilarityThresholdSpinner.visibleProperty());
+        customSimilarityThresholdSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 100));
+        IntegerStringConverter.createFor(customSimilarityThresholdSpinner);
+
+        // Tooltip rules
+        ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
+        toolTipManager.setDismissDelay(10000);
+        toolTipManager.setInitialDelay(600);
+        toolTipManager.setReshowDelay(300);
     }
 
     @FXML
@@ -76,7 +98,12 @@ public class MainViewController {
         startButton.setVisible(false);
 
         //Starts the backend similarity analysis on a new thread
-        Analyser analyser = new Analyser(zipDirectory);
+        Analyser analyser;
+        if (customSimilarityThresholdCheckbox.isSelected()){
+            analyser = new Analyser(zipDirectory, customSimilarityThresholdSpinner.getValue() / 100.0, preprocessCodeCheckbox.isSelected());
+        } else {
+            analyser = new Analyser(zipDirectory, preprocessCodeCheckbox.isSelected());
+        }
         progressBar.progressProperty().bind(analyser.progressProperty());
         progressPercentageLabel.textProperty().bind(analyser.progressProperty().multiply(100).asString("%.0f%%"));
         Thread analyserThread = new Thread(analyser, "analyser_thread");
