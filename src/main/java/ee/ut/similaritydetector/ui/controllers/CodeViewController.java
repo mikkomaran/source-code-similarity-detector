@@ -16,6 +16,10 @@ import java.util.List;
 public class CodeViewController {
 
     private final List<TableView<SimilarSolutionPair>> clusterTables;
+
+    @FXML
+    private MenuBarController menuBarController;
+
     @FXML
     private VBox solutionClusterView;
 

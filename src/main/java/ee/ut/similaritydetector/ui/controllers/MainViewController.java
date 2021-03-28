@@ -1,16 +1,19 @@
 package main.java.ee.ut.similaritydetector.ui.controllers;
 
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import main.java.ee.ut.similaritydetector.backend.Analyser;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
-import main.java.ee.ut.similaritydetector.utils.IntegerStringConverter;
+import main.java.ee.ut.similaritydetector.ui.utils.IntegerStringConverter;
 
 import javax.swing.*;
 import java.io.File;
@@ -23,7 +26,12 @@ public class MainViewController {
     public static Stage stage;
     public static File zipDirectory;
 
+    @FXML
+    private MenuBarController menuBarController;
+
     // Settings
+    @FXML
+    private AnchorPane settingsPane;
     @FXML
     private CheckBox customSimilarityThresholdCheckbox;
     @FXML
@@ -41,7 +49,11 @@ public class MainViewController {
 
     // Analyse progress
     @FXML
+    private VBox progressArea;
+    @FXML
     private Button startButton;
+    @FXML
+    private Label progressTextLabel;
     @FXML
     private ProgressBar progressBar;
     @FXML
@@ -52,10 +64,9 @@ public class MainViewController {
 
     @FXML
     private void initialize() {
-        progressBar.setVisible(false);
         startButton.setVisible(false);
         fileArea.setVisible(false);
-        progressPercentageLabel.setVisible(false);
+        progressArea.setVisible(false);
 
         // Spinner restrictions and bindings
         customSimilarityThresholdSpinner.visibleProperty().bind(customSimilarityThresholdCheckbox.selectedProperty());
@@ -92,10 +103,12 @@ public class MainViewController {
 
     @FXML
     private void startAnalysis() {
+        // Animates settings pane to disappear left
+        hideSettings();
+
         fileArea.setVisible(false);
-        progressBar.setVisible(true);
-        progressPercentageLabel.setVisible(true);
         startButton.setVisible(false);
+        progressArea.setVisible(true);
 
         //Starts the backend similarity analysis on a new thread
         Analyser analyser;
@@ -110,12 +123,11 @@ public class MainViewController {
         analyserThread.setDaemon(true);
         analyserThread.start();
 
-        // TODO: open results view and present the information
         analyser.setOnSucceeded(workerStateEvent -> {
             try {
-                openCodeView(analyser.getSimilarSolutionClusters());
+                openResultsView(analyser);
             } catch (IOException e) {
-                System.out.println("Failed to open code view:\n" +  e.getMessage());
+                System.out.println("Failed to open results view:\n" +  e.getMessage());
             }
         });
 
@@ -123,25 +135,33 @@ public class MainViewController {
         //analyser.setOnFailed();
     }
 
+    private void hideSettings(){
+        Duration duration = Duration.millis(500);
+        Timeline timeline = new Timeline(
+                new KeyFrame(duration,
+                        new KeyValue(settingsPane.maxWidthProperty(), 0, Interpolator.EASE_OUT),
+                        new KeyValue(settingsPane.minWidthProperty(), 0, Interpolator.EASE_OUT)));
+        timeline.play();
+    }
+
     @FXML
-    private void openCodeView(List<SimilarSolutionCluster> clusters) throws IOException {
+    private void openResultsView(Analyser analyser) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../../../../../resources/ee/ut/similaritydetector/fxml/code_view.fxml"));
+                "../../../../../../resources/ee/ut/similaritydetector/fxml/results_view.fxml"));
         Parent root = loader.load();
-        CodeViewController controller = loader.getController();
-        controller.setClusters(clusters);
-        controller.createClusterItems();
+        ResultsViewController controller = loader.getController();
+        controller.setAnalyser(analyser);
 
-        Scene sideBySideScene = new Scene(root, 1200, 700);
-        stage.setScene(sideBySideScene);
+        Scene resultsViewScene = new Scene(root, 1000, 700);
+        stage.setScene(resultsViewScene);
+
+        // Persists dark theme if it was activated before
+        menuBarController.persistDarkTheme();
+
+        // Makes the "View clusters" button clickable if analysis found any clusters
+        controller.toggleClusterButtonUsability();
+
         stage.show();
-
-        // Resize cluster table columns
-        controller.resizeClusterTableColumns();
-
-        // Binds line numbers to move with code area's scrollbar
-        controller.bindLineNumberVerticalScrollToCodeArea(controller.getLineNumbersLeft(), controller.getCodeAreaLeft());
-        controller.bindLineNumberVerticalScrollToCodeArea(controller.getLineNumbersRight(), controller.getCodeAreaRight());
     }
 
 }

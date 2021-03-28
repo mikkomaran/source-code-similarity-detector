@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" stylesheets="@../style/style.scss, @../style/results_view_style.scss" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.ee.ut.similaritydetector.ui.controllers.ResultsViewController">
+   <children>
+       <fx:include fx:id="menuBar" source="menu_bar.fxml" />
+      <HBox VBox.vgrow="ALWAYS">
+         <children>
+            <AnchorPane minWidth="200.0" HBox.hgrow="NEVER">
+               <children>
+                  <TitledPane animated="false" collapsible="false" text="Settings" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </TitledPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox alignment="TOP_CENTER" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="Statistics" VBox.vgrow="ALWAYS">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" spacing="25.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <AnchorPane HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <VBox alignment="CENTER_RIGHT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <Label text="Total solutions:" />
+                                                <Label text="Solution pairs analysed:" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <VBox alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <Label text="99" />
+                                                <Label text="99" />
+                                             </children>
+                                             <padding>
+                                                <Insets right="50.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <Separator>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="20.0" right="20.0" />
+                           </padding>
+                        </Separator>
+                        <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label text="Label" />
+                           </children>
+                        </HBox>
+                        <Separator>
+                           <padding>
+                              <Insets left="20.0" right="20.0" />
+                           </padding>
+                        </Separator>
+                        <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label text="Label" />
+                           </children>
+                        </HBox>
+                        <Separator layoutX="10.0" layoutY="140.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="20.0" right="20.0" />
+                           </padding>
+                        </Separator>
+                        <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="viewClustersButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onAction="#viewClusters" prefHeight="50.0" prefWidth="125.0" text="View clusters" textAlignment="CENTER" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="-25.0" />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+   </children>
+</VBox>

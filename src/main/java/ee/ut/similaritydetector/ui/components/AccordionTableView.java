@@ -60,12 +60,15 @@ public class AccordionTableView extends TitledPane {
         tableView.setFixedCellSize(cellSize);
         tableView.prefHeightProperty().bind(Bindings.size(tableView.getItems()).multiply(tableView.getFixedCellSize()).add(1));
 
-        // Sets titledPane header and content and is collapsed in the beginning
+        // TitledPane header and content
         this.setText(cluster.getName());
         this.setContent(anchorPane);
+
+        // TitledPane restrictions
         this.setExpanded(false);
         this.setPrefWidth(400);
         this.setMinWidth(Region.USE_PREF_SIZE);
+        this.setWrapText(true);
     }
 
 }
