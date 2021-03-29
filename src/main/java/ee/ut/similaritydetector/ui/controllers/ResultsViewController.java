@@ -20,10 +20,14 @@ public class ResultsViewController {
     private MenuBarController menuBarController;
 
     @FXML
-    private Label totalSolutions;
+    private Label totalSolutionsLabel;
     @FXML
-    private Label solutionPairs;
+    private Label solutionPairsLabel;
 
+    @FXML
+    private Label similarPairsLabel;
+    @FXML
+    private Label similarClustersLabel;
     @FXML
     private Button viewClustersButton;
 
@@ -40,8 +44,10 @@ public class ResultsViewController {
     }
 
     public void readStatistics() {
-        totalSolutions.setText(String.valueOf(analyser.getExercises().stream().mapToInt(Exercise::getExerciseSolutionCount).sum()));
-        solutionPairs.setText(String.valueOf(analyser.getAnalysedSolutionPairsCount()));
+        totalSolutionsLabel.setText(String.valueOf(analyser.getExercises().stream().mapToInt(Exercise::getExerciseSolutionCount).sum()));
+        solutionPairsLabel.setText(String.valueOf(analyser.getAnalysedSolutionPairsCount()));
+        similarPairsLabel.setText(String.valueOf(analyser.getSimilarSolutionPairs().size()));
+        similarClustersLabel.setText(String.valueOf(analyser.getSimilarSolutionClusters().size()));
     }
 
 

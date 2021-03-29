@@ -51,7 +51,7 @@ public class SimilarityDetectorLauncher extends Application {
         ButtonType exitButton = new ButtonType("Exit");
         ButtonType cancelButton = ButtonType.CANCEL;
         alert.getButtonTypes().setAll(cancelButton, exitButton);
-        // TODO: defauly button
+        // TODO: default button
         //Deactivate Defaultbehavior for yes-Button:
         Button yesButton = (Button) alert.getDialogPane().lookupButton(exitButton);
         yesButton.setDefaultButton(false);
@@ -74,7 +74,7 @@ public class SimilarityDetectorLauncher extends Application {
     @Override
     public void stop() throws Exception {
         /* TODO: siin teha asjad, mida sulgemisel vaja oleks:
-                resources kausta kusutamine?,
+                resources kausta kustutamine?,
                 salvestada äkki ümber sarnased tööd kuhugi? */
         super.stop();
     }

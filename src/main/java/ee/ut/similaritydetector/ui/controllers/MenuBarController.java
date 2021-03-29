@@ -2,15 +2,11 @@ package main.java.ee.ut.similaritydetector.ui.controllers;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
 import javafx.scene.control.Menu;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import main.java.ee.ut.similaritydetector.ui.utils.UserData;
-
-import java.util.Arrays;
 
 public class MenuBarController {
 
@@ -37,6 +33,8 @@ public class MenuBarController {
 
     @FXML
     private Menu helpMenu;
+    @FXML
+    private MenuItem aboutMenuItem;
 
     public MenuBarController() {
     }
@@ -53,7 +51,7 @@ public class MenuBarController {
         }
     }
 
-    public void activateDarkTheme() {
+    private void activateDarkTheme() {
         UserData userData = (UserData) MainViewController.stage.getUserData();
         userData.setDarkMode(true);
         MainViewController.stage.setUserData(userData);
@@ -63,10 +61,9 @@ public class MenuBarController {
                 stylesheets.add(String.valueOf(this.getClass().getResource(darkThemeStylesheetPath)));
             }
         });
-
     }
 
-    public void activateClassicTheme() {
+    private void activateClassicTheme() {
         UserData userData = (UserData) MainViewController.stage.getUserData();
         userData.setDarkMode(false);
         MainViewController.stage.setUserData(userData);
@@ -77,6 +74,11 @@ public class MenuBarController {
         if (darkTheme.isSelected()) {
             activateDarkTheme();
         }
+    }
+
+    @FXML
+    private void showAboutInfo() {
+        // TODO: create about info page
     }
 
 }

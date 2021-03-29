@@ -41,7 +41,7 @@ public class MainViewController {
 
     // File choosing
     @FXML
-    private Button fileChooserButton;
+    private Button fileChooseButton;
     @FXML
     private Label fileNameLabel;
     @FXML
@@ -95,7 +95,7 @@ public class MainViewController {
             MainViewController.zipDirectory = zipDirectory;
             //System.out.println(zipDirectoryPath);
             fileNameLabel.setText(MainViewController.zipDirectory.getName());
-            fileChooserButton.setVisible(false);
+            fileChooseButton.setVisible(false);
             fileArea.setVisible(true);
             startButton.setVisible(true);
         }
@@ -186,7 +186,7 @@ public class MainViewController {
         controller.setAnalyser(analyser);
         controller.readStatistics();
 
-        Scene resultsViewScene = new Scene(root, 1000, 700);
+        Scene resultsViewScene = new Scene(root, 800, 600);
         stage.setScene(resultsViewScene);
 
         // Persists dark theme if it was activated before

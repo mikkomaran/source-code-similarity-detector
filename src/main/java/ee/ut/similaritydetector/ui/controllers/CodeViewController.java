@@ -7,6 +7,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import main.java.ee.ut.similaritydetector.backend.SimilarSolutionPair;
+import main.java.ee.ut.similaritydetector.backend.Solution;
 import main.java.ee.ut.similaritydetector.ui.components.AccordionTableView;
 
 import java.io.IOException;
@@ -114,6 +115,25 @@ public class CodeViewController {
     }
 
     /**
+     * Adds a custom listener to the given table that on table row selection
+     * loads the corresponding solution pair code and removes current selection from other tables.
+     *
+     * @param tableView the tableview that gets added the listener
+     */
+    private void addCustomListener(TableView<SimilarSolutionPair> tableView) {
+        tableView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue == null) return;
+            SimilarSolutionPair solutionPair = tableView.getSelectionModel().getSelectedItem();
+            loadSolutionPairSourceCodes(solutionPair, titleLeft, titleRight, lineNumbersLeft, lineNumbersRight, codeAreaLeft, codeAreaRight);
+            for (TableView<SimilarSolutionPair> otherTableView : clusterTables) {
+                if (!tableView.equals(otherTableView)) {
+                    otherTableView.getSelectionModel().clearSelection();
+                }
+            }
+        });
+    }
+
+    /**
      * Resizes the cluster tables' columns
      */
     public void resizeClusterTableColumns() {
@@ -123,9 +143,9 @@ public class CodeViewController {
     /**
      * Resizes the columns of the given {@code TableView} to fit the size of columns' content.
      *
-     * @param table - the {@code TableView} to be resized
+     * @param table the {@code TableView} to be resized
      */
-    public void resizeTable(TableView<?> table) {
+    private void resizeTable(TableView<?> table) {
         double columnsWidth = table.getColumns().stream().mapToDouble(TableColumnBase::getWidth).sum();
         double tableWidth = table.getWidth();
         if (tableWidth > columnsWidth) {
@@ -156,25 +176,6 @@ public class CodeViewController {
     }
 
     /**
-     * Adds a custom listener to the given table that on table row selection
-     * loads the corresponding solution pair code and removes current selection from other tables.
-     *
-     * @param tableView the tableview that gets added the listener
-     */
-    public void addCustomListener(TableView<SimilarSolutionPair> tableView) {
-        tableView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (newValue == null) return;
-            SimilarSolutionPair solutionPair = tableView.getSelectionModel().getSelectedItem();
-            loadSolutionPairSourceCodes(solutionPair, titleLeft, titleRight, lineNumbersLeft, lineNumbersRight, codeAreaLeft, codeAreaRight);
-            for (TableView<SimilarSolutionPair> otherTableView : clusterTables) {
-                if (!tableView.equals(otherTableView)) {
-                    otherTableView.getSelectionModel().clearSelection();
-                }
-            }
-        });
-    }
-
-    /**
      * Loads the source codes from the given solutionPair to the view.
      *
      * @param solutionPair given {@code SimilarSolutionPair}
@@ -185,22 +186,36 @@ public class CodeViewController {
      * @param codeAreaLeft {@code TextArea} for first solution's source code lines
      * @param codeAreaRight {@code TextArea} for second solution's source code lines
      */
-    public void loadSolutionPairSourceCodes(SimilarSolutionPair solutionPair, Label titleLeft, Label titleRight, TextArea lineNumbersLeft,
+    private void loadSolutionPairSourceCodes(SimilarSolutionPair solutionPair, Label titleLeft, Label titleRight, TextArea lineNumbersLeft,
                                             TextArea lineNumbersRight, TextArea codeAreaLeft, TextArea codeAreaRight) {
-        List<String> sourceCodeLines1 = null;
-        List<String> sourceCodeLines2 = null;
+        // First solution
         try {
-            sourceCodeLines1 = solutionPair.getFirstSolution().getSourceCodeLines();
-            sourceCodeLines2 = solutionPair.getSecondSolution().getSourceCodeLines();
+            List<String> sourceCodeLines1 = solutionPair.getFirstSolution().getSourceCodeLines();
+            titleLeft.setText(solutionPair.getFirstSolution().getAuthor() + " - " + solutionPair.getFirstSolution().getExerciseName());
+            setLineNumbersAndCodeLines(lineNumbersLeft, codeAreaLeft, sourceCodeLines1);
         } catch (IOException e) {
-            // TODO: error handling
             e.printStackTrace();
+            // TODO: error handling
+            showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
         }
-        titleLeft.setText(solutionPair.getFirstSolution().getAuthor() + " - " + solutionPair.getFirstSolution().getExerciseName());
-        titleRight.setText(solutionPair.getSecondSolution().getAuthor() + " - " + solutionPair.getSecondSolution().getExerciseName());
 
-        setLineNumbersAndCodeLines(lineNumbersLeft, codeAreaLeft, sourceCodeLines1);
-        setLineNumbersAndCodeLines(lineNumbersRight, codeAreaRight, sourceCodeLines2);
+        // Second solution
+        try {
+            List<String> sourceCodeLines2 = solutionPair.getSecondSolution().getSourceCodeLines();
+            titleRight.setText(solutionPair.getSecondSolution().getAuthor() + " - " + solutionPair.getSecondSolution().getExerciseName());
+            setLineNumbersAndCodeLines(lineNumbersRight, codeAreaRight, sourceCodeLines2);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // TODO: error handling
+            showSolutionCodeReadingErrorAlert(solutionPair.getSecondSolution());
+        }
+    }
+
+    private void showSolutionCodeReadingErrorAlert(Solution solution) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Could not load solution code");
+        alert.setContentText(solution.getExerciseName() + " - " + solution.getAuthor());
+        alert.showAndWait();
     }
 
     /**
