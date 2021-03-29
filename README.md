@@ -1,1 +1,3 @@
 # Source code similarity detector
+
+Work in progress...
