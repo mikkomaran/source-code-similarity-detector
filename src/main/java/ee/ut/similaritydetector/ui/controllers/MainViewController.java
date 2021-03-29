@@ -1,6 +1,7 @@
 package main.java.ee.ut.similaritydetector.ui.controllers;
 
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,14 +13,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.java.ee.ut.similaritydetector.backend.Analyser;
-import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import main.java.ee.ut.similaritydetector.ui.utils.IntegerStringConverter;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-
 
 public class MainViewController {
 
@@ -38,6 +36,8 @@ public class MainViewController {
     private Spinner<Integer> customSimilarityThresholdSpinner;
     @FXML
     private CheckBox preprocessCodeCheckbox;
+    @FXML
+    private CheckBox anonymousResultsCheckbox;
 
     // File choosing
     @FXML
@@ -110,15 +110,17 @@ public class MainViewController {
         startButton.setVisible(false);
         progressArea.setVisible(true);
 
-        //Starts the backend similarity analysis on a new thread
         Analyser analyser;
         if (customSimilarityThresholdCheckbox.isSelected()){
-            analyser = new Analyser(zipDirectory, customSimilarityThresholdSpinner.getValue() / 100.0, preprocessCodeCheckbox.isSelected());
+            analyser = new Analyser(zipDirectory, customSimilarityThresholdSpinner.getValue() / 100.0, preprocessCodeCheckbox.isSelected(), anonymousResultsCheckbox.isSelected(), this);
         } else {
-            analyser = new Analyser(zipDirectory, preprocessCodeCheckbox.isSelected());
+            analyser = new Analyser(zipDirectory, preprocessCodeCheckbox.isSelected(), anonymousResultsCheckbox.isSelected(), this);
         }
         progressBar.progressProperty().bind(analyser.progressProperty());
         progressPercentageLabel.textProperty().bind(analyser.progressProperty().multiply(100).asString("%.0f%%"));
+        setProgressText("Starting analysis...");
+
+        //Starts the backend similarity analysis on a new thread
         Thread analyserThread = new Thread(analyser, "analyser_thread");
         analyserThread.setDaemon(true);
         analyserThread.start();
@@ -127,21 +129,52 @@ public class MainViewController {
             try {
                 openResultsView(analyser);
             } catch (IOException e) {
-                System.out.println("Failed to open results view:\n" +  e.getMessage());
+                e.printStackTrace();
+                resetMainView("Failed to load results", "");
             }
         });
 
-        // TODO: error message when analysis thread failed
-        //analyser.setOnFailed();
+        analyser.setOnFailed(event -> {
+            analyser.getException().printStackTrace();
+            resetMainView("Analysis failed", "");
+        });
     }
 
     private void hideSettings(){
-        Duration duration = Duration.millis(500);
+        Duration duration = Duration.millis(300);
+        settingsPane.setPrefWidth(settingsPane.getMinWidth());
         Timeline timeline = new Timeline(
                 new KeyFrame(duration,
                         new KeyValue(settingsPane.maxWidthProperty(), 0, Interpolator.EASE_OUT),
                         new KeyValue(settingsPane.minWidthProperty(), 0, Interpolator.EASE_OUT)));
         timeline.play();
+    }
+
+    private void openSettings(){
+        Duration duration = Duration.millis(300);
+        Timeline timeline = new Timeline(
+                new KeyFrame(duration,
+                        new KeyValue(settingsPane.maxWidthProperty(), settingsPane.getPrefWidth(), Interpolator.EASE_OUT),
+                        new KeyValue(settingsPane.minWidthProperty(), settingsPane.getPrefWidth(), Interpolator.EASE_OUT)));
+        timeline.play();
+    }
+
+    public void setProgressText(String text) {
+        Platform.runLater(() -> progressTextLabel.setText(text));
+    }
+
+    private void resetMainView(String errorMessage, String contextMessage) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(errorMessage);
+        alert.setContentText(contextMessage);
+        alert.showAndWait();
+
+        // Animates settings pane to reappear
+        openSettings();
+
+        fileArea.setVisible(true);
+        startButton.setVisible(true);
+        progressArea.setVisible(false);
     }
 
     @FXML
@@ -151,6 +184,7 @@ public class MainViewController {
         Parent root = loader.load();
         ResultsViewController controller = loader.getController();
         controller.setAnalyser(analyser);
+        controller.readStatistics();
 
         Scene resultsViewScene = new Scene(root, 1000, 700);
         stage.setScene(resultsViewScene);
@@ -161,6 +195,7 @@ public class MainViewController {
         // Makes the "View clusters" button clickable if analysis found any clusters
         controller.toggleClusterButtonUsability();
 
+        stage.centerOnScreen();
         stage.show();
     }
 

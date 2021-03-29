@@ -15,11 +15,16 @@ public class SolutionParser {
     private final File contentDirectory;
     private final File outputDirectory;
     private final boolean preprocessSourceCode;
+    private final boolean anonymousResults;
 
-    public SolutionParser(File contentDirectory, boolean preprocessSourceCode) {
+    private final Analyser analyser;
+
+    public SolutionParser(File contentDirectory, boolean preprocessSourceCode, boolean anonymousResults, Analyser analyser) {
         this.contentDirectory = contentDirectory;
         this.outputDirectory = new File("resources/");
         this.preprocessSourceCode = preprocessSourceCode;
+        this.anonymousResults = anonymousResults;
+        this.analyser = analyser;
     }
 
     /**
@@ -50,8 +55,21 @@ public class SolutionParser {
      */
     public List<Exercise> parseSolutions() {
         List<Exercise> exercises = new ArrayList<>();
-        //Map<String, List<Solution>> solutions = new HashMap<>();
+        int numSolutions = 0;
+        int parsedSolutions = 0;
 
+        try {
+            ZipFile zipFile = new ZipFile(contentDirectory);
+            Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
+            while (zipEntries.hasMoreElements()) {
+                ZipEntry entry = zipEntries.nextElement();
+                if (!entry.isDirectory()) {
+                    numSolutions++;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // File unzipping adapted from: https://www.baeldung.com/java-compress-and-uncompress [11.03.2021]
         byte[] buffer = new byte[1024];
         try (ZipInputStream zis = new ZipInputStream(new FileInputStream(contentDirectory), StandardCharsets.UTF_8)) {
@@ -84,16 +102,19 @@ public class SolutionParser {
                         } else {
                             exercises.add(new Exercise(solution.getExerciseName(), solution));
                         }
-                        //solutions.computeIfAbsent(solution.getExerciseName(), k -> new ArrayList<>()).add(solution);
                     } catch (InvalidPathException | InterruptedException | IOException e) {
                         System.out.println(e.getMessage());
                     }
+                    parsedSolutions ++;
+                    analyser.updateProgressProperty(parsedSolutions, numSolutions);
                 }
                 zipEntry = zis.getNextEntry();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println(numSolutions + " - " + parsedSolutions);
         return exercises;
     }
 
@@ -105,10 +126,14 @@ public class SolutionParser {
      */
     private Solution parseSolution(File sourceCodeFile) throws IOException, InterruptedException {
         Solution solution;
-        Pattern solutionFolderPattern = Pattern.compile(".+_(.+)");
+        Pattern solutionFolderPattern = Pattern.compile("(.+)_(.+)");
         Matcher matcher = solutionFolderPattern.matcher(sourceCodeFile.getParentFile().getName());
         if (matcher.find()) {
-            String author = matcher.group(1);
+            String author;
+            if (anonymousResults)
+                author = matcher.group(1);
+            else
+                author = matcher.group(2);
             solution = new Solution(author, sourceCodeFile.getName(), sourceCodeFile);
         } else {
             throw new InvalidPathException(sourceCodeFile.getParentFile().getName(), " is an invalid file path.");

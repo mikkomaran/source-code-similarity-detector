@@ -40,6 +40,10 @@ public class Exercise {
         return averageSolutionPreprocessedCodeLength;
     }
 
+    public int getExerciseSolutionCount() {
+        return solutions.size();
+    }
+
     public void findAverageSolutionSourceCodeLength() {
         float avgSolutionLength = 0;
         int solutionCount = solutions.size();

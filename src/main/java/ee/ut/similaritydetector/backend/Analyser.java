@@ -1,6 +1,8 @@
 package main.java.ee.ut.similaritydetector.backend;
 
 import javafx.concurrent.Task;
+import javafx.scene.control.Label;
+import main.java.ee.ut.similaritydetector.ui.controllers.MainViewController;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +18,7 @@ public class Analyser extends Task<Void> {
 
     private double similarityThreshold = -1;
     private final boolean preprocessSourceCode;
+    private final boolean anonymousResults;
     private final File zipDirectory;
     private final List<SimilarSolutionPair> similarSolutionPairs;
     private final List<SimilarSolutionCluster> similarSolutionClusters;
@@ -25,25 +28,64 @@ public class Analyser extends Task<Void> {
     private int analysedSolutionPairsCount;
     private int similarCount;
 
-    public Analyser(File zipDirectory, boolean preprocessSourceCode) {
+    private final MainViewController mainViewController;
+
+    public Analyser(File zipDirectory, boolean preprocessSourceCode, boolean anonymousResults, MainViewController mainViewController) {
         this.zipDirectory = zipDirectory;
         this.preprocessSourceCode = preprocessSourceCode;
+        this.anonymousResults = anonymousResults;
+        this.mainViewController = mainViewController;
         exercises = new ArrayList<>();
         similarSolutionPairs = new ArrayList<>();
         similarSolutionClusters = new ArrayList<>();
     }
 
-    public Analyser(File zipDirectory, double similarityThreshold, boolean preprocessSourceCode) {
+    public Analyser(File zipDirectory, double similarityThreshold, boolean preprocessSourceCode, boolean anonymousResults, MainViewController mainViewController) {
         this.zipDirectory = zipDirectory;
         this.similarityThreshold = similarityThreshold;
         this.preprocessSourceCode = preprocessSourceCode;
+        this.anonymousResults = anonymousResults;
+        this.mainViewController = mainViewController;
         exercises = new ArrayList<>();
         similarSolutionPairs = new ArrayList<>();
         similarSolutionClusters = new ArrayList<>();
+    }
+
+
+    public double getSimilarityThreshold() {
+        return similarityThreshold;
+    }
+
+    public boolean isPreprocessSourceCode() {
+        return preprocessSourceCode;
+    }
+
+    public File getZipDirectory() {
+        return zipDirectory;
+    }
+
+    public List<SimilarSolutionPair> getSimilarSolutionPairs() {
+        return similarSolutionPairs;
     }
 
     public List<SimilarSolutionCluster> getSimilarSolutionClusters() {
         return similarSolutionClusters;
+    }
+
+    public List<Exercise> getExercises() {
+        return exercises;
+    }
+
+    public int getTotalSolutionPairsCount() {
+        return totalSolutionPairsCount;
+    }
+
+    public int getAnalysedSolutionPairsCount() {
+        return analysedSolutionPairsCount;
+    }
+
+    public int getSimilarCount() {
+        return similarCount;
     }
 
     @Override
@@ -53,9 +95,15 @@ public class Analyser extends Task<Void> {
         return null;
     }
 
+    public void updateProgressProperty(int done, int total) {
+        updateProgress(done / 2.0, total);
+    }
+
     public void startAnalysis() {
-        SolutionParser solutionParser = new SolutionParser(zipDirectory, preprocessSourceCode);
+        mainViewController.setProgressText("Reading solutions...");
+        SolutionParser solutionParser = new SolutionParser(zipDirectory, preprocessSourceCode, anonymousResults, this);
         exercises = solutionParser.parseSolutions();
+        mainViewController.setProgressText("Analysing solutions...");
         for (Exercise exercise : exercises) {
             // If user chose a custom similarity threshold then it is used, otherwise it is calculated
             if (similarityThreshold != -1) {
