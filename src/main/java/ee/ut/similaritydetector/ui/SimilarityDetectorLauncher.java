@@ -14,6 +14,7 @@ import javafx.stage.WindowEvent;
 import main.java.ee.ut.similaritydetector.ui.controllers.MainViewController;
 import main.java.ee.ut.similaritydetector.ui.utils.UserData;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -71,11 +72,33 @@ public class SimilarityDetectorLauncher extends Application {
         }
     }
 
+    private void deleteOutputFiles() {
+        File outputDirectory = new File("resources/");
+        deleteDirectory(outputDirectory);
+    }
+
+    // Adapted from: https://stackoverflow.com/questions/7768071/how-to-delete-directory-content-in-java [30.03.2021]
+    // Original author: NCode (https://stackoverflow.com/users/805569/ncode)
+    boolean deleteDirectory(File directory) {
+        File[] files = directory.listFiles();
+        if(files != null) {
+            for(File f : files) {
+                if(f.isDirectory()) {
+                    deleteDirectory(f);
+                } else {
+                    f.delete();
+                }
+            }
+        }
+        return directory.delete();
+    }
+
     @Override
     public void stop() throws Exception {
         /* TODO: siin teha asjad, mida sulgemisel vaja oleks:
                 resources kausta kustutamine?,
                 salvestada äkki ümber sarnased tööd kuhugi? */
+        deleteOutputFiles();
         super.stop();
     }
 }
