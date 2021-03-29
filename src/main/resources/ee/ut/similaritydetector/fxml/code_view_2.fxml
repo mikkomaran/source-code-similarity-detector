@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="@../style/style.scss, @../style/code_view_style.scss" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.ee.ut.similaritydetector.ui.controllers.CodeViewController2">
+   <children>
+      <BorderPane prefHeight="700.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <SplitPane fx:id="codeSplitPane" BorderPane.alignment="CENTER" />
+         </center>
+         <left>
+            <VBox fx:id="solutionClusterView" BorderPane.alignment="CENTER" />
+         </left>
+         <top>
+             <fx:include fx:id="menuBar" source="menu_bar.fxml" />
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -57,6 +58,20 @@ public class ResultsViewController {
         }
     }
 
+    @FXML
+    private void viewClusters() {
+        try {
+            openCodeView2();
+        } catch (IOException e) {
+            // TODO: error handling
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Could not view clusters");
+            alert.showAndWait();
+            System.out.println("Could not view clusters.");
+        }
+    }
+
     public void openCodeView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "../../../../../../resources/ee/ut/similaritydetector/fxml/code_view.fxml"));
@@ -85,15 +100,27 @@ public class ResultsViewController {
 
     }
 
-    @FXML
-    private void viewClusters() {
-        try {
-            openCodeView();
-        } catch (IOException e) {
-            // TODO: error handling
+    public void openCodeView2() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "../../../../../../resources/ee/ut/similaritydetector/fxml/code_view_2.fxml"));
+        Parent root = loader.load();
+        CodeViewController2 controller = loader.getController();
+        controller.setClusters(analyser.getSimilarSolutionClusters());
+        controller.createClusterItems();
 
-            System.out.println("Could not view clusters.");
-        }
+        Scene codeViewScene = new Scene(root, 1200, 700);
+        Stage newWindow = new Stage();
+        newWindow.setMinWidth(800);
+        newWindow.setMinHeight(600);
+        newWindow.setScene(codeViewScene);
+        newWindow.centerOnScreen();
+        newWindow.show();
+
+        // Persists dark theme if it was activated before
+        menuBarController.persistDarkTheme();
+
+        // Resize cluster table columns
+        controller.resizeClusterTableColumns();
     }
 
 }

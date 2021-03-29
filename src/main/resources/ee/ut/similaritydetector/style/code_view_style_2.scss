@@ -1,0 +1,52 @@
+///////////////////////////////////////////////////////////
+//                  CLUSTER TABLES AREA
+///////////////////////////////////////////////////////////
+
+#solutionClusterView {
+  // -fx-background-color: #616773;
+}
+
+/*Aligns similarity percentages to the right in cluster table*/
+.percentage-column{
+  -fx-alignment: center;
+}
+
+.no-header .column-header-background {
+  -fx-max-height: 0;
+  -fx-pref-height: 0;
+  -fx-min-height: 0;
+}
+
+// Removes horizontal scrollbars from cluster tables
+#solutionClusterView .table-view .scroll-bar * {
+  -fx-min-width: 0;
+  -fx-pref-width: 0;
+  -fx-max-width: 0;
+  -fx-min-height: 0;
+  -fx-pref-height: 0;
+  -fx-max-height: 0;
+  -fx-opacity: 0;
+}
+
+.titledPane>.title {
+  -fx-pref-height: 50; /* increase available area */
+  -fx-alignment: top-center;
+  -fx-padding: 4 4 4 30; /* increase left padding to align text */
+}
+
+#titledPane>.title>.arrow-button {
+  -fx-translate-x: -20; /* move back arrow, which is also subject to the padding */
+}
+
+// Makes empty rows plain white
+.table-row-cell:empty {
+  -fx-background-color: white;
+}
+.table-row-cell:empty .table-cell {
+  -fx-border-width: 0px;
+}
+
+///////////////////////////////////////////////////////////
+//                  CODE VIEWING AREA
+///////////////////////////////////////////////////////////
+
