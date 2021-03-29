@@ -15,7 +15,7 @@ public class CodePaneController {
     @FXML
     private AnchorPane root;
     @FXML
-    private Tab tab;
+    private Tab codeTab;
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -54,10 +54,10 @@ public class CodePaneController {
      */
     public void loadSolutionSourceCode(Solution solution) throws IOException {
         List<String> sourceCodeLines = solution.getSourceCodeLines();
-        tab.setText(solution.getAuthor() + " - " + solution.getExerciseName());
+        codeTab.setText(solution.getAuthor() + " - " + solution.getExerciseName());
         setLineNumbersAndCodeLines(sourceCodeLines);
         Platform.runLater(this::bindLineNumberVerticalScrollToCodeArea);
-        tab.setOnClosed(event -> codeViewController.closeCodePane(root));
+        codeTab.setOnClosed(event -> codeViewController.closeCodeTab(root));
     }
 
     /**

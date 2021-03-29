@@ -195,7 +195,6 @@ public class CodeViewController {
             setLineNumbersAndCodeLines(lineNumbersLeft, codeAreaLeft, sourceCodeLines1);
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: error handling
             showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
         }
 
@@ -206,7 +205,6 @@ public class CodeViewController {
             setLineNumbersAndCodeLines(lineNumbersRight, codeAreaRight, sourceCodeLines2);
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO: error handling
             showSolutionCodeReadingErrorAlert(solutionPair.getSecondSolution());
         }
     }

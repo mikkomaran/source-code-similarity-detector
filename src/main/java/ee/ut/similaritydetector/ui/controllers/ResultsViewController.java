@@ -1,5 +1,6 @@
 package main.java.ee.ut.similaritydetector.ui.controllers;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -63,16 +64,14 @@ public class ResultsViewController {
         try {
             openCodeView2();
         } catch (IOException e) {
-            // TODO: error handling
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Could not view clusters");
             alert.showAndWait();
-            System.out.println("Could not view clusters.");
         }
     }
 
-    public void openCodeView() throws IOException {
+    /*  public void openCodeView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "../../../../../../resources/ee/ut/similaritydetector/fxml/code_view.fxml"));
         Parent root = loader.load();
@@ -97,8 +96,8 @@ public class ResultsViewController {
         // Binds line numbers to move with code area's scrollbar
         controller.bindLineNumberVerticalScrollToCodeArea(controller.getLineNumbersLeft(), controller.getCodeAreaLeft());
         controller.bindLineNumberVerticalScrollToCodeArea(controller.getLineNumbersRight(), controller.getCodeAreaRight());
-
     }
+     */
 
     public void openCodeView2() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
@@ -106,7 +105,7 @@ public class ResultsViewController {
         Parent root = loader.load();
         CodeViewController2 controller = loader.getController();
         controller.setClusters(analyser.getSimilarSolutionClusters());
-        controller.createClusterItems();
+        Platform.runLater(controller::createClusterItems);
 
         Scene codeViewScene = new Scene(root, 1200, 700);
         Stage newWindow = new Stage();

@@ -1,8 +1,9 @@
 package main.java.ee.ut.similaritydetector.ui.controllers;
 
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
@@ -28,6 +29,8 @@ public class CodeViewController2 {
     @FXML
     private SplitPane codeSplitPane;
 
+    @FXML
+    private MenuItem closeAllTabsMenuItem;
 
     private List<SimilarSolutionCluster> clusters;
 
@@ -45,6 +48,10 @@ public class CodeViewController2 {
 
     @FXML
     private void initialize() {
+        closeAllTabsMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() ->
+                codeSplitPane.getItems().size() == 0,
+                codeSplitPane.getItems())
+        );
     }
 
     /**
@@ -73,25 +80,31 @@ public class CodeViewController2 {
      * @param tableView the tableview that gets added the listener
      */
     private void addCustomListener(TableView<SimilarSolutionPair> tableView) {
+        tableView.setRowFactory( tv -> {
+            TableRow<SimilarSolutionPair> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    SimilarSolutionPair solutionPair = row.getItem();
+                    // First solution
+                    try {
+                        createNewCodePane(solutionPair.getFirstSolution());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
+                    }
+                    // Second solution
+                    try {
+                        createNewCodePane(solutionPair.getSecondSolution());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
+                    }
+                }
+            });
+            return row;
+        });
         tableView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue == null) return;
-            SimilarSolutionPair solutionPair = tableView.getSelectionModel().getSelectedItem();
-            // First solution
-            try {
-                createNewCodePane(solutionPair.getFirstSolution());
-            } catch (IOException e) {
-                //TODO: error handling
-                e.printStackTrace();
-                showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
-            }
-            // Second solution
-            try {
-                createNewCodePane(solutionPair.getSecondSolution());
-            } catch (IOException e) {
-                //TODO: error handling
-                e.printStackTrace();
-                showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
-            }
             // Clears selection from all other tables
             for (TableView<SimilarSolutionPair> otherTableView : clusterTables) {
                 if (! tableView.equals(otherTableView)) {
@@ -105,10 +118,17 @@ public class CodeViewController2 {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "../../../../../../resources/ee/ut/similaritydetector/fxml/code_pane.fxml"));
         AnchorPane root = loader.load();
-        codeSplitPane.getItems().add(root);
         CodePaneController controller = loader.getController();
         controller.setCodeViewController(this);
-        controller.loadSolutionSourceCode(solution);
+        Platform.runLater(() -> {
+            try {
+                controller.loadSolutionSourceCode(solution);
+            } catch (IOException e) {
+                e.printStackTrace();
+                showSolutionCodeReadingErrorAlert(solution);
+            }
+        });
+        codeSplitPane.getItems().add(root);
 
         // Persists dark theme if it was activated before
         menuBarController.persistDarkTheme();
@@ -161,8 +181,13 @@ public class CodeViewController2 {
         }
     }
 
-    public void closeCodePane(AnchorPane codePaneRoot) {
+    public void closeCodeTab(AnchorPane codePaneRoot) {
         codeSplitPane.getItems().remove(codePaneRoot);
+    }
+
+    @FXML
+    private void closeAllCodeTabs() {
+        codeSplitPane.getItems().clear();
     }
 
 }

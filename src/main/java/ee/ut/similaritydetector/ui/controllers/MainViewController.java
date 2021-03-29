@@ -184,7 +184,7 @@ public class MainViewController {
         Parent root = loader.load();
         ResultsViewController controller = loader.getController();
         controller.setAnalyser(analyser);
-        controller.readStatistics();
+        Platform.runLater(controller::readStatistics);
 
         Scene resultsViewScene = new Scene(root, 800, 600);
         stage.setScene(resultsViewScene);

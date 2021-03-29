@@ -1,5 +1,6 @@
 package main.java.ee.ut.similaritydetector.ui.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -41,8 +42,8 @@ public class MenuBarController {
 
     @FXML
     private void initialize() {
-        classicTheme.setOnAction(event -> activateClassicTheme());
-        darkTheme.setOnAction(event -> activateDarkTheme());
+        classicTheme.setOnAction(event -> Platform.runLater(this::activateClassicTheme));
+        darkTheme.setOnAction(event -> Platform.runLater(this::activateDarkTheme));
         if (MainViewController.stage != null) {
             UserData userData = (UserData) MainViewController.stage.getUserData();
             if (userData.isDarkMode()) {
