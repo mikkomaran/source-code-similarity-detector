@@ -1,6 +1,10 @@
 package ee.ut.similaritydetector.ui.controllers;
 
+import ee.ut.similaritydetector.ui.utils.UserData;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
@@ -9,6 +13,7 @@ import ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import ee.ut.similaritydetector.backend.SimilarSolutionPair;
 import ee.ut.similaritydetector.backend.Solution;
 import ee.ut.similaritydetector.ui.components.AccordionTableView;
+import ee.ut.similaritydetector.ui.components.CodePaneController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,27 +25,13 @@ public class CodeViewController {
 
     @FXML
     private MenuBarController menuBarController;
-
     @FXML
     private VBox solutionClusterView;
+    @FXML
+    private SplitPane codeSplitPane;
 
     @FXML
-    private ScrollPane scrollPaneLeft;
-    @FXML
-    private Label titleLeft;
-    @FXML
-    private TextArea lineNumbersLeft;
-    @FXML
-    private TextArea codeAreaLeft;
-
-    @FXML
-    private ScrollPane scrollPaneRight;
-    @FXML
-    private Label titleRight;
-    @FXML
-    private TextArea lineNumbersRight;
-    @FXML
-    private TextArea codeAreaRight;
+    private MenuItem closeAllTabsMenuItem;
 
     private List<SimilarSolutionCluster> clusters;
 
@@ -56,44 +47,12 @@ public class CodeViewController {
         this.clusters = clusters;
     }
 
-    public TextArea getLineNumbersLeft() {
-        return lineNumbersLeft;
-    }
-
-    public TextArea getCodeAreaLeft() {
-        return codeAreaLeft;
-    }
-
-    public TextArea getLineNumbersRight() {
-        return lineNumbersRight;
-    }
-
-    public TextArea getCodeAreaRight() {
-        return codeAreaRight;
-    }
-
     @FXML
     private void initialize() {
-        // Binding code area height to the scroll pane's height
-        codeAreaLeft.prefHeightProperty().bind(scrollPaneLeft.heightProperty().subtract(2));
-        codeAreaRight.prefHeightProperty().bind(scrollPaneRight.heightProperty().subtract(2));
-
-        // Restricts selecting text from line numbers area
-        restrictTextSelection(lineNumbersLeft);
-        restrictTextSelection(lineNumbersRight);
-    }
-
-    // Taken from: https://stackoverflow.com/questions/61665296/how-to-disable-text-selection-in-textarea-javafx [25.03.2021]
-    private void restrictTextSelection(TextArea textArea) {
-        textArea.setTextFormatter(new TextFormatter<String>(change -> {
-            change.setAnchor(change.getCaretPosition());
-            return change;
-        }));
-    }
-
-    public void bindLineNumberVerticalScrollToCodeArea(TextArea lineNumbersArea, TextArea codeArea) {
-        ScrollBar scrollBar = (ScrollBar) codeArea.lookup(".scroll-bar:vertical");
-        scrollBar.valueProperty().addListener((src, ov, nv) -> lineNumbersArea.setScrollTop(codeArea.getScrollTop()));
+        closeAllTabsMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() ->
+                codeSplitPane.getItems().size() == 0,
+                codeSplitPane.getItems())
+        );
     }
 
     /**
@@ -116,21 +75,76 @@ public class CodeViewController {
 
     /**
      * Adds a custom listener to the given table that on table row selection
-     * loads the corresponding solution pair code and removes current selection from other tables.
+     * loads the corresponding solution pair's codes
+     * and removes current selection from other tables.
      *
      * @param tableView the tableview that gets added the listener
      */
     private void addCustomListener(TableView<SimilarSolutionPair> tableView) {
+        tableView.setRowFactory( tv -> {
+            TableRow<SimilarSolutionPair> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    SimilarSolutionPair solutionPair = row.getItem();
+                    // First solution
+                    try {
+                        createNewCodePane(solutionPair.getFirstSolution());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
+                    }
+                    // Second solution
+                    try {
+                        createNewCodePane(solutionPair.getSecondSolution());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
+                    }
+                }
+            });
+            return row;
+        });
         tableView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue == null) return;
-            SimilarSolutionPair solutionPair = tableView.getSelectionModel().getSelectedItem();
-            loadSolutionPairSourceCodes(solutionPair, titleLeft, titleRight, lineNumbersLeft, lineNumbersRight, codeAreaLeft, codeAreaRight);
+            // Clears selection from all other tables
             for (TableView<SimilarSolutionPair> otherTableView : clusterTables) {
-                if (!tableView.equals(otherTableView)) {
+                if (! tableView.equals(otherTableView)) {
                     otherTableView.getSelectionModel().clearSelection();
                 }
             }
         });
+    }
+
+    private void createNewCodePane(Solution solution) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "../../fxml/code_pane.fxml"));
+        AnchorPane root = loader.load();
+        CodePaneController controller = loader.getController();
+        controller.setCodeViewController(this);
+        Platform.runLater(() -> {
+            try {
+                controller.loadSolutionSourceCode(solution);
+            } catch (IOException e) {
+                e.printStackTrace();
+                showSolutionCodeReadingErrorAlert(solution);
+            }
+        });
+        codeSplitPane.getItems().add(root);
+
+        // Persists dark theme if it was activated before
+        menuBarController.persistDarkTheme();
+    }
+
+    private void showSolutionCodeReadingErrorAlert(Solution solution) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Could not load solution code");
+        alert.setContentText(solution.getExerciseName() + " - " + solution.getAuthor());
+        // Dark mode
+        if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
+            alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
+                    "../../style/dark_mode2.scss")));
+        }
+        alert.showAndWait();
     }
 
     /**
@@ -143,7 +157,7 @@ public class CodeViewController {
     /**
      * Resizes the columns of the given {@code TableView} to fit the size of columns' content.
      *
-     * @param table the {@code TableView} to be resized
+     * @param table - the {@code TableView} to be resized
      */
     private void resizeTable(TableView<?> table) {
         double columnsWidth = table.getColumns().stream().mapToDouble(TableColumnBase::getWidth).sum();
@@ -162,79 +176,24 @@ public class CodeViewController {
                 }
                 if (col2.getWidth() > nameColumnsPrefWidth / 2) {
                     col1.setPrefWidth(nameColumnsPrefWidth - col2.getWidth());
-                }
-                else {
+                } else {
                     col1.setPrefWidth(nameColumnsPrefWidth / 2);
                     col2.setPrefWidth(nameColumnsPrefWidth / 2);
                 }
                 col3.setPrefWidth(tableWidth - nameColumnsPrefWidth);
-            }
-            else {
+            } else {
                 col3.setPrefWidth(col3.getWidth() + (tableWidth - columnsWidth));
             }
         }
     }
 
-    /**
-     * Loads the source codes from the given solutionPair to the view.
-     *
-     * @param solutionPair given {@code SimilarSolutionPair}
-     * @param titleLeft title label for first solution's name
-     * @param titleRight title label for second solution's name
-     * @param lineNumbersLeft {@code TextArea} for first solution code's line numbers
-     * @param lineNumbersRight {@code TextArea} for second solution code's line numbers
-     * @param codeAreaLeft {@code TextArea} for first solution's source code lines
-     * @param codeAreaRight {@code TextArea} for second solution's source code lines
-     */
-    private void loadSolutionPairSourceCodes(SimilarSolutionPair solutionPair, Label titleLeft, Label titleRight, TextArea lineNumbersLeft,
-                                            TextArea lineNumbersRight, TextArea codeAreaLeft, TextArea codeAreaRight) {
-        // First solution
-        try {
-            List<String> sourceCodeLines1 = solutionPair.getFirstSolution().getSourceCodeLines();
-            titleLeft.setText(solutionPair.getFirstSolution().getAuthor() + " - " + solutionPair.getFirstSolution().getExerciseName());
-            setLineNumbersAndCodeLines(lineNumbersLeft, codeAreaLeft, sourceCodeLines1);
-        } catch (IOException e) {
-            e.printStackTrace();
-            showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
-        }
-
-        // Second solution
-        try {
-            List<String> sourceCodeLines2 = solutionPair.getSecondSolution().getSourceCodeLines();
-            titleRight.setText(solutionPair.getSecondSolution().getAuthor() + " - " + solutionPair.getSecondSolution().getExerciseName());
-            setLineNumbersAndCodeLines(lineNumbersRight, codeAreaRight, sourceCodeLines2);
-        } catch (IOException e) {
-            e.printStackTrace();
-            showSolutionCodeReadingErrorAlert(solutionPair.getSecondSolution());
-        }
+    public void closeCodeTab(AnchorPane codePaneRoot) {
+        codeSplitPane.getItems().remove(codePaneRoot);
     }
 
-    private void showSolutionCodeReadingErrorAlert(Solution solution) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText("Could not load solution code");
-        alert.setContentText(solution.getExerciseName() + " - " + solution.getAuthor());
-        alert.showAndWait();
-    }
-
-    /**
-     * Generates line numbers from the given source code lines.
-     * Adds line numbers and code line to the view.
-     *
-     * @param lineNumbersArea {@code TextArea} for line numbers
-     * @param codeLinesArea {@code TextArea} for code lines
-     * @param sourceCodeLines the given code lines
-     */
-    private void setLineNumbersAndCodeLines(TextArea lineNumbersArea, TextArea codeLinesArea, List<String> sourceCodeLines) {
-        StringBuilder lineNumbers = new StringBuilder();
-        StringBuilder codeLines = new StringBuilder();
-        for (int i = 0, n = sourceCodeLines.size(); i < n; i++) {
-            String line = sourceCodeLines.get(i);
-            lineNumbers.append(i + 1 < 10 ? "  " : i + 1 < 100 ? " " : "").append(i + 1).append(System.lineSeparator());
-            codeLines.append(line).append(System.lineSeparator());
-        }
-        lineNumbers.append(System.lineSeparator());
-        lineNumbersArea.setText(lineNumbers.toString());
-        codeLinesArea.setText(codeLines.toString());
+    @FXML
+    private void closeAllCodeTabs() {
+        codeSplitPane.getItems().clear();
     }
 
 }

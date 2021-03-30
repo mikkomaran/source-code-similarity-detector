@@ -94,7 +94,7 @@ public class Analyser extends Task<Void> {
     }
 
     public void startAnalysis() {
-        mainViewController.setProgressText("Reading solutions...");
+        mainViewController.setProgressText("Processing solutions...");
         SolutionParser solutionParser = new SolutionParser(zipDirectory, preprocessSourceCode, anonymousResults, this);
         exercises = solutionParser.parseSolutions();
         mainViewController.setProgressText("Analysing solutions...");

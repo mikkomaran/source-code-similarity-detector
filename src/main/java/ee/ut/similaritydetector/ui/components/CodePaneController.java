@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import ee.ut.similaritydetector.backend.Solution;
-import ee.ut.similaritydetector.ui.controllers.CodeViewController2;
+import ee.ut.similaritydetector.ui.controllers.CodeViewController;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,12 +23,12 @@ public class CodePaneController {
     @FXML
     private TextArea codeArea;
 
-    private CodeViewController2 codeViewController;
+    private CodeViewController codeViewController;
 
     public CodePaneController() {
     }
 
-    public void setCodeViewController(CodeViewController2 codeViewController) {
+    public void setCodeViewController(CodeViewController codeViewController) {
         this.codeViewController = codeViewController;
     }
 

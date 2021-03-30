@@ -73,7 +73,7 @@ public class ResultsViewController {
 
     /*  public void openCodeView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../fxml/code_view.fxml"));
+                "../../fxml/code_view_OLD.fxml"));
         Parent root = loader.load();
         CodeViewController controller = loader.getController();
         controller.setClusters(analyser.getSimilarSolutionClusters());
@@ -101,9 +101,9 @@ public class ResultsViewController {
 
     public void openCodeView2() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../fxml/code_view_2.fxml"));
+                "../../fxml/code_view.fxml"));
         Parent root = loader.load();
-        CodeViewController2 controller = loader.getController();
+        CodeViewController controller = loader.getController();
         controller.setClusters(analyser.getSimilarSolutionClusters());
         Platform.runLater(controller::createClusterItems);
 
