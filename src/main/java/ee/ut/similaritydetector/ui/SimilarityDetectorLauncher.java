@@ -11,14 +11,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.Style;
 import ee.ut.similaritydetector.ui.controllers.MainViewController;
 import ee.ut.similaritydetector.ui.utils.UserData;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Optional;
 
@@ -41,8 +38,6 @@ public class SimilarityDetectorLauncher extends Application {
         stage.setMinHeight(600);
         stage.setTitle("Source code similarity detector");
         Scene scene = new Scene(root, 800, 600);
-        //JMetro jMetro = new JMetro(Style.DARK);
-        //jMetro.setScene(scene);
         stage.setScene(scene);
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         stage.getIcons().add(new Image(getClass().getResourceAsStream("../images/app_icon.png")));
@@ -70,7 +65,7 @@ public class SimilarityDetectorLauncher extends Application {
         // Dark mode
         if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
-                    "../style/dark_mode.scss")));
+                    "../style/dark_mode2.scss")));
         }
         Optional<ButtonType> buttonType = alert.showAndWait();
         if (buttonType.isPresent() && buttonType.get() == exitButton) {

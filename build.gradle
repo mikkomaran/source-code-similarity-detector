@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.jfxtras:jmetro:11.6.14'
+
 }
 
 javafx {

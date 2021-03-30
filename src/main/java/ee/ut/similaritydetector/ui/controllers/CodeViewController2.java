@@ -142,7 +142,7 @@ public class CodeViewController2 {
         // Dark mode
         if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
-                    "../../style/dark_mode.scss")));
+                    "../../style/dark_mode2.scss")));
         }
         alert.showAndWait();
     }
