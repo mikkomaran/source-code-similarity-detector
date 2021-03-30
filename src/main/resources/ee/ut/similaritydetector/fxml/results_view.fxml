@@ -112,7 +112,7 @@
                               </HBox>
                               <Button fx:id="viewClustersButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onAction="#viewClusters" prefHeight="50.0" prefWidth="175.0" text="View similar pairs &amp; clusters" textAlignment="CENTER">
                                  <VBox.margin>
-                                    <Insets bottom="25.0" />
+                                    <Insets bottom="50.0" />
                                  </VBox.margin></Button>
                            </children>
                         </VBox>

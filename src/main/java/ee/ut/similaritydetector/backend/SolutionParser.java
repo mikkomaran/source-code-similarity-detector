@@ -106,15 +106,13 @@ public class SolutionParser {
                         System.out.println(e.getMessage());
                     }
                     parsedSolutions ++;
-                    analyser.updateProgressProperty(parsedSolutions, numSolutions);
+                    analyser.updateProcessingProgress(parsedSolutions, numSolutions);
                 }
                 zipEntry = zis.getNextEntry();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println(numSolutions + " - " + parsedSolutions);
         return exercises;
     }
 

@@ -25,7 +25,6 @@ public class Analyser extends Task<Void> {
 
     private int totalSolutionPairsCount;
     private int analysedSolutionPairsCount;
-    private int similarCount;
 
     private final MainViewController mainViewController;
 
@@ -75,16 +74,8 @@ public class Analyser extends Task<Void> {
         return exercises;
     }
 
-    public int getTotalSolutionPairsCount() {
-        return totalSolutionPairsCount;
-    }
-
     public int getAnalysedSolutionPairsCount() {
         return analysedSolutionPairsCount;
-    }
-
-    public int getSimilarCount() {
-        return similarCount;
     }
 
     @Override
@@ -94,8 +85,12 @@ public class Analyser extends Task<Void> {
         return null;
     }
 
-    public void updateProgressProperty(int done, int total) {
-        updateProgress(done / 2.0, total);
+    public void updateProcessingProgress(int done, int total) {
+            updateProgress(done * 0.5, total);
+    }
+
+    public void updateAnalysingProgress() {
+            updateProgress(totalSolutionPairsCount * 0.5 + analysedSolutionPairsCount * 0.5, totalSolutionPairsCount);
     }
 
     public void startAnalysis() {
@@ -121,17 +116,12 @@ public class Analyser extends Task<Void> {
 //            System.out.println("Preprocessing removed on average " + Math.round(exercise.getAverageSolutionSourceCodeLength()
 //                    - exercise.getAverageSolutionPreprocessedCodeLength()) + " characters per solution for exercise " + exercise.getName());
         }
-        System.out.println("Total solution pairs: " + totalSolutionPairsCount);
-
         // Performing the pairwise comparison of solutions for each exercise
         exercises.forEach(this::compareSolutions);
-        System.out.println("Analysed solution pairs: " + analysedSolutionPairsCount);
-        System.out.println("Similar pairs found: " + similarCount);
 
+        // Clustering similar pairs
         clusterSimilarPairs();
-        System.out.println("Similar clusters: " + similarSolutionClusters.size());
-        similarSolutionClusters.forEach(cluster -> System.out.println(cluster.toString()));
-        System.out.println();
+        //similarSolutionClusters.forEach(cluster -> System.out.println(cluster.toString()));
     }
 
     /**
@@ -147,7 +137,6 @@ public class Analyser extends Task<Void> {
                 Solution solution2 = solutions.get(j);
                 double similarity = findSimilarity(solution1, solution2, exercise.getSimilarityThreshold());
                 if (similarity > exercise.getSimilarityThreshold()) {
-                    similarCount++;
                     solution1.addSimilarSolution(solution2);
                     solution2.addSimilarSolution(solution1);
                     similarSolutionPairs.add(new SimilarSolutionPair(similarity, solution1, solution2));
@@ -155,7 +144,7 @@ public class Analyser extends Task<Void> {
                             solution2.getAuthor() + " - " + String.format("%.1f%%", similarity * 100));
                 }
                 analysedSolutionPairsCount++;
-                updateProgress(totalSolutionPairsCount / 2.0 + analysedSolutionPairsCount / 2.0, totalSolutionPairsCount);
+                updateAnalysingProgress();
             }
         }
     }
@@ -208,24 +197,6 @@ public class Analyser extends Task<Void> {
                 solutionCode = Files.readString(second, StandardCharsets.UTF_8);
             } catch (IOException | NullPointerException exception) {
                 // If the second priority file also cannot be read or doesn't exist
-                solutionCode = null;
-            }
-        }
-        return solutionCode;
-    }
-
-    public static String readCode(Solution solution) {
-        String solutionCode;
-        // We try to read the preprocessed code file
-        try {
-            solutionCode = Files.readString(solution.getSourceCodeFile().toPath(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            // If the preprocessed solution code cannot be read or the file doesn't exist
-            // the source code file is the fallback
-            try {
-                solutionCode = Files.readString(solution.getPreprocessedCodeFile().toPath(), StandardCharsets.UTF_8);
-            } catch (IOException ioException) {
-                // If the source code file also cannot be read or doesn't exist
                 solutionCode = null;
             }
         }
