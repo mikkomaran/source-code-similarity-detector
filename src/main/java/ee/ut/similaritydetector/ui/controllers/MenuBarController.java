@@ -22,7 +22,7 @@ public class MenuBarController {
     @FXML
     private Menu themeMenu;
     @FXML
-    private RadioMenuItem classicTheme;
+    private RadioMenuItem lightTheme;
     @FXML
     public RadioMenuItem darkTheme;
 
@@ -36,13 +36,18 @@ public class MenuBarController {
 
     @FXML
     private void initialize() {
-        classicTheme.setOnAction(event -> Platform.runLater(this::activateClassicTheme));
+        lightTheme.setOnAction(event -> Platform.runLater(this::activateClassicTheme));
         darkTheme.setOnAction(event -> Platform.runLater(this::activateDarkTheme));
+        // When scenes are switched then persists theme
         if (MainViewController.stage != null) {
             UserData userData = (UserData) MainViewController.stage.getUserData();
             if (userData.isDarkMode()) {
                 darkTheme.setSelected(true);
             }
+        }
+        // When application is started
+        else {
+            Platform.runLater(this::activateDarkTheme);
         }
     }
 

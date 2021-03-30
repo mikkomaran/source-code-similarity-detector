@@ -42,7 +42,7 @@ public class SimilarityDetectorLauncher extends Application {
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         stage.getIcons().add(new Image(getClass().getResourceAsStream("../images/app_icon.png")));
         stage.show();
-        stage.setUserData(new UserData());
+        stage.setUserData(new UserData(true));
         stage.setOnCloseRequest(this::showExitConfirmationAlert);
         MainViewController.stage = stage;
     }

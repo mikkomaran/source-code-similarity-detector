@@ -27,12 +27,12 @@
         </Menu>
         <Menu fx:id="themeMenu" mnemonicParsing="false" text="Theme">
             <items>
-                <RadioMenuItem fx:id="classicTheme" mnemonicParsing="false" selected="true" text="Classic">
+                <RadioMenuItem fx:id="lightTheme" mnemonicParsing="false" text="Light">
                     <toggleGroup>
                         <ToggleGroup fx:id="themeGroup" />
                     </toggleGroup>
                 </RadioMenuItem>
-                <RadioMenuItem fx:id="darkTheme" mnemonicParsing="false" text="Dark" toggleGroup="$themeGroup" />
+                <RadioMenuItem fx:id="darkTheme" mnemonicParsing="false" selected="true" text="Dark" toggleGroup="$themeGroup" />
             </items>
         </Menu>
         <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">

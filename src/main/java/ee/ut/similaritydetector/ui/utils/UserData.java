@@ -4,8 +4,8 @@ public class UserData {
 
     private boolean isDarkMode;
 
-    public UserData() {
-        isDarkMode = false;
+    public UserData(boolean isDarkMode) {
+        this.isDarkMode = isDarkMode;
     }
 
     public boolean isDarkMode() {
