@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" stylesheets="@../style/style.scss, @../style/main_view_style.scss" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.ee.ut.similaritydetector.ui.controllers.MainViewController">
+<VBox prefHeight="600.0" prefWidth="800.0" stylesheets="@../style/style.scss, @../style/main_view_style.scss" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.ee.ut.similaritydetector.ui.controllers.MainViewController">
    <children>
        <fx:include fx:id="menuBar" source="menu_bar.fxml" />
       <HBox VBox.vgrow="ALWAYS">
