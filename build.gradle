@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+}
+
+description = 'Source code similarity detector'
+group = 'ee.ut.similaritydetector'
+version = '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+compileJava.options.encoding = 'UTF-8'
+
+mainClassName = 'ee.ut.similaritydetector.ui.SimilarityDetectorLauncher'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.jfxtras:jmetro:11.6.14'
+}
+
+javafx {
+    version = '11.0.2'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}

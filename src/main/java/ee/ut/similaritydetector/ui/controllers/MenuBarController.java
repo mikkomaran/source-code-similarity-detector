@@ -1,4 +1,4 @@
-package main.java.ee.ut.similaritydetector.ui.controllers;
+package ee.ut.similaritydetector.ui.controllers;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -7,17 +7,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-import main.java.ee.ut.similaritydetector.ui.utils.UserData;
+import ee.ut.similaritydetector.ui.utils.UserData;
 
 public class MenuBarController {
 
-    private static final String darkThemeStylesheetPath = "../../../../../../resources/ee/ut/similaritydetector/style/dark_mode.scss";
-    private static final String[] fxmlFilePaths = {
-            "../../../../../../resources/ee/ut/similaritydetector/fxml/code_view.fxml",
-            "../../../../../../resources/ee/ut/similaritydetector/fxml/main_view.fxml",
-            "../../../../../../resources/ee/ut/similaritydetector/fxml/menu_bar.fxml",
-            "../../../../../../resources/ee/ut/similaritydetector/fxml/results_view.fxml"
-    };
+    private static final String darkThemeStylesheetPath = "../../style/dark_mode.scss";
 
     @FXML
     private Menu fileMenu;

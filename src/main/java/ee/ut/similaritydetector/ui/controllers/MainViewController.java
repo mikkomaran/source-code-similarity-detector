@@ -1,4 +1,4 @@
-package main.java.ee.ut.similaritydetector.ui.controllers;
+package ee.ut.similaritydetector.ui.controllers;
 
 import javafx.animation.*;
 import javafx.application.Platform;
@@ -12,8 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import main.java.ee.ut.similaritydetector.backend.Analyser;
-import main.java.ee.ut.similaritydetector.ui.utils.IntegerStringConverter;
+import ee.ut.similaritydetector.backend.Analyser;
+import ee.ut.similaritydetector.ui.utils.IntegerStringConverter;
 
 import javax.swing.*;
 import java.io.File;
@@ -112,7 +112,8 @@ public class MainViewController {
 
         Analyser analyser;
         if (customSimilarityThresholdCheckbox.isSelected()){
-            analyser = new Analyser(zipDirectory, customSimilarityThresholdSpinner.getValue() / 100.0, preprocessCodeCheckbox.isSelected(), anonymousResultsCheckbox.isSelected(), this);
+            analyser = new Analyser(zipDirectory, customSimilarityThresholdSpinner.getValue() / 100.0,
+                    preprocessCodeCheckbox.isSelected(), anonymousResultsCheckbox.isSelected(), this);
         } else {
             analyser = new Analyser(zipDirectory, preprocessCodeCheckbox.isSelected(), anonymousResultsCheckbox.isSelected(), this);
         }
@@ -180,7 +181,7 @@ public class MainViewController {
     @FXML
     private void openResultsView(Analyser analyser) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../../../../../resources/ee/ut/similaritydetector/fxml/results_view.fxml"));
+                "../../fxml/results_view.fxml"));
         Parent root = loader.load();
         ResultsViewController controller = loader.getController();
         controller.setAnalyser(analyser);

@@ -1,4 +1,4 @@
-package main.java.ee.ut.similaritydetector.ui.controllers;
+package ee.ut.similaritydetector.ui.controllers;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -9,8 +9,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import main.java.ee.ut.similaritydetector.backend.Analyser;
-import main.java.ee.ut.similaritydetector.backend.Exercise;
+import ee.ut.similaritydetector.backend.Analyser;
+import ee.ut.similaritydetector.backend.Exercise;
 
 import java.io.IOException;
 
@@ -73,7 +73,7 @@ public class ResultsViewController {
 
     /*  public void openCodeView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../../../../../resources/ee/ut/similaritydetector/fxml/code_view.fxml"));
+                "../../fxml/code_view.fxml"));
         Parent root = loader.load();
         CodeViewController controller = loader.getController();
         controller.setClusters(analyser.getSimilarSolutionClusters());
@@ -101,7 +101,7 @@ public class ResultsViewController {
 
     public void openCodeView2() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../../../../../resources/ee/ut/similaritydetector/fxml/code_view_2.fxml"));
+                "../../fxml/code_view_2.fxml"));
         Parent root = loader.load();
         CodeViewController2 controller = loader.getController();
         controller.setClusters(analyser.getSimilarSolutionClusters());

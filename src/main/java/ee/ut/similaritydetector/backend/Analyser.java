@@ -1,8 +1,7 @@
-package main.java.ee.ut.similaritydetector.backend;
+package ee.ut.similaritydetector.backend;
 
 import javafx.concurrent.Task;
-import javafx.scene.control.Label;
-import main.java.ee.ut.similaritydetector.ui.controllers.MainViewController;
+import ee.ut.similaritydetector.ui.controllers.MainViewController;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static main.java.ee.ut.similaritydetector.backend.LevenshteinDistance.normalisedLevenshteinSimilarity;
+import static ee.ut.similaritydetector.backend.LevenshteinDistance.normalisedLevenshteinSimilarity;
 
 public class Analyser extends Task<Void> {
 

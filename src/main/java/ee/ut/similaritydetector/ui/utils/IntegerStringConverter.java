@@ -1,4 +1,4 @@
-package main.java.ee.ut.similaritydetector.ui.utils;
+package ee.ut.similaritydetector.ui.utils;
 
 import javafx.application.Platform;
 import javafx.event.*;

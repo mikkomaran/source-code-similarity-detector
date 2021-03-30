@@ -1,4 +1,4 @@
-package main.java.ee.ut.similaritydetector.ui.components;
+package ee.ut.similaritydetector.ui.components;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.SelectionMode;
@@ -8,8 +8,8 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
-import main.java.ee.ut.similaritydetector.backend.SimilarSolutionPair;
+import ee.ut.similaritydetector.backend.SimilarSolutionCluster;
+import ee.ut.similaritydetector.backend.SimilarSolutionPair;
 
 import java.util.Comparator;
 import java.util.stream.Collectors;

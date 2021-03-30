@@ -7,7 +7,7 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.input.KeyCodeCombination?>
 
-<MenuBar stylesheets="@../style/style.scss, @../style/menu_bar_style.scss" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.ee.ut.similaritydetector.ui.controllers.MenuBarController">
+<MenuBar stylesheets="@../style/style.scss, @../style/menu_bar_style.scss" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ee.ut.similaritydetector.ui.controllers.MenuBarController">
     <menus>
         <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
             <items>

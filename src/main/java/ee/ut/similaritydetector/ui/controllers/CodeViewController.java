@@ -1,14 +1,14 @@
-package main.java.ee.ut.similaritydetector.ui.controllers;
+package ee.ut.similaritydetector.ui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
-import main.java.ee.ut.similaritydetector.backend.SimilarSolutionPair;
-import main.java.ee.ut.similaritydetector.backend.Solution;
-import main.java.ee.ut.similaritydetector.ui.components.AccordionTableView;
+import ee.ut.similaritydetector.backend.SimilarSolutionCluster;
+import ee.ut.similaritydetector.backend.SimilarSolutionPair;
+import ee.ut.similaritydetector.backend.Solution;
+import ee.ut.similaritydetector.ui.components.AccordionTableView;
 
 import java.io.IOException;
 import java.util.ArrayList;

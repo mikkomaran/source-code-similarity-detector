@@ -1,4 +1,4 @@
-package main.java.ee.ut.similaritydetector.backend;
+package ee.ut.similaritydetector.backend;
 
 import java.util.Arrays;
 
@@ -77,8 +77,8 @@ public class LevenshteinDistance {
      * @param s2 char array of string 2
      * @param prevCosts previous row of costs
      * @param currCosts current row of costs
-     * @param i
-     * @param j
+     * @param i current character index of string 1
+     * @param j current character index of string 2
      * @return the cost for the edit
      */
     public static double findCost(char[] s1, char[] s2, double[] prevCosts, double[] currCosts, int i, int j) {

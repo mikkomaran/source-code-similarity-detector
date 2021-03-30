@@ -1,5 +1,6 @@
-package main.java.ee.ut.similaritydetector.ui.controllers;
+package ee.ut.similaritydetector.ui.controllers;
 
+import ee.ut.similaritydetector.ui.utils.UserData;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -8,11 +9,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import main.java.ee.ut.similaritydetector.backend.SimilarSolutionCluster;
-import main.java.ee.ut.similaritydetector.backend.SimilarSolutionPair;
-import main.java.ee.ut.similaritydetector.backend.Solution;
-import main.java.ee.ut.similaritydetector.ui.components.AccordionTableView;
-import main.java.ee.ut.similaritydetector.ui.components.CodePaneController;
+import ee.ut.similaritydetector.backend.SimilarSolutionCluster;
+import ee.ut.similaritydetector.backend.SimilarSolutionPair;
+import ee.ut.similaritydetector.backend.Solution;
+import ee.ut.similaritydetector.ui.components.AccordionTableView;
+import ee.ut.similaritydetector.ui.components.CodePaneController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -116,7 +117,7 @@ public class CodeViewController2 {
 
     private void createNewCodePane(Solution solution) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../../../../../resources/ee/ut/similaritydetector/fxml/code_pane.fxml"));
+                "../../fxml/code_pane.fxml"));
         AnchorPane root = loader.load();
         CodePaneController controller = loader.getController();
         controller.setCodeViewController(this);
@@ -138,6 +139,11 @@ public class CodeViewController2 {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText("Could not load solution code");
         alert.setContentText(solution.getExerciseName() + " - " + solution.getAuthor());
+        // Dark mode
+        if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
+            alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
+                    "../../style/dark_mode.scss")));
+        }
         alert.showAndWait();
     }
 

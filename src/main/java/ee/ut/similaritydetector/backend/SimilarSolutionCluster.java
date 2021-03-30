@@ -1,4 +1,4 @@
-package main.java.ee.ut.similaritydetector.backend;
+package ee.ut.similaritydetector.backend;
 
 import java.util.Collections;
 import java.util.HashSet;

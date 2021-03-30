@@ -1,4 +1,4 @@
-package main.java.ee.ut.similaritydetector.backend;
+package ee.ut.similaritydetector.backend;
 
 public class SimilarSolutionPair {
 

@@ -1,11 +1,11 @@
-package main.java.ee.ut.similaritydetector.ui.components;
+package ee.ut.similaritydetector.ui.components;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import main.java.ee.ut.similaritydetector.backend.Solution;
-import main.java.ee.ut.similaritydetector.ui.controllers.CodeViewController2;
+import ee.ut.similaritydetector.backend.Solution;
+import ee.ut.similaritydetector.ui.controllers.CodeViewController2;
 
 import java.io.IOException;
 import java.util.List;

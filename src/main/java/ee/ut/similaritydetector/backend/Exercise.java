@@ -1,10 +1,10 @@
-package main.java.ee.ut.similaritydetector.backend;
+package ee.ut.similaritydetector.backend;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static main.java.ee.ut.similaritydetector.backend.Analyser.readSolutionCode;
+import static ee.ut.similaritydetector.backend.Analyser.readSolutionCode;
 
 public class Exercise {
 

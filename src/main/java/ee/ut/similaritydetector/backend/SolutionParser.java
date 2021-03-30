@@ -1,4 +1,4 @@
-package main.java.ee.ut.similaritydetector.backend;
+package ee.ut.similaritydetector.backend;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
