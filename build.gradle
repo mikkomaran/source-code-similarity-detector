@@ -4,13 +4,18 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.9'
 }
 
-description = 'Source code similarity detector'
-group = 'ee.ut.similaritydetector'
-version = '1.0.0-SNAPSHOT'
-
 sourceCompatibility = 11
 targetCompatibility = 11
+
+description = 'Source code similarity detector'
+group = 'ee.ut.similaritydetector'
+version = '1.0.0'
+
 compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
 
 mainClassName = 'ee.ut.similaritydetector.ui.SimilarityDetectorLauncher'
 
@@ -20,12 +25,13 @@ repositories {
 }
 
 dependencies {
-
+    implementation 'org.python:jython-standalone:2.7.2'
+    implementation 'org.pygments:pygments:2.5.2'
 }
 
 javafx {
     version = '11.0.2'
-    modules = ['javafx.controls', 'javafx.fxml']
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
 }
 
 jar {

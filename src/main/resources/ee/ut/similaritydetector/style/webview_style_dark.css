@@ -1,0 +1,46 @@
+/*Base colors*/
+:root {
+    --keyword-color-dark: #ba7d11 ;
+    --string-color-dark: #4e861c ;
+    --background-color-dark: #323232 ;
+}
+
+/* Background colors */
+td.linenos  { background-color: var(--background-color-dark) !important; }
+span.lineno { background-color: var(--background-color-dark) !important; }
+body        { background: var(--background-color-dark) !important; }
+
+/* Colors for strings */
+body .s  { color: var(--string-color-dark) !important; } /* Literal.String */
+body .sa { color: var(--string-color-dark) !important; } /* Literal.String.Affix */
+body .sb { color: var(--string-color-dark) !important; } /* Literal.String.Backtick */
+body .sc { color: var(--string-color-dark) !important; } /* Literal.String.Char */
+body .dl { color: var(--string-color-dark) !important; } /* Literal.String.Delimiter */
+body .sd { color: var(--string-color-dark) !important; } /* Literal.String.Doc */
+body .s2 { color: var(--string-color-dark) !important; } /* Literal.String.Double */
+body .se { color: var(--string-color-dark) !important; } /* Literal.String.Escape */
+body .sh { color: var(--string-color-dark) !important; } /* Literal.String.Heredoc */
+body .si { color: var(--string-color-dark) !important; } /* Literal.String.Interpol */
+body .sr { color: var(--string-color-dark) !important; } /* Literal.String.Regex */
+body .s1 { color: var(--string-color-dark) !important; } /* Literal.String.Single */
+body .ss { color: var(--string-color-dark) !important; } /* Literal.String.Symbol */
+
+/* Color for keywords */
+body .k  { color: var(--keyword-color-dark) !important; } /* Keyword */
+body .kc { color: var(--keyword-color-dark) !important; } /* Keyword.Constant */
+body .kd { color: var(--keyword-color-dark) !important; } /* Keyword.Declaration */
+body .kn { color: var(--keyword-color-dark) !important; } /* Keyword.Namespace */
+body .kp { color: var(--keyword-color-dark) !important; } /* Keyword.Pseudo */
+body .kr { color: var(--keyword-color-dark) !important; } /* Keyword.Reserved */
+body .kt { color: var(--keyword-color-dark) !important; } /* Keyword.Type */
+body .nt { color: var(--keyword-color-dark) !important; } /* Name.Tag */
+body .ow { color: var(--keyword-color-dark) !important; } /* Operator.Word */
+
+/* Built-in names */
+body .nb { color: #466aa9 !important; } /* Name.Builtin */
+
+/* Function names */
+body .nf { color: #d7b80b !important; } /* Name.Function */
+
+/* Line number color */
+.linenodiv { color: #7c7c7c !important; }

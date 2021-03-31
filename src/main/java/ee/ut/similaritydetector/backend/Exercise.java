@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static ee.ut.similaritydetector.backend.Analyser.readSolutionCode;
-
 public class Exercise {
 
     private final String name;
@@ -48,7 +46,7 @@ public class Exercise {
         float avgSolutionLength = 0;
         int solutionCount = solutions.size();
         for (Solution solution : solutions) {
-            avgSolutionLength += readSolutionCode(solution, true).length();
+            avgSolutionLength += solution.readSolutionCode(true).length();
         }
         avgSolutionLength /= solutionCount;
         averageSolutionSourceCodeLength = avgSolutionLength;
@@ -58,7 +56,7 @@ public class Exercise {
         float avgSolutionLength = 0;
         int solutionCount = solutions.size();
         for (Solution solution : solutions) {
-            avgSolutionLength += readSolutionCode(solution, false).length();
+            avgSolutionLength += solution.readSolutionCode(false).length();
         }
         avgSolutionLength /= solutionCount;
         averageSolutionPreprocessedCodeLength = avgSolutionLength;

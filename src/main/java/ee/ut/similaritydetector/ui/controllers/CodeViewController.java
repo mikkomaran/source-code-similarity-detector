@@ -1,5 +1,6 @@
 package ee.ut.similaritydetector.ui.controllers;
 
+import ee.ut.similaritydetector.ui.components.CodePaneController2;
 import ee.ut.similaritydetector.ui.utils.UserData;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -88,14 +89,14 @@ public class CodeViewController {
                     SimilarSolutionPair solutionPair = row.getItem();
                     // First solution
                     try {
-                        createNewCodePane(solutionPair.getFirstSolution());
+                        createNewCodePane2(solutionPair.getFirstSolution());
                     } catch (IOException e) {
                         e.printStackTrace();
                         showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
                     }
                     // Second solution
                     try {
-                        createNewCodePane(solutionPair.getSecondSolution());
+                        createNewCodePane2(solutionPair.getSecondSolution());
                     } catch (IOException e) {
                         e.printStackTrace();
                         showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
@@ -125,6 +126,26 @@ public class CodeViewController {
             try {
                 controller.loadSolutionSourceCode(solution);
             } catch (IOException e) {
+                e.printStackTrace();
+                showSolutionCodeReadingErrorAlert(solution);
+            }
+        });
+        codeSplitPane.getItems().add(root);
+
+        // Persists dark theme if it was activated before
+        menuBarController.persistDarkTheme();
+    }
+
+    private void createNewCodePane2(Solution solution) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "../../fxml/code_pane2.fxml"));
+        AnchorPane root = loader.load();
+        CodePaneController2 controller = loader.getController();
+        controller.setCodeViewController(this);
+        Platform.runLater(() -> {
+            try {
+                controller.loadSolutionSourceCode(solution);
+            } catch (Exception e) {
                 e.printStackTrace();
                 showSolutionCodeReadingErrorAlert(solution);
             }

@@ -43,6 +43,8 @@ public class MenuBarController {
             UserData userData = (UserData) MainViewController.stage.getUserData();
             if (userData.isDarkMode()) {
                 darkTheme.setSelected(true);
+            } else {
+                lightTheme.setSelected(true);
             }
         }
         // When application is started

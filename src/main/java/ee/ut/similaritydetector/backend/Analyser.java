@@ -4,12 +4,9 @@ import javafx.concurrent.Task;
 import ee.ut.similaritydetector.ui.controllers.MainViewController;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static ee.ut.similaritydetector.backend.LevenshteinDistance.normalisedLevenshteinSimilarity;
 
@@ -86,11 +83,15 @@ public class Analyser extends Task<Void> {
     }
 
     public void updateProcessingProgress(int done, int total) {
-            updateProgress(done * 0.5, total);
+            updateProgress(done * 0.45, total);
     }
 
-    public void updateAnalysingProgress() {
-            updateProgress(totalSolutionPairsCount * 0.5 + analysedSolutionPairsCount * 0.5, totalSolutionPairsCount);
+    private void updateAnalysingProgress() {
+            updateProgress(totalSolutionPairsCount * 0.45 + analysedSolutionPairsCount * 0.45, totalSolutionPairsCount);
+    }
+
+    private void updateGeneratingProgress(int done, int total) {
+        updateProgress(total * 0.9 + done * 0.1, total);
     }
 
     public void startAnalysis() {
@@ -122,6 +123,20 @@ public class Analyser extends Task<Void> {
         // Clustering similar pairs
         clusterSimilarPairs();
         //similarSolutionClusters.forEach(cluster -> System.out.println(cluster.toString()));
+
+        // Generate syntax highlighting HTML for every solution
+        mainViewController.setProgressText("Preparing results...");
+        int total = similarSolutionClusters.stream().mapToInt(cluster -> cluster.getSolutions().size()).sum();
+        AtomicInteger done = new AtomicInteger();
+        similarSolutionClusters.forEach(cluster -> cluster.getSolutions().forEach(solution -> {
+            try {
+                solution.generateSyntaxHighlightedHTML();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            done.getAndIncrement();
+            updateGeneratingProgress(done.get(), total);
+        }));
     }
 
     /**
@@ -156,8 +171,8 @@ public class Analyser extends Task<Void> {
      */
     private double findSimilarity(Solution sol1, Solution sol2, double similarityThreshold) {
         double similarity;
-        String sol1Code = readSolutionCode(sol1, false);
-        String sol2Code = readSolutionCode(sol2, false);
+        String sol1Code = sol1.readSolutionCode(false);
+        String sol2Code = sol2.readSolutionCode(false);
         try {
             similarity = normalisedLevenshteinSimilarity(sol1Code, sol2Code, (float) similarityThreshold);
         } catch (NullPointerException e) {
@@ -165,42 +180,6 @@ public class Analyser extends Task<Void> {
             similarity = 0;
         }
         return similarity;
-    }
-
-    /**
-     *
-     *
-     * @param solution
-     * @param sourceCodePrioritised
-     * @return
-     */
-    public static String readSolutionCode(Solution solution, boolean sourceCodePrioritised) {
-        String solutionCode;
-        Path first = null;
-        Path second = null;
-        if (sourceCodePrioritised) {
-            first = solution.getSourceCodeFile().toPath();
-            if(solution.getPreprocessedCodeFile() != null)
-                second = solution.getPreprocessedCodeFile().toPath();
-        } else {
-            if(solution.getPreprocessedCodeFile() != null)
-                first = solution.getPreprocessedCodeFile().toPath();
-            second = solution.getSourceCodeFile().toPath();
-        }
-        // We try to read the higher priority code file
-        try {
-            solutionCode = Files.readString(first, StandardCharsets.UTF_8);
-        } catch (IOException | NullPointerException e) {
-            // If the higher priority code cannot be read or the file doesn't exist
-            // the second priority file is the fallback
-            try {
-                solutionCode = Files.readString(second, StandardCharsets.UTF_8);
-            } catch (IOException | NullPointerException exception) {
-                // If the second priority file also cannot be read or doesn't exist
-                solutionCode = null;
-            }
-        }
-        return solutionCode;
     }
 
     private void clusterSimilarPairs() {
