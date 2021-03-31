@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ee.ut.similaritydetector.backend.Analyser;
 import ee.ut.similaritydetector.backend.Exercise;
@@ -113,6 +114,9 @@ public class ResultsViewController {
         newWindow.setMinHeight(600);
         newWindow.setScene(codeViewScene);
         newWindow.centerOnScreen();
+        newWindow.setTitle("Source code similarity detector - Similar clusters & pairs");
+        // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
+        newWindow.getIcons().add(new Image(getClass().getResourceAsStream("../../images/app_icon.png")));
 
         // Persists dark theme if it was activated before
         Platform.runLater(menuBarController::persistDarkTheme);

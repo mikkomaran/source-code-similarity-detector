@@ -46,7 +46,6 @@ public class Analyser extends Task<Void> {
         similarSolutionClusters = new ArrayList<>();
     }
 
-
     public double getSimilarityThreshold() {
         return similarityThreshold;
     }
@@ -83,11 +82,11 @@ public class Analyser extends Task<Void> {
     }
 
     public void updateProcessingProgress(int done, int total) {
-            updateProgress(done * 0.45, total);
+            updateProgress(done * 0.3, total);
     }
 
     private void updateAnalysingProgress() {
-            updateProgress(totalSolutionPairsCount * 0.45 + analysedSolutionPairsCount * 0.45, totalSolutionPairsCount);
+            updateProgress(totalSolutionPairsCount * 0.3 + analysedSolutionPairsCount * 0.6, totalSolutionPairsCount);
     }
 
     private void updateGeneratingProgress(int done, int total) {

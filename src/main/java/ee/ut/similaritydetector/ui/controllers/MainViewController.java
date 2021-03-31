@@ -189,6 +189,7 @@ public class MainViewController {
 
         Scene resultsViewScene = new Scene(root, 800, 600);
         stage.setScene(resultsViewScene);
+        stage.setTitle("Source code similarity detector - Results");
 
         // Persists dark theme if it was activated before
         menuBarController.persistDarkTheme();
