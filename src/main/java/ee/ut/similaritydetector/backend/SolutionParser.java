@@ -1,5 +1,7 @@
 package ee.ut.similaritydetector.backend;
 
+import org.python.util.PythonInterpreter;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.InvalidPathException;
@@ -102,8 +104,8 @@ public class SolutionParser {
                         } else {
                             exercises.add(new Exercise(solution.getExerciseName(), solution));
                         }
-                    } catch (InvalidPathException | InterruptedException | IOException e) {
-                        System.out.println(e.getMessage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     parsedSolutions ++;
                     analyser.updateProcessingProgress(parsedSolutions, numSolutions);
@@ -122,7 +124,7 @@ public class SolutionParser {
      * @param sourceCodeFile the source code file of the solution
      * @return a {@code Solution} parsed from the given {@code ZipEntry}
      */
-    private Solution parseSolution(File sourceCodeFile) throws IOException, InterruptedException {
+    private Solution parseSolution(File sourceCodeFile) throws Exception {
         Solution solution;
         Pattern solutionFolderPattern = Pattern.compile("(.+)_(.+)");
         Matcher matcher = solutionFolderPattern.matcher(sourceCodeFile.getParentFile().getName());
@@ -137,7 +139,7 @@ public class SolutionParser {
             throw new InvalidPathException(sourceCodeFile.getParentFile().getName(), " is an invalid file path.");
         }
         if (preprocessSourceCode) {
-            preprocessSourceCode(sourceCodeFile.getAbsolutePath());
+            preprocessSourceCode2(sourceCodeFile.getAbsolutePath());
             String sourceCodePath = sourceCodeFile.getAbsolutePath();
             File preProcessedCodeFile = new File(sourceCodePath.substring(0, sourceCodePath.length() - 3) + "_preprocessed.py");
             solution.setPreprocessedCodeFile(preProcessedCodeFile);
@@ -159,6 +161,17 @@ public class SolutionParser {
         ProcessBuilder processBuilder = new ProcessBuilder(command).inheritIO();
         Process process = processBuilder.start();
         process.waitFor();
+
     }
+
+    public void preprocessSourceCode2(String filePath) throws Exception {
+        final String preprocessorScript = "src/main/resources/ee/ut/similaritydetector/python/Preprocessor.py";
+
+        PythonInterpreter interpreter = new PythonInterpreter();
+        interpreter.set("source_code_filepath", filePath);
+        interpreter.execfile(preprocessorScript);
+    }
+
+
 
 }

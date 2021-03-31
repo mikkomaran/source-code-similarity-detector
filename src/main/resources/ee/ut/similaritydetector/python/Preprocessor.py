@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import io
 import sys
 import tokenize
@@ -6,9 +9,11 @@ import tokenize
 """ Function taken from: https://stackoverflow.com/questions/1769332/script-to-remove-python-comments-docstrings [04.03.2021]
     Original author: Dan McDougall (https://stackoverflow.com/users/357007/dan-mcdougall) 
     Modifications made by: Basj (https://stackoverflow.com/users/1422096/basj)
+    I also made some customisations.
 """
 def preprocess_source_code(source_code):
-    source_code_io = io.StringIO(source_code)
+    source_code_io = io.BytesIO(source_code)
+
     output = ""
     prev_tok_type = tokenize.INDENT
     last_line_nr = -1
@@ -39,14 +44,12 @@ def preprocess_source_code(source_code):
     return output
 
 
-# File path is passed as a command line argument
-source_code_filepath = sys.argv[1]
 preprocessed_code_filepath = source_code_filepath[0: len(source_code_filepath) - 3] + "_preprocessed.py"
 
-with open(source_code_filepath, 'r', encoding="utf-8") as source_code_file:
+with open(source_code_filepath, 'rb') as source_code_file:
     try:
         preprocessed_code = preprocess_source_code(source_code_file.read())
-        with open(preprocessed_code_filepath, 'w', encoding="utf-8") as preprocessed_code_file:
+        with open(preprocessed_code_filepath, 'wb') as preprocessed_code_file:
             preprocessed_code_file.write(preprocessed_code)
     # If the source code is syntactically incorrect
     except IndentationError:

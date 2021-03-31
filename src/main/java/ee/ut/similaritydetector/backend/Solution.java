@@ -127,7 +127,7 @@ public class Solution {
         final String sourceCodePathWithoutFileExtension = sourceCodePath.substring(0, sourceCodePath.length() - 3);
         final String darkHTMLPath = sourceCodePathWithoutFileExtension + "_dark.html";
         final String lightHTMLPath = sourceCodePathWithoutFileExtension + "_light.html";
-        final String syntaxHighlighterScript = "src/main/python/ee/ut/similaritydetector/SyntaxHighlighter.py";
+        final String syntaxHighlighterScript = "src/main/resources/ee/ut/similaritydetector/python/SyntaxHighlighter.py";
 
         PythonInterpreter interpreter = new PythonInterpreter();
         interpreter.set("source_code_filepath", sourceCodePath);

@@ -113,13 +113,14 @@ public class ResultsViewController {
         newWindow.setMinHeight(600);
         newWindow.setScene(codeViewScene);
         newWindow.centerOnScreen();
-        newWindow.show();
 
         // Persists dark theme if it was activated before
-        menuBarController.persistDarkTheme();
+        Platform.runLater(menuBarController::persistDarkTheme);
 
         // Resize cluster table columns
-        controller.resizeClusterTableColumns();
+        Platform.runLater(controller::resizeClusterTableColumns);
+
+        newWindow.show();
     }
 
 }

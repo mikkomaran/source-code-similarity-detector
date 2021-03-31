@@ -178,7 +178,7 @@ public class CodeViewController {
     /**
      * Resizes the columns of the given {@code TableView} to fit the size of columns' content.
      *
-     * @param table - the {@code TableView} to be resized
+     * @param table the {@code TableView} to be resized
      */
     private void resizeTable(TableView<?> table) {
         double columnsWidth = table.getColumns().stream().mapToDouble(TableColumnBase::getWidth).sum();
