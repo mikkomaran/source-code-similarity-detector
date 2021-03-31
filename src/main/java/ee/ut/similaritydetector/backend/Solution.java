@@ -1,7 +1,5 @@
 package ee.ut.similaritydetector.backend;
 
-import ee.ut.similaritydetector.ui.controllers.MainViewController;
-import ee.ut.similaritydetector.ui.utils.UserData;
 import org.python.util.PythonInterpreter;
 
 import java.io.*;
@@ -18,11 +16,10 @@ public class Solution {
     private final String author;
     private final String exerciseName;
     private final File sourceCodeFile;
+    private final Set<Solution> similarSolutions;
     private File preprocessedCodeFile;
     private File sourceCodeHTMLLight;
     private File sourceCodeHTMLDark;
-
-    private final Set<Solution> similarSolutions;
 
     public Solution(String author, String exerciseName, File sourceCodeFile) {
         this.author = author;
@@ -99,10 +96,10 @@ public class Solution {
         Path second = null;
         if (sourceCodePrioritised) {
             first = sourceCodeFile.toPath();
-            if(preprocessedCodeFile != null)
+            if (preprocessedCodeFile != null)
                 second = preprocessedCodeFile.toPath();
         } else {
-            if(preprocessedCodeFile != null)
+            if (preprocessedCodeFile != null)
                 first = preprocessedCodeFile.toPath();
             second = sourceCodeFile.toPath();
         }
