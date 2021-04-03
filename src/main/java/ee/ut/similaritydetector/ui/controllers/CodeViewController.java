@@ -1,6 +1,5 @@
 package ee.ut.similaritydetector.ui.controllers;
 
-import ee.ut.similaritydetector.ui.components.CodePaneController2;
 import ee.ut.similaritydetector.ui.utils.UserData;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -14,7 +13,6 @@ import ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import ee.ut.similaritydetector.backend.SimilarSolutionPair;
 import ee.ut.similaritydetector.backend.Solution;
 import ee.ut.similaritydetector.ui.components.AccordionTableView;
-import ee.ut.similaritydetector.ui.components.CodePaneController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +21,8 @@ import java.util.List;
 public class CodeViewController {
 
     private final List<TableView<SimilarSolutionPair>> clusterTables;
+
+    private static CodeViewController instance;
 
     @FXML
     private MenuBarController menuBarController;
@@ -36,8 +36,17 @@ public class CodeViewController {
 
     private List<SimilarSolutionCluster> clusters;
 
+    private final List<CodePaneController> openCodePanes;
+
+
     public CodeViewController() {
+        instance = this;
         clusterTables = new ArrayList<>();
+        openCodePanes = new ArrayList<>();
+    }
+
+    public static CodeViewController getInstance() {
+        return instance;
     }
 
     public List<TableView<SimilarSolutionPair>> getClusterTables() {
@@ -46,6 +55,20 @@ public class CodeViewController {
 
     public void setClusters(List<SimilarSolutionCluster> clusters) {
         this.clusters = clusters;
+    }
+
+    public void addCodePane(CodePaneController codePaneController) {
+        openCodePanes.add(codePaneController);
+        codeSplitPane.getItems().add(codePaneController.getRoot());
+    }
+
+    public void removeCodePane(CodePaneController codePaneController) {
+        openCodePanes.remove(codePaneController);
+        codeSplitPane.getItems().remove(codePaneController.getRoot());
+    }
+
+    public List<CodePaneController> getOpenCodePanes() {
+        return openCodePanes;
     }
 
     @FXML
@@ -89,14 +112,14 @@ public class CodeViewController {
                     SimilarSolutionPair solutionPair = row.getItem();
                     // First solution
                     try {
-                        createNewCodePane2(solutionPair.getFirstSolution());
+                        createNewCodePane(solutionPair.getFirstSolution());
                     } catch (IOException e) {
                         e.printStackTrace();
                         showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
                     }
                     // Second solution
                     try {
-                        createNewCodePane2(solutionPair.getSecondSolution());
+                        createNewCodePane(solutionPair.getSecondSolution());
                     } catch (IOException e) {
                         e.printStackTrace();
                         showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
@@ -117,43 +140,25 @@ public class CodeViewController {
     }
 
     private void createNewCodePane(Solution solution) throws IOException {
+        // If the solution is already open then we don't duplicate it
+        if (openCodePanes.stream().anyMatch(codePaneController -> codePaneController.getSolution().equals(solution))){
+            return;
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "../../fxml/code_pane.fxml"));
-        AnchorPane root = loader.load();
+        loader.load();
         CodePaneController controller = loader.getController();
         controller.setCodeViewController(this);
+        controller.setSolution(solution);
         Platform.runLater(() -> {
             try {
-                controller.loadSolutionSourceCode(solution);
-            } catch (IOException e) {
-                e.printStackTrace();
-                showSolutionCodeReadingErrorAlert(solution);
-            }
-        });
-        codeSplitPane.getItems().add(root);
-
-        // Persists dark theme if it was activated before
-        menuBarController.persistDarkTheme();
-    }
-
-    private void createNewCodePane2(Solution solution) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../fxml/code_pane2.fxml"));
-        AnchorPane root = loader.load();
-        CodePaneController2 controller = loader.getController();
-        controller.setCodeViewController(this);
-        Platform.runLater(() -> {
-            try {
-                controller.loadSolutionSourceCode(solution);
+                controller.loadSolutionSourceCode();
             } catch (Exception e) {
                 e.printStackTrace();
                 showSolutionCodeReadingErrorAlert(solution);
             }
         });
-        codeSplitPane.getItems().add(root);
-
-        // Persists dark theme if it was activated before
-        menuBarController.persistDarkTheme();
+        addCodePane(controller);
     }
 
     private void showSolutionCodeReadingErrorAlert(Solution solution) {
@@ -163,7 +168,7 @@ public class CodeViewController {
         // Dark mode
         if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
-                    "../../style/dark_mode2.scss")));
+                    "../../style/dark_mode.scss")));
         }
         alert.showAndWait();
     }
@@ -208,12 +213,14 @@ public class CodeViewController {
         }
     }
 
-    public void closeCodeTab(AnchorPane codePaneRoot) {
-        codeSplitPane.getItems().remove(codePaneRoot);
+    public void closeCodeTab(CodePaneController codePaneController) {
+        removeCodePane(codePaneController);
+        codeSplitPane.getItems().remove(codePaneController.getRoot());
     }
 
     @FXML
     private void closeAllCodeTabs() {
+        openCodePanes.clear();
         codeSplitPane.getItems().clear();
     }
 

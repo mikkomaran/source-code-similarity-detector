@@ -65,7 +65,7 @@ public class SimilarityDetectorLauncher extends Application {
         // Dark mode
         if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
-                    "../style/dark_mode2.scss")));
+                    "../style/dark_mode.scss")));
         }
         Optional<ButtonType> buttonType = alert.showAndWait();
         if (buttonType.isPresent() && buttonType.get() == exitButton) {
@@ -82,7 +82,7 @@ public class SimilarityDetectorLauncher extends Application {
 
     // Adapted from: https://stackoverflow.com/questions/7768071/how-to-delete-directory-content-in-java [30.03.2021]
     // Original author: NCode (https://stackoverflow.com/users/805569/ncode)
-    boolean deleteDirectory(File directory) {
+    void deleteDirectory(File directory) {
         File[] files = directory.listFiles();
         if(files != null) {
             for(File f : files) {
@@ -93,7 +93,7 @@ public class SimilarityDetectorLauncher extends Application {
                 }
             }
         }
-        return directory.delete();
+        directory.delete();
     }
 
     @Override

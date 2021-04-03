@@ -63,7 +63,7 @@ public class ResultsViewController {
     @FXML
     private void viewClusters() {
         try {
-            openCodeView2();
+            openCodeView();
         } catch (IOException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -72,35 +72,7 @@ public class ResultsViewController {
         }
     }
 
-    /*  public void openCodeView() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../fxml/code_view_OLD.fxml"));
-        Parent root = loader.load();
-        CodeViewController controller = loader.getController();
-        controller.setClusters(analyser.getSimilarSolutionClusters());
-        controller.createClusterItems();
-
-        Scene codeViewScene = new Scene(root, 1200, 700);
-        Stage newWindow = new Stage();
-        newWindow.setMinWidth(800);
-        newWindow.setMinHeight(600);
-        newWindow.setScene(codeViewScene);
-        newWindow.centerOnScreen();
-        newWindow.show();
-
-        // Persists dark theme if it was activated before
-        menuBarController.persistDarkTheme();
-
-        // Resize cluster table columns
-        controller.resizeClusterTableColumns();
-
-        // Binds line numbers to move with code area's scrollbar
-        controller.bindLineNumberVerticalScrollToCodeArea(controller.getLineNumbersLeft(), controller.getCodeAreaLeft());
-        controller.bindLineNumberVerticalScrollToCodeArea(controller.getLineNumbersRight(), controller.getCodeAreaRight());
-    }
-     */
-
-    public void openCodeView2() throws IOException {
+    public void openCodeView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "../../fxml/code_view.fxml"));
         Parent root = loader.load();

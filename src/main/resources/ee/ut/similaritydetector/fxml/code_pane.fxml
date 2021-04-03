@@ -1,38 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
 
-<AnchorPane fx:id="root" minHeight="0.0" minWidth="0.0" stylesheets="@../style/style.scss, @../style/code_pane.scss" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ee.ut.similaritydetector.ui.components.CodePaneController">
+<AnchorPane fx:id="root" minHeight="0.0" minWidth="0.0" stylesheets="@../style/style.scss, @../style/code_pane.scss" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ee.ut.similaritydetector.ui.controllers.CodePaneController">
    <children>
       <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
           <Tab fx:id="codeTab" text="kodu2.py">
                <content>
-                  <AnchorPane>
+                  <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
-                        <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <content>
-                              <AnchorPane>
-                                 <children>
-                                    <TextArea fx:id="codeArea" editable="false" focusTraversable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="39.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <font>
-                                          <Font name="Monospaced Regular" size="12.0" />
-                                       </font>
-                                    </TextArea>
-                                    <TextArea fx:id="lineNumbers" editable="false" focusTraversable="false" prefHeight="675.0" prefWidth="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <font>
-                                          <Font name="Monospaced Regular" size="12.0" />
-                                       </font>
-                                    </TextArea>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </ScrollPane>
+                        <WebView fx:id="webView" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                </content>

@@ -11,7 +11,7 @@ import ee.ut.similaritydetector.ui.utils.UserData;
 
 public class MenuBarController {
 
-    private static final String darkThemeStylesheetPath = "../../style/dark_mode2.scss";
+    private static final String darkThemeStylesheetPath = "../../style/dark_mode.scss";
 
     @FXML
     private Menu fileMenu;
@@ -24,7 +24,7 @@ public class MenuBarController {
     @FXML
     private RadioMenuItem lightTheme;
     @FXML
-    public RadioMenuItem darkTheme;
+    private RadioMenuItem darkTheme;
 
     @FXML
     private Menu helpMenu;
@@ -63,6 +63,9 @@ public class MenuBarController {
                 stylesheets.add(String.valueOf(this.getClass().getResource(darkThemeStylesheetPath)));
             }
         });
+        if (CodeViewController.getInstance() != null){
+            CodeViewController.getInstance().getOpenCodePanes().forEach(CodePaneController::loadDarkThemeHTML);
+        }
     }
 
     private void activateClassicTheme() {
@@ -70,6 +73,9 @@ public class MenuBarController {
         userData.setDarkMode(false);
         MainViewController.stage.setUserData(userData);
         Stage.getWindows().forEach(window -> window.getScene().getStylesheets().remove(String.valueOf(this.getClass().getResource(darkThemeStylesheetPath))));
+        if (CodeViewController.getInstance() != null){
+            CodeViewController.getInstance().getOpenCodePanes().forEach(CodePaneController::loadLightThemeHTML);
+        }
     }
 
     public void persistDarkTheme() {
