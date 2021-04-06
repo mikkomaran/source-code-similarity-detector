@@ -181,7 +181,7 @@ public class MainViewController {
     @FXML
     private void openResultsView(Analyser analyser) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../fxml/results_view.fxml"));
+                "/ee/ut/similaritydetector/fxml/results_view.fxml"));
         Parent root = loader.load();
         ResultsViewController controller = loader.getController();
         controller.setAnalyser(analyser);

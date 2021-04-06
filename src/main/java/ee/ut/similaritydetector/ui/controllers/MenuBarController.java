@@ -11,7 +11,7 @@ import ee.ut.similaritydetector.ui.utils.UserData;
 
 public class MenuBarController {
 
-    private static final String darkThemeStylesheetPath = "../../style/dark_mode.scss";
+    private static final String darkThemeStylesheetPath = "/ee/ut/similaritydetector/style/dark_mode.scss";
 
     @FXML
     private Menu fileMenu;

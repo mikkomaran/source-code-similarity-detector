@@ -2,10 +2,15 @@ package ee.ut.similaritydetector.backend;
 
 import org.python.util.PythonInterpreter;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.InvalidPathException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -156,7 +161,7 @@ public class SolutionParser {
      * @throws IOException
      */
     public void preprocessSourceCode(String filePath) throws InterruptedException, IOException {
-        String scriptPath = "src/main/python/ee/ut/similaritydetector/Preprocessor.py";
+        String scriptPath = "/ee/ut/similaritydetector/python/Preprocessor.py";
         String[] command = {"python", scriptPath, filePath};
         ProcessBuilder processBuilder = new ProcessBuilder(command).inheritIO();
         Process process = processBuilder.start();
@@ -165,11 +170,11 @@ public class SolutionParser {
     }
 
     public void preprocessSourceCode2(String filePath) throws Exception {
-        final String preprocessorScript = "src/main/resources/ee/ut/similaritydetector/python/Preprocessor.py";
+        final String preprocessorScript = "/ee/ut/similaritydetector/python/Preprocessor.py";
 
         PythonInterpreter interpreter = new PythonInterpreter();
         interpreter.set("source_code_filepath", filePath);
-        interpreter.execfile(preprocessorScript);
+        interpreter.execfile(getClass().getResourceAsStream(preprocessorScript));
     }
 
 

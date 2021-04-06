@@ -145,7 +145,7 @@ public class CodeViewController {
             return;
         }
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../fxml/code_pane.fxml"));
+                "/ee/ut/similaritydetector/fxml/code_pane.fxml"));
         loader.load();
         CodePaneController controller = loader.getController();
         controller.setCodeViewController(this);
@@ -168,7 +168,7 @@ public class CodeViewController {
         // Dark mode
         if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
-                    "../../style/dark_mode.scss")));
+                    "/ee/ut/similaritydetector/style/dark_mode.scss")));
         }
         alert.showAndWait();
     }

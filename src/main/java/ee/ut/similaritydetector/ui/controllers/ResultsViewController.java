@@ -74,7 +74,7 @@ public class ResultsViewController {
 
     public void openCodeView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../fxml/code_view.fxml"));
+                "/ee/ut/similaritydetector/fxml/code_view.fxml"));
         Parent root = loader.load();
         CodeViewController controller = loader.getController();
         controller.setClusters(analyser.getSimilarSolutionClusters());
@@ -88,7 +88,7 @@ public class ResultsViewController {
         newWindow.centerOnScreen();
         newWindow.setTitle("Source code similarity detector - Similar clusters & pairs");
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
-        newWindow.getIcons().add(new Image(getClass().getResourceAsStream("../../images/app_icon.png")));
+        newWindow.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
 
         // Persists dark theme if it was activated before
         Platform.runLater(menuBarController::persistDarkTheme);

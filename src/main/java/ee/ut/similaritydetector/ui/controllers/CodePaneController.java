@@ -1,11 +1,9 @@
 package ee.ut.similaritydetector.ui.controllers;
 
-import com.sun.javafx.scene.control.behavior.TabPaneBehavior;
 import ee.ut.similaritydetector.backend.Solution;
 import ee.ut.similaritydetector.ui.utils.UserData;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.skin.TabPaneSkin;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 
@@ -67,13 +65,13 @@ public class CodePaneController {
 
     public void loadLightThemeHTML() {
         File htmlFile = solution.getSourceCodeHTMLLight();
-        webView.getEngine().setUserStyleSheetLocation(getClass().getResource("../../style/webview_style_light.css").toString());
+        webView.getEngine().setUserStyleSheetLocation(getClass().getResource("/ee/ut/similaritydetector/style/webview_style_light.css").toString());
         webView.getEngine().load(htmlFile.toURI().toString());
     }
 
     public void loadDarkThemeHTML() {
         File htmlFile = solution.getSourceCodeHTMLDark();
-        webView.getEngine().setUserStyleSheetLocation(getClass().getResource("../../style/webview_style_dark.css").toString());
+        webView.getEngine().setUserStyleSheetLocation(getClass().getResource("/ee/ut/similaritydetector/style/webview_style_dark.css").toString());
         webView.getEngine().load(htmlFile.toURI().toString());
     }
 

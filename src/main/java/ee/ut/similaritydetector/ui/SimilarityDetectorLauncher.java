@@ -31,8 +31,7 @@ public class SimilarityDetectorLauncher extends Application {
     }
 
     public void loadMainView(Stage stage) throws IOException {
-        URL fxmlLocation = this.getClass().getResource("../fxml/main_view.fxml");
-        System.out.println(fxmlLocation.getPath());
+        URL fxmlLocation = this.getClass().getResource("/ee/ut/similaritydetector/fxml/main_view.fxml");
         Parent root = FXMLLoader.load(fxmlLocation);
         stage.setMinWidth(800);
         stage.setMinHeight(600);
@@ -40,7 +39,7 @@ public class SimilarityDetectorLauncher extends Application {
         Scene scene = new Scene(root, 800, 600);
         stage.setScene(scene);
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("../images/app_icon.png")));
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         stage.show();
         stage.setUserData(new UserData(true));
         stage.setOnCloseRequest(this::showExitConfirmationAlert);
@@ -65,7 +64,7 @@ public class SimilarityDetectorLauncher extends Application {
         // Dark mode
         if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
-                    "../style/dark_mode.scss")));
+                    "/ee/ut/similaritydetector/style/dark_mode.scss")));
         }
         Optional<ButtonType> buttonType = alert.showAndWait();
         if (buttonType.isPresent() && buttonType.get() == exitButton) {
