@@ -63,12 +63,18 @@ public class CodePaneController {
         }
     }
 
+    /**
+     * Loads the syntax highlighted source code HTML for light theme.
+     */
     public void loadLightThemeHTML() {
         File htmlFile = solution.getSourceCodeHTMLLight();
         webView.getEngine().setUserStyleSheetLocation(getClass().getResource("/ee/ut/similaritydetector/style/webview_style_light.css").toString());
         webView.getEngine().load(htmlFile.toURI().toString());
     }
 
+    /**
+     * Loads the syntax highlighted source code HTML for dark theme.
+     */
     public void loadDarkThemeHTML() {
         File htmlFile = solution.getSourceCodeHTMLDark();
         webView.getEngine().setUserStyleSheetLocation(getClass().getResource("/ee/ut/similaritydetector/style/webview_style_dark.css").toString());

@@ -53,6 +53,9 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Activates dark theme on every currently opened window by adding a css stylesheet to the scenes.
+     */
     private void activateDarkTheme() {
         UserData userData = (UserData) MainViewController.stage.getUserData();
         userData.setDarkMode(true);
@@ -68,6 +71,9 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Activates light theme on every currently opened window by adding a css stylesheet to the scenes.
+     */
     private void activateClassicTheme() {
         UserData userData = (UserData) MainViewController.stage.getUserData();
         userData.setDarkMode(false);
@@ -78,9 +84,14 @@ public class MenuBarController {
         }
     }
 
-    public void persistDarkTheme() {
+    /**
+     * Persists the current theme through scene changes.
+     */
+    public void persistCurrentTheme() {
         if (darkTheme.isSelected()) {
             activateDarkTheme();
+        } else {
+            activateClassicTheme();
         }
     }
 

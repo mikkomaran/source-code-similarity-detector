@@ -30,6 +30,12 @@ public class SimilarityDetectorLauncher extends Application {
        loadMainView(stage);
     }
 
+    /**
+     * Opens the main view or throws {@link IOException} if it fails to load.
+     *
+     * @param stage current {@link Stage}
+     * @throws IOException if fails to load main_view.fxml
+     */
     public void loadMainView(Stage stage) throws IOException {
         URL fxmlLocation = this.getClass().getResource("/ee/ut/similaritydetector/fxml/main_view.fxml");
         Parent root = FXMLLoader.load(fxmlLocation);
@@ -46,6 +52,11 @@ public class SimilarityDetectorLauncher extends Application {
         MainViewController.stage = stage;
     }
 
+    /**
+     * Shows a confirmation {@link Alert} if the main application window is attempted to close.
+     *
+     * @param windowEvent {@link WindowEvent}
+     */
     private void showExitConfirmationAlert(WindowEvent windowEvent) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("");
@@ -74,13 +85,21 @@ public class SimilarityDetectorLauncher extends Application {
         }
     }
 
+    /**
+     * Deletes the files that are generated during analysis.
+     */
     private void deleteOutputFiles() {
         File outputDirectory = new File("resources/");
         deleteDirectory(outputDirectory);
     }
 
-    // Adapted from: https://stackoverflow.com/questions/7768071/how-to-delete-directory-content-in-java [30.03.2021]
-    // Original author: NCode (https://stackoverflow.com/users/805569/ncode)
+    /**
+     * Adapted from: https://stackoverflow.com/questions/7768071/how-to-delete-directory-content-in-java [30.03.2021]
+     *  Original author: NCode (https://stackoverflow.com/users/805569/ncode)
+     *
+     * @param directory the directory to delete
+     */
+
     void deleteDirectory(File directory) {
         File[] files = directory.listFiles();
         if(files != null) {
@@ -95,6 +114,9 @@ public class SimilarityDetectorLauncher extends Application {
         directory.delete();
     }
 
+    /**
+     * Overrides the {@link Application#stop()} to delete the files generated on runtime before closing the application.
+     */
     @Override
     public void stop() throws Exception {
         /* TODO: siin teha asjad, mida sulgemisel vaja oleks:

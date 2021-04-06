@@ -35,36 +35,17 @@ public class SolutionParser {
     }
 
     /**
-     * <p>Taken from: https://www.baeldung.com/java-compress-and-uncompress [11.03.2021]</p>
+     * Parses solutions from the given zip folder of solutions as a {@link List<Exercise>} of {@link Exercise}s
+     * where an {@link Exercise} contains all the {@link Solution}s for that exercise.
      *
-     * <p>Quote from the source:
-     * "This method guards against writing files to the file system outside of the target folder."</p>
-     */
-    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
-        File destFile = new File(destinationDir, zipEntry.getName());
-
-        String destDirPath = destinationDir.getCanonicalPath();
-        String destFilePath = destFile.getCanonicalPath();
-
-        if (!destFilePath.startsWith(destDirPath + File.separator)) {
-            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
-        }
-
-        return destFile;
-    }
-
-    /**
-     * <p>Parses the zip folder of solutions as a map of lists, where
-     * the key is the exercise name and the list contains all the
-     * solutions to that exercise.</p>
-     *
-     * @return parsed solutions as a {@code Map} where every exercise has a list of solutions
+     * @return parsed solutions as a {@link List<Exercise>} of {@link Exercise}s
      */
     public List<Exercise> parseSolutions() {
         List<Exercise> exercises = new ArrayList<>();
         int numSolutions = 0;
         int parsedSolutions = 0;
 
+        // Counts the total number of solutions for progress tracking
         try {
             ZipFile zipFile = new ZipFile(contentDirectory);
             Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
@@ -124,10 +105,29 @@ public class SolutionParser {
     }
 
     /**
-     * Parses a {@code Solution} from the given {@code ZipEntry}.
+     * <p>Taken from: https://www.baeldung.com/java-compress-and-uncompress [11.03.2021]</p>
+     *
+     * <p>Quote from the source:
+     * "This method guards against writing files to the file system outside of the target folder."</p>
+     */
+    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+        File destFile = new File(destinationDir, zipEntry.getName());
+
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
+    }
+
+    /**
+     * Parses a {@link Solution} from the given {@link ZipEntry}.
      *
      * @param sourceCodeFile the source code file of the solution
-     * @return a {@code Solution} parsed from the given {@code ZipEntry}
+     * @return a {@link Solution} parsed from the given {@link ZipEntry}
      */
     private Solution parseSolution(File sourceCodeFile) throws Exception {
         Solution solution;
@@ -156,19 +156,9 @@ public class SolutionParser {
      * Runs a python script to preprocess the source code,
      * removing comments, docstrings, empty lines and trailing whitespace.
      *
-     * @param filePath the source code filepath
-     * @throws InterruptedException
-     * @throws IOException
+     * @param filePath the source code file's path
+     * @throws Exception if the preprocessing fails
      */
-    public void preprocessSourceCode(String filePath) throws InterruptedException, IOException {
-        String scriptPath = "/ee/ut/similaritydetector/python/Preprocessor.py";
-        String[] command = {"python", scriptPath, filePath};
-        ProcessBuilder processBuilder = new ProcessBuilder(command).inheritIO();
-        Process process = processBuilder.start();
-        process.waitFor();
-
-    }
-
     public void preprocessSourceCode2(String filePath) throws Exception {
         final String preprocessorScript = "/ee/ut/similaritydetector/python/Preprocessor.py";
 

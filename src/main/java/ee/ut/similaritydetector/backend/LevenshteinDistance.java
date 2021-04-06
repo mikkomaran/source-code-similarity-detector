@@ -8,10 +8,15 @@ public class LevenshteinDistance {
      * <p>Adapted from: https://github.com/tdebatty/java-string-similarity/blob/master/src/main/java/info/debatty/java/stringsimilarity/Levenshtein.java [06.03.2021]</p>
      * <p>Calculates the customised Levenshtein distance metric of two strings.</p>
      * <p>Customisations made:
-     * <ol><li></li></ol></p>
+     * <ol>
+     *     <li>Same characters with case difference have a smaller edit cost</li>
+     *     <li>Estonian special characters [õ,ä,ö,ü,š,ž] change to ascii characters [o,a,u,y,s,z] has a smaller edit cost</li>
+     * </ol></p>
      * <p>There are two optimizations made:
-     * <ol><li>The strings are presented as char arrays for improved efficiency.</li>
-     * <li>If the distance metric surpasses the given threshold, the algorithm is halted.</li></ol></p>
+     * <ol>
+     *     <li>The strings are presented as char arrays for improved efficiency.</li>
+     *     <li>If the distance metric surpasses the given threshold, the algorithm is halted.</li>
+     * </ol></p>
      *
      * @param s1        char array of string 1
      * @param s2        char array of string 2
@@ -27,11 +32,9 @@ public class LevenshteinDistance {
             return 0;
         }
 
-        // String lengths
         int n = s1.length;
         int m = s2.length;
 
-        //
         double[] prevCosts = new double[m + 1];
         double[] currCosts = new double[m + 1];
         double[] temp;
@@ -104,13 +107,10 @@ public class LevenshteinDistance {
                 charSubstitutionCondition(s1[i], s2[j], 'z', 'ž')) {
             subCost = 0.3;
         }
-
-        double swapCost = 1;
-
         return Math.min(
                 currCosts[j] + 1,                 // Cost of insertion
                 Math.min(
-                        prevCosts[j + 1] + 1,     // Cost of remove
+                        prevCosts[j + 1] + 1,     // Cost of removal
                         prevCosts[j] + subCost)); // Cost of substitution
     }
 
@@ -118,29 +118,23 @@ public class LevenshteinDistance {
         return curr1 == sub1 && curr2 == sub2 || curr1 == sub2 && curr2 == sub1;
     }
 
-    public static double findCost2(char[] s1, char[] s2, double[] prevCosts, double[] currCosts, int i, int j) {
-        double cost = 1;
-        if (s1[i] == s2[j]) {
-            cost = 0;                          // Cost is 0 when same chars
-        }
-        // Special cases
-
-        return Math.min(
-                currCosts[j] + 1,              // Cost of insertion
-                Math.min(
-                        prevCosts[j + 1] + 1,  // Cost of remove
-                        prevCosts[j] + cost)); // Cost of substitution
-    }
-
+    /**
+     * <p>Finds the normalised Levenshtein similarity between the given solutions s1 and s2 by the formula:</p>
+     * <p>normalisedLevenshteinSimilarity(s1, s2) = 1 - LevenshteinDistance(s1, s2) / max(s1.length, s2.length)</p>
+     *
+     * @param s1 Solution 1 code
+     * @param s2 Solution 2 code
+     * @param similarityThreshold given similarity threshold above which solutions are considered similar
+     * @return normalised Levenshtein similarity between the two solutions
+     */
     public static double normalisedLevenshteinSimilarity(String s1, String s2, float similarityThreshold) {
         int maxLength = Math.max(s1.length(), s2.length());
         int distanceThreshold = Math.round((1 - similarityThreshold) * maxLength);
-        //double distance = levenshteinDistance(s1.toCharArray(), s2.toCharArray(), distanceThreshold);
-        double distance = distance(s1.toCharArray(), s2.toCharArray(), distanceThreshold);
-        if (distance == -1) {
+        double levenshteinDistance = distance(s1.toCharArray(), s2.toCharArray(), distanceThreshold);
+        if (levenshteinDistance == -1) {
             return 0;
         }
-        return 1.0 - distance / maxLength;
+        return 1.0 - levenshteinDistance / maxLength;
     }
 
 }

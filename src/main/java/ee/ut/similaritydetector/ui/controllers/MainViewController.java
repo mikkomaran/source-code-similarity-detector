@@ -81,6 +81,9 @@ public class MainViewController {
         toolTipManager.setReshowDelay(300);
     }
 
+    /**
+     * Opens a {@link FileChooser} when the "Select ZIP folder" is pressed.
+     */
     @FXML
     private void chooseFile() {
         FileChooser fileChooser = new FileChooser();
@@ -101,6 +104,10 @@ public class MainViewController {
         }
     }
 
+    /**
+     * Starts the analysis process if the "Start analysis" button is clicked.
+     * The {@link Analyser} is started on a new thread.
+     */
     @FXML
     private void startAnalysis() {
         // Animates settings pane to disappear left
@@ -137,10 +144,13 @@ public class MainViewController {
 
         analyser.setOnFailed(event -> {
             analyser.getException().printStackTrace();
-            resetMainView("Analysis failed", "");
+            resetMainView("Analysis failed", analyser.getException().getMessage());
         });
     }
 
+    /**
+     * Animates the closing of Settings pane.
+     */
     private void hideSettings(){
         Duration duration = Duration.millis(300);
         settingsPane.setPrefWidth(settingsPane.getMinWidth());
@@ -151,6 +161,9 @@ public class MainViewController {
         timeline.play();
     }
 
+    /**
+     * Animates the opening of Settings pane.
+     */
     private void openSettings(){
         Duration duration = Duration.millis(300);
         Timeline timeline = new Timeline(
@@ -160,10 +173,22 @@ public class MainViewController {
         timeline.play();
     }
 
+    /**
+     * Changes the progress text that is displayed above the progress bar.
+     *
+     * @param text text to be displayed
+     */
     public void setProgressText(String text) {
         Platform.runLater(() -> progressTextLabel.setText(text));
     }
 
+    /**
+     * Creates an {@link Alert} if {@link Analyser} fails and shows the error message.
+     * After clicking OK resets main view.
+     *
+     * @param errorMessage error message to show
+     * @param contextMessage error's context message to show
+     */
     private void resetMainView(String errorMessage, String contextMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(errorMessage);
@@ -178,6 +203,13 @@ public class MainViewController {
         progressArea.setVisible(false);
     }
 
+    /**
+     * Opens the results view and passes the {@link Analyser} used for analysing solutions to the
+     * {@link ResultsViewController}
+     *
+     * @param analyser {@link Analyser}
+     * @throws IOException
+     */
     @FXML
     private void openResultsView(Analyser analyser) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
@@ -192,7 +224,7 @@ public class MainViewController {
         stage.setTitle("Source code similarity detector - Results");
 
         // Persists dark theme if it was activated before
-        menuBarController.persistDarkTheme();
+        Platform.runLater(() -> menuBarController.persistCurrentTheme());
 
         // Makes the "View clusters" button clickable if analysis found any clusters
         controller.toggleClusterButtonUsability();

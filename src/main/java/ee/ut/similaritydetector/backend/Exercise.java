@@ -38,6 +38,14 @@ public class Exercise {
         return averageSolutionPreprocessedCodeLength;
     }
 
+    public double getSimilarityThreshold() {
+        return similarityThreshold;
+    }
+
+    public void setSimilarityThreshold(double similarityThreshold) {
+        this.similarityThreshold = similarityThreshold;
+    }
+
     public int getExerciseSolutionCount() {
         return solutions.size();
     }
@@ -62,16 +70,13 @@ public class Exercise {
         averageSolutionPreprocessedCodeLength = avgSolutionLength;
     }
 
-    public double getSimilarityThreshold() {
-        return similarityThreshold;
-    }
-
-    public void setSimilarityThreshold(double similarityThreshold) {
-        this.similarityThreshold = similarityThreshold;
-    }
-
     public void calculateSimilarityThreshold() {
+        double averageSolutionLength = averageSolutionPreprocessedCodeLength != 0 ?
+                                        averageSolutionPreprocessedCodeLength :
+                                        averageSolutionSourceCodeLength;
+        double lengthMultiplier = 1;
 
+        similarityThreshold = 0.95;
     }
 
 }

@@ -12,13 +12,13 @@ import static ee.ut.similaritydetector.backend.LevenshteinDistance.normalisedLev
 
 public class Analyser extends Task<Void> {
 
-    private double similarityThreshold = -1;
     private final boolean preprocessSourceCode;
     private final boolean anonymousResults;
     private final File zipDirectory;
     private final List<SimilarSolutionPair> similarSolutionPairs;
     private final List<SimilarSolutionCluster> similarSolutionClusters;
     private List<Exercise> exercises;
+    private double similarityThreshold = -1;
 
     private int totalSolutionPairsCount;
     private int analysedSolutionPairsCount;
@@ -97,8 +97,37 @@ public class Analyser extends Task<Void> {
         mainViewController.setProgressText("Processing solutions...");
         SolutionParser solutionParser = new SolutionParser(zipDirectory, preprocessSourceCode, anonymousResults, this);
         exercises = solutionParser.parseSolutions();
+
         mainViewController.setProgressText("Analysing solutions...");
+        analyseSolutions();
+
+        // Performing the pairwise comparison of solutions for each exercise
+        exercises.forEach(this::compareSolutions);
+
+        // Clustering similar pairs
+        clusterSimilarPairs();
+
+        // Generating syntax highlighted solution code HTML
+        generateSyntaxHighlightingHTML();
+    }
+
+    /**
+     * For each exercise finds the average solution length of source code and preprocessed code
+     * (if preprocessing is done) and sets similarity threshold, if custom threshold is not used,
+     * then calculates a similarity threshold based on solution length.
+     */
+    private void analyseSolutions() {
         for (Exercise exercise : exercises) {
+            // Finds the average solution length for this exercise
+            exercise.findAverageSolutionSourceCodeLength();
+            System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionSourceCodeLength() + " preprocessed codes");
+            if (preprocessSourceCode){
+                exercise.findAverageSolutionPreprocessedCodeLength();
+                System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionPreprocessedCodeLength() + " source codes");
+                System.out.println("Preprocessing removed on average " + Math.round(exercise.getAverageSolutionSourceCodeLength()
+                        - exercise.getAverageSolutionPreprocessedCodeLength()) + " characters per solution for exercise " + exercise.getName());
+            }
+
             // If user chose a custom similarity threshold then it is used, otherwise it is calculated
             if (similarityThreshold != -1) {
                 exercise.setSimilarityThreshold(similarityThreshold);
@@ -108,34 +137,7 @@ public class Analyser extends Task<Void> {
             // Finds the total number of pairs that will be compared
             int exerciseSolutionCount = exercise.getSolutions().size();
             totalSolutionPairsCount += exerciseSolutionCount * (exerciseSolutionCount - 1) / 2;
-            // Finds the average solution length for this exercise
-            exercise.findAverageSolutionSourceCodeLength();
-//            exercise.findAverageSolutionPreprocessedCodeLength();
-//            System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionSourceCodeLength() + " preprocessed codes");
-//            System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionPreprocessedCodeLength() + " source codes");
-//            System.out.println("Preprocessing removed on average " + Math.round(exercise.getAverageSolutionSourceCodeLength()
-//                    - exercise.getAverageSolutionPreprocessedCodeLength()) + " characters per solution for exercise " + exercise.getName());
         }
-        // Performing the pairwise comparison of solutions for each exercise
-        exercises.forEach(this::compareSolutions);
-
-        // Clustering similar pairs
-        clusterSimilarPairs();
-        //similarSolutionClusters.forEach(cluster -> System.out.println(cluster.toString()));
-
-        // Generate syntax highlighting HTML for every solution
-        mainViewController.setProgressText("Preparing results...");
-        int total = similarSolutionClusters.stream().mapToInt(cluster -> cluster.getSolutions().size()).sum();
-        AtomicInteger done = new AtomicInteger();
-        similarSolutionClusters.forEach(cluster -> cluster.getSolutions().forEach(solution -> {
-            try {
-                solution.generateSyntaxHighlightedHTML();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            done.getAndIncrement();
-            updateGeneratingProgress(done.get(), total);
-        }));
     }
 
     /**
@@ -164,9 +166,12 @@ public class Analyser extends Task<Void> {
     }
 
     /**
-     * @param sol1
-     * @param sol2
-     * @return
+     * Finds the similarity between two given solutions based on Levenshtein distance.
+     *
+     * @param sol1 {@link Solution} nr 1
+     * @param sol2 {@link Solution} nr 2
+     * @return the similarity of the two solutions in the range 0 to 1 (both inclusive),
+     *          0 meaning no similarities between the two solutions and 1 meaning solutions are identical.
      */
     private double findSimilarity(Solution sol1, Solution sol2, double similarityThreshold) {
         double similarity;
@@ -181,29 +186,34 @@ public class Analyser extends Task<Void> {
         return similarity;
     }
 
+    /**
+     * Clusters all found similar solution pairs based on the assumption
+     * that given solutions A, B and C, if A is similar to B and A is similar to C
+     * then A, B and C all belong to the same cluster.
+     */
     private void clusterSimilarPairs() {
         for (SimilarSolutionPair pair1 : similarSolutionPairs) {
             Solution sol1 = pair1.getFirstSolution();
             Solution sol2 = pair1.getSecondSolution();
             SimilarSolutionCluster cluster = null;
-            // If both solutions are not in a cluster
+            // If both solutions are not in an existing cluster
             if (similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol1)) &&
                     similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol2))) {
                 cluster = new SimilarSolutionCluster(sol1.getExerciseName(), sol1, sol2);
             }
-            // If only first solution is in a cluster
+            // If only first solution is in an existing cluster
             else if (similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol1)) && similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol2))) {
                 SimilarSolutionCluster existingCluster = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol1)).findAny().get();
                 existingCluster.addSolution(sol2);
                 existingCluster.addSolutionPair(pair1);
             }
-            // If only second solution is in a cluster
+            // If only second solution is in an existing cluster
             else if (similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol1)) && similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol2))) {
                 SimilarSolutionCluster existingCluster = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol2)).findAny().get();
                 existingCluster.addSolution(sol1);
                 existingCluster.addSolutionPair(pair1);
             }
-            // If both are in a cluster
+            // If both are in an existing cluster
             else if (similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol1)) && similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol2))) {
                 SimilarSolutionCluster existingCluster1 = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol1)).findAny().get();
                 SimilarSolutionCluster existingCluster2 = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol2)).findAny().get();
@@ -234,6 +244,24 @@ public class Analyser extends Task<Void> {
         for (SimilarSolutionCluster cluster : similarSolutionClusters) {
             cluster.createName();
         }
+    }
+
+    /**
+     * Generates syntax highlighting HTML for each suspicious solution.
+     */
+    private void generateSyntaxHighlightingHTML() {
+        mainViewController.setProgressText("Preparing results...");
+        int total = similarSolutionClusters.stream().mapToInt(cluster -> cluster.getSolutions().size()).sum();
+        AtomicInteger done = new AtomicInteger();
+        similarSolutionClusters.forEach(cluster -> cluster.getSolutions().forEach(solution -> {
+            try {
+                solution.generateSyntaxHighlightedHTML();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            done.getAndIncrement();
+            updateGeneratingProgress(done.get(), total);
+        }));
     }
 
 }

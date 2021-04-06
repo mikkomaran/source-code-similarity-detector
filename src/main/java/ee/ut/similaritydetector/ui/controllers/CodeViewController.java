@@ -139,6 +139,14 @@ public class CodeViewController {
         });
     }
 
+    /**
+     * Creates and opens a new code tab with the given solutions source code
+     * in the code view if it is not already opened.
+     *
+     * @param solution {@link Solution}
+     * @throws IOException if the solution's source code HTML could not be loaded,
+     *          an {@link Alert} is created by {@link CodeViewController#showSolutionCodeReadingErrorAlert(Solution)}
+     */
     private void createNewCodePane(Solution solution) throws IOException {
         // If the solution is already open then we don't duplicate it
         if (openCodePanes.stream().anyMatch(codePaneController -> codePaneController.getSolution().equals(solution))){
@@ -161,6 +169,11 @@ public class CodeViewController {
         addCodePane(controller);
     }
 
+    /**
+     * Shows an {@link Alert} if the solutions code could not be loaded.
+     *
+     * @param solution {@link Solution}
+     */
     private void showSolutionCodeReadingErrorAlert(Solution solution) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText("Could not load solution code");
@@ -213,11 +226,19 @@ public class CodeViewController {
         }
     }
 
+    /**
+     * Closes the given code tab
+     *
+     * @param codePaneController {@link CodePaneController}
+     */
     public void closeCodeTab(CodePaneController codePaneController) {
         removeCodePane(codePaneController);
         codeSplitPane.getItems().remove(codePaneController.getRoot());
     }
 
+    /**
+     * Closes all code tabs that are currently open.
+     */
     @FXML
     private void closeAllCodeTabs() {
         openCodePanes.clear();

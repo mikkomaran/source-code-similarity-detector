@@ -46,6 +46,9 @@ public class ResultsViewController {
     private void initialize() {
     }
 
+    /**
+     * Loads the statistics from the {@link Analyser} onto the results view.
+     */
     public void readStatistics() {
         totalSolutionsLabel.setText(String.valueOf(analyser.getExercises().stream().mapToInt(Exercise::getExerciseSolutionCount).sum()));
         solutionPairsLabel.setText(String.valueOf(analyser.getAnalysedSolutionPairsCount()));
@@ -53,13 +56,19 @@ public class ResultsViewController {
         similarClustersLabel.setText(String.valueOf(analyser.getSimilarSolutionClusters().size()));
     }
 
-
+    /**
+     * If no similar solutions were found then the cluster viewing button is not interactable.
+     */
     public void toggleClusterButtonUsability() {
         if (analyser.getSimilarSolutionClusters() != null && analyser.getSimilarSolutionClusters().size() != 0) {
             viewClustersButton.setDisable(false);
         }
     }
 
+    /**
+     * Tries to open the Code view if the "View similar clusters & pairs" button is clicked.
+     * If it fails, then shows an {@link Alert}.
+     */
     @FXML
     private void viewClusters() {
         try {
@@ -72,6 +81,11 @@ public class ResultsViewController {
         }
     }
 
+    /**
+     * Opens the code view in a new window, or throws {@link IOException} if it fails to load.
+     *
+     * @throws IOException if the code view could not be opened
+     */
     public void openCodeView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "/ee/ut/similaritydetector/fxml/code_view.fxml"));
@@ -91,7 +105,7 @@ public class ResultsViewController {
         newWindow.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
 
         // Persists dark theme if it was activated before
-        Platform.runLater(menuBarController::persistDarkTheme);
+        Platform.runLater(menuBarController::persistCurrentTheme);
 
         // Resize cluster table columns
         Platform.runLater(controller::resizeClusterTableColumns);

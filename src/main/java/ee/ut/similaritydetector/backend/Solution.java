@@ -119,6 +119,10 @@ public class Solution {
         return solutionCode;
     }
 
+    /**
+     * Generates HTML files for the syntactically highlighted source code of the solution for
+     * viewing on {@link javafx.scene.web.WebView}
+     */
     public void generateSyntaxHighlightedHTML() {
         final String sourceCodePath = sourceCodeFile.getAbsolutePath();
         final String sourceCodePathWithoutFileExtension = sourceCodePath.substring(0, sourceCodePath.length() - 3);
