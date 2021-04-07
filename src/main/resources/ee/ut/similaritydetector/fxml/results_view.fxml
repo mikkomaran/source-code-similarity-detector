@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" stylesheets="/ee/ut/similaritydetector/style/style.scss, /ee/ut/similaritydetector/style/results_view_style.scss" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ee.ut.similaritydetector.ui.controllers.ResultsViewController">
+<VBox prefHeight="600.0" prefWidth="800.0" stylesheets="/ee/ut/similaritydetector/style/style.scss, /ee/ut/similaritydetector/style/results_view_style.scss" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ee.ut.similaritydetector.ui.controllers.ResultsViewController">
    <children>
        <fx:include fx:id="menuBar" source="menu_bar.fxml" />
       <VBox alignment="TOP_CENTER" spacing="25.0" VBox.vgrow="ALWAYS">

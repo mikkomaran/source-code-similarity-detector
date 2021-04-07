@@ -7,6 +7,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -14,6 +15,7 @@ import ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import ee.ut.similaritydetector.backend.SimilarSolutionPair;
 import ee.ut.similaritydetector.backend.Solution;
 import ee.ut.similaritydetector.ui.components.AccordionTableView;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -178,6 +180,8 @@ public class CodeViewController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText("Could not load solution code");
         alert.setContentText(solution.getExerciseName() + " - " + solution.getAuthor());
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         // Dark mode
         if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ee.ut.similaritydetector.ui.utils.UserData;
 
@@ -105,7 +106,18 @@ public class MenuBarController {
 
     @FXML
     private void showAboutInfo() {
-        // TODO: create about info page
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
+        alert.setHeaderText("Source code similarity detector v1.0");
+        alert.setContentText("Mikko Maran\n" +
+                             "2021");
+        // Dark mode
+        if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
+            alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
+                    "/ee/ut/similaritydetector/style/dark_mode.scss")));
+        }
+        alert.show();
     }
 
 }

@@ -1,5 +1,6 @@
 package ee.ut.similaritydetector.ui.controllers;
 
+import ee.ut.similaritydetector.ui.utils.UserData;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -102,6 +103,13 @@ public class ResultsViewController {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Could not view clusters");
+            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
+            // Dark mode
+            if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
+                alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
+                        "/ee/ut/similaritydetector/style/dark_mode.scss")));
+            }
             alert.showAndWait();
         }
     }

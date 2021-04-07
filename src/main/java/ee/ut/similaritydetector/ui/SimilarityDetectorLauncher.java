@@ -71,6 +71,8 @@ public class SimilarityDetectorLauncher extends Application {
         //Activate Defaultbehavior for no-Button:
         Button noButton = (Button) alert.getDialogPane().lookupButton(cancelButton);
         noButton.setDefaultButton(true);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         // Dark mode
         if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(

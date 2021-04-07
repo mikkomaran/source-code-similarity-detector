@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -205,6 +206,8 @@ public class MainViewController {
         Alert alert = new Alert(alertType);
         alert.setHeaderText(errorMessage);
         alert.setContentText(contextMessage);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         // Dark mode
         if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
