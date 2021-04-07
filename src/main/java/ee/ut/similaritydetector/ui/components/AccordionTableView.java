@@ -16,7 +16,14 @@ import java.util.stream.Collectors;
 
 public class AccordionTableView extends TitledPane {
 
+    private final String exerciseName;
+
+    public String getExerciseName() {
+        return exerciseName;
+    }
+
     public AccordionTableView(SimilarSolutionCluster cluster) {
+        exerciseName = cluster.getExerciseName();
 
         // Creates the table layout
         AnchorPane anchorPane = new AnchorPane();
@@ -69,5 +76,4 @@ public class AccordionTableView extends TitledPane {
         this.setMaxWidth(400);
         this.setWrapText(true);
     }
-
 }

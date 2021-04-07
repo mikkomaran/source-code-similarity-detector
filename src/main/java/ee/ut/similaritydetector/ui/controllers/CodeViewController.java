@@ -1,13 +1,10 @@
 package ee.ut.similaritydetector.ui.controllers;
 
-import ee.ut.similaritydetector.backend.Exercise;
-import ee.ut.similaritydetector.ui.utils.UserData;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -15,11 +12,12 @@ import ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import ee.ut.similaritydetector.backend.SimilarSolutionPair;
 import ee.ut.similaritydetector.backend.Solution;
 import ee.ut.similaritydetector.ui.components.AccordionTableView;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
 
 public class CodeViewController {
 
@@ -96,7 +94,6 @@ public class CodeViewController {
         }
         // Add custom listeners to each table
         clusterTables.forEach(this::addCustomListener);
-
     }
 
     /**
@@ -177,17 +174,9 @@ public class CodeViewController {
      * @param solution {@link Solution}
      */
     private void showSolutionCodeReadingErrorAlert(Solution solution) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText("Could not load solution code");
-        alert.setContentText(solution.getExerciseName() + " - " + solution.getAuthor());
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
-        // Dark mode
-        if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
-            alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
-                    "/ee/ut/similaritydetector/style/dark_mode.scss")));
-        }
-        alert.showAndWait();
+        showAndWaitAlert("Could not load solution code",
+                solution.getExerciseName() + " - " + solution.getAuthor(),
+                Alert.AlertType.ERROR);
     }
 
     /**
@@ -205,6 +194,7 @@ public class CodeViewController {
     private void resizeTableColumns(TableView<?> table) {
         double columnsWidth = table.getColumns().stream().mapToDouble(TableColumnBase::getWidth).sum();
         double tableWidth = table.getWidth();
+        System.out.println(columnsWidth + " - " + tableWidth);
         if (tableWidth > columnsWidth) {
             tableWidth -= 4; // So random horizontal scroll doesn't happen
             TableColumn<?, ?> col1 = table.getColumns().get(0);

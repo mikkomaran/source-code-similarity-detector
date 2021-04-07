@@ -1,7 +1,6 @@
 package ee.ut.similaritydetector.ui.controllers;
 
 import ee.ut.similaritydetector.ui.SimilarityDetectorLauncher;
-import ee.ut.similaritydetector.ui.utils.UserData;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -9,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -21,6 +19,9 @@ import ee.ut.similaritydetector.ui.utils.IntegerStringConverter;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+
+import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAlert;
+import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
 
 public class MainViewController {
 
@@ -137,10 +138,11 @@ public class MainViewController {
         analyserThread.start();
 
         analyser.setOnSucceeded(workerStateEvent -> {
-            if (analyser.getSimilarSolutionPairs().size() == 0){
-                resetMainView("No similar solutions were detected",
+            if (analyser.getSimilarSolutionPairs().size() == 0) {
+                showAlert("No similar solutions were detected",
                         "Try lowering the similarity threshold or check if the ZIP structure is correct",
-                        Alert.AlertType.WARNING);
+                        Alert.AlertType.INFORMATION);
+                resetMainView();
                 SimilarityDetectorLauncher.deleteOutputFiles();
                 return;
             }
@@ -148,21 +150,23 @@ public class MainViewController {
                 openResultsView(analyser);
             } catch (IOException e) {
                 e.printStackTrace();
-                resetMainView("Failed to load results",
+                showAlert("Failed to load results",
                         "Check your solutions ZIP structure and try again",
                         Alert.AlertType.ERROR);
+                resetMainView();
             }
         });
 
         analyser.setOnFailed(event -> {
             analyser.getException().printStackTrace();
-            resetMainView("Analysis failed", analyser.getException().getMessage(), Alert.AlertType.ERROR);
+            showAndWaitAlert("Analysis failed", analyser.getException().getMessage(), Alert.AlertType.ERROR);
+            resetMainView();
             SimilarityDetectorLauncher.deleteOutputFiles();
         });
     }
 
     /**
-     * Animates the closing of Settings pane.
+     * Animates the closing of options pane.
      */
     private void hideOptions(){
         Duration duration = Duration.millis(300);
@@ -175,7 +179,7 @@ public class MainViewController {
     }
 
     /**
-     * Animates the opening of Settings pane.
+     * Animates the opening of options pane.
      */
     private void openOptions(){
         Duration duration = Duration.millis(300);
@@ -189,33 +193,16 @@ public class MainViewController {
     /**
      * Changes the progress text that is displayed above the progress bar.
      *
-     * @param text text to be displayed
+     * @param text the text to be displayed
      */
     public void setProgressText(String text) {
         Platform.runLater(() -> progressTextLabel.setText(text));
     }
 
     /**
-     * Creates an {@link Alert} if {@link Analyser} fails and shows the error message.
-     * After clicking OK resets main view.
-     *
-     * @param errorMessage error message to show
-     * @param contextMessage error's context message to show
+     * Resets the main view to the initial state.
      */
-    private void resetMainView(String errorMessage, String contextMessage, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setHeaderText(errorMessage);
-        alert.setContentText(contextMessage);
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
-        // Dark mode
-        if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
-            alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
-                    "/ee/ut/similaritydetector/style/dark_mode.scss")));
-        }
-        alert.show();
-
-        // Animates settings pane to reappear
+    private void resetMainView() {
         openOptions();
 
         fileArea.setVisible(true);

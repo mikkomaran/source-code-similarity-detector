@@ -87,7 +87,7 @@ public class SimilarityDetectorLauncher extends Application {
     }
 
     /**
-     * Deletes the files that are generated during analysis.
+     * Deletes the files that are generated during runtime for analysis.
      */
     public static void deleteOutputFiles() {
         File outputDirectory = new File("resources/");
@@ -100,7 +100,6 @@ public class SimilarityDetectorLauncher extends Application {
      *
      * @param directory the directory to delete
      */
-
     private static void deleteDirectory(File directory) {
         File[] files = directory.listFiles();
         if(files != null) {

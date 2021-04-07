@@ -1,7 +1,8 @@
 package ee.ut.similaritydetector.ui.controllers;
 
-import ee.ut.similaritydetector.ui.utils.UserData;
+import ee.ut.similaritydetector.ui.utils.ExerciseStatistics;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,8 +15,8 @@ import ee.ut.similaritydetector.backend.Analyser;
 import ee.ut.similaritydetector.backend.Exercise;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+
+import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
 
 public class ResultsViewController {
 
@@ -70,6 +71,11 @@ public class ResultsViewController {
         totalSolutionsLabel.setText(String.valueOf(analyser.getExercises().stream().mapToInt(Exercise::getSolutionCount).sum()));
         solutionPairsLabel.setText(String.valueOf(analyser.getAnalysedSolutionPairsCount()));
         fillExerciseStatisticsTable();
+        // To remove empty rows from the bottom of the table we have to set fixed cell
+        int cellSize = 30;
+        exerciseStatisticsTable.setFixedCellSize(cellSize);
+        exerciseStatisticsTable.prefHeightProperty().bind(Bindings.size(exerciseStatisticsTable.getItems()).
+                multiply(exerciseStatisticsTable.getFixedCellSize()).add(cellSize + 6));
     }
 
     private void fillExerciseStatisticsTable() {
@@ -79,7 +85,7 @@ public class ResultsViewController {
         percentageSuspiciousSolutionsColumn.setCellValueFactory(new PropertyValueFactory<>("percentageSuspiciousSolutions"));
         similarPairsColumn.setCellValueFactory(new PropertyValueFactory<>("similarPairs"));
         similarClustersColumn.setCellValueFactory(new PropertyValueFactory<>("similarClusters"));
-        analyser.getExercises().forEach(exercise -> exerciseStatisticsTable.getItems().add(new ExerciseStatistics(exercise)));
+        analyser.getExercises().forEach(exercise -> exerciseStatisticsTable.getItems().add(new ExerciseStatistics(exercise, analyser)));
     }
 
     /**
@@ -101,16 +107,7 @@ public class ResultsViewController {
             openCodeView();
         } catch (IOException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Could not view clusters");
-            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
-            // Dark mode
-            if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
-                alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
-                        "/ee/ut/similaritydetector/style/dark_mode.scss")));
-            }
-            alert.showAndWait();
+            showAndWaitAlert("Could not view clusters", "", Alert.AlertType.ERROR);
         }
     }
 
@@ -146,51 +143,4 @@ public class ResultsViewController {
         Platform.runLater(controller::resizeClusterTableColumns);
     }
 
-    public class ExerciseStatistics {
-        private final String exerciseName;
-        private final int totalSolutions;
-        private final int suspiciousSolutions;
-        private final double percentageSuspiciousSolutions;
-        private final int similarPairs;
-        private final int similarClusters;
-
-        public String getExerciseName() {
-            return exerciseName;
-        }
-
-        public int getTotalSolutions() {
-            return totalSolutions;
-        }
-
-        public int getSuspiciousSolutions() {
-            return suspiciousSolutions;
-        }
-
-        public double getPercentageSuspiciousSolutions() {
-            return percentageSuspiciousSolutions;
-        }
-
-        public int getSimilarPairs() {
-            return similarPairs;
-        }
-
-        public int getSimilarClusters() {
-            return similarClusters;
-        }
-
-        public ExerciseStatistics(Exercise exercise) {
-            this.exerciseName = exercise.getName();
-            this.totalSolutions = exercise.getSolutionCount();
-            this.suspiciousSolutions = analyser.getSimilarSolutionClusters().stream().filter(cluster ->
-                    cluster.getExerciseName().equals(exerciseName)).mapToInt(cluster ->
-                    cluster.getSolutions().size()).sum();
-            BigDecimal percentage = new BigDecimal(Double.toString((double) suspiciousSolutions / totalSolutions * 100));
-            percentage = percentage.setScale(1, RoundingMode.HALF_UP);
-            this.percentageSuspiciousSolutions = percentage.doubleValue();
-            this.similarPairs = (int) analyser.getSimilarSolutionPairs().stream().filter(pair ->
-                    pair.getFirstSolution().getExerciseName().equals(exerciseName)).count();
-            this.similarClusters = (int) analyser.getSimilarSolutionClusters().stream().filter(cluster ->
-                    cluster.getExerciseName().equals(exerciseName)).count();
-        }
-    }
 }
