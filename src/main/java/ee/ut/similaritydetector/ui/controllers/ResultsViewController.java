@@ -5,15 +5,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ee.ut.similaritydetector.backend.Analyser;
 import ee.ut.similaritydetector.backend.Exercise;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class ResultsViewController {
 
@@ -23,14 +24,28 @@ public class ResultsViewController {
     private MenuBarController menuBarController;
 
     @FXML
+    private Label title;
+
+    @FXML
     private Label totalSolutionsLabel;
     @FXML
     private Label solutionPairsLabel;
 
     @FXML
-    private Label similarPairsLabel;
+    private TableView<ExerciseStatistics> exerciseStatisticsTable;
     @FXML
-    private Label similarClustersLabel;
+    private TableColumn<ExerciseStatistics, String> exerciseNameColumn;
+    @FXML
+    private TableColumn<ExerciseStatistics, Integer> totalSolutionsColumn;
+    @FXML
+    private TableColumn<ExerciseStatistics, Integer> suspiciousSolutionsColumn;
+    @FXML
+    private TableColumn<ExerciseStatistics, Double> percentageSuspiciousSolutionsColumn;
+    @FXML
+    private TableColumn<ExerciseStatistics, Integer> similarPairsColumn;
+    @FXML
+    private TableColumn<ExerciseStatistics, Integer> similarClustersColumn;
+
     @FXML
     private Button viewClustersButton;
 
@@ -50,10 +65,20 @@ public class ResultsViewController {
      * Loads the statistics from the {@link Analyser} onto the results view.
      */
     public void readStatistics() {
-        totalSolutionsLabel.setText(String.valueOf(analyser.getExercises().stream().mapToInt(Exercise::getExerciseSolutionCount).sum()));
+        title.setText("Results - " + analyser.getZipDirectory().getName());
+        totalSolutionsLabel.setText(String.valueOf(analyser.getExercises().stream().mapToInt(Exercise::getSolutionCount).sum()));
         solutionPairsLabel.setText(String.valueOf(analyser.getAnalysedSolutionPairsCount()));
-        similarPairsLabel.setText(String.valueOf(analyser.getSimilarSolutionPairs().size()));
-        similarClustersLabel.setText(String.valueOf(analyser.getSimilarSolutionClusters().size()));
+        fillExerciseStatisticsTable();
+    }
+
+    private void fillExerciseStatisticsTable() {
+        exerciseNameColumn.setCellValueFactory(new PropertyValueFactory<>("exerciseName"));
+        totalSolutionsColumn.setCellValueFactory(new PropertyValueFactory<>("totalSolutions"));
+        suspiciousSolutionsColumn.setCellValueFactory(new PropertyValueFactory<>("suspiciousSolutions"));
+        percentageSuspiciousSolutionsColumn.setCellValueFactory(new PropertyValueFactory<>("percentageSuspiciousSolutions"));
+        similarPairsColumn.setCellValueFactory(new PropertyValueFactory<>("similarPairs"));
+        similarClustersColumn.setCellValueFactory(new PropertyValueFactory<>("similarClusters"));
+        analyser.getExercises().forEach(exercise -> exerciseStatisticsTable.getItems().add(new ExerciseStatistics(exercise)));
     }
 
     /**
@@ -100,17 +125,64 @@ public class ResultsViewController {
         newWindow.setMinHeight(600);
         newWindow.setScene(codeViewScene);
         newWindow.centerOnScreen();
-        newWindow.setTitle("Source code similarity detector - Similar clusters & pairs");
+        newWindow.setTitle("Source code similarity detector - Similar clusters & pairs - " + analyser.getZipDirectory().getName());
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         newWindow.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
 
         // Persists dark theme if it was activated before
         Platform.runLater(menuBarController::persistCurrentTheme);
 
+        newWindow.show();
+
         // Resize cluster table columns
         Platform.runLater(controller::resizeClusterTableColumns);
-
-        newWindow.show();
     }
 
+    public class ExerciseStatistics {
+        private final String exerciseName;
+        private final int totalSolutions;
+        private final int suspiciousSolutions;
+        private final double percentageSuspiciousSolutions;
+        private final int similarPairs;
+        private final int similarClusters;
+
+        public String getExerciseName() {
+            return exerciseName;
+        }
+
+        public int getTotalSolutions() {
+            return totalSolutions;
+        }
+
+        public int getSuspiciousSolutions() {
+            return suspiciousSolutions;
+        }
+
+        public double getPercentageSuspiciousSolutions() {
+            return percentageSuspiciousSolutions;
+        }
+
+        public int getSimilarPairs() {
+            return similarPairs;
+        }
+
+        public int getSimilarClusters() {
+            return similarClusters;
+        }
+
+        public ExerciseStatistics(Exercise exercise) {
+            this.exerciseName = exercise.getName();
+            this.totalSolutions = exercise.getSolutionCount();
+            this.suspiciousSolutions = analyser.getSimilarSolutionClusters().stream().filter(cluster ->
+                    cluster.getExerciseName().equals(exerciseName)).mapToInt(cluster ->
+                    cluster.getSolutions().size()).sum();
+            BigDecimal percentage = new BigDecimal(Double.toString((double) suspiciousSolutions / totalSolutions * 100));
+            percentage = percentage.setScale(1, RoundingMode.HALF_UP);
+            this.percentageSuspiciousSolutions = percentage.doubleValue();
+            this.similarPairs = (int) analyser.getSimilarSolutionPairs().stream().filter(pair ->
+                    pair.getFirstSolution().getExerciseName().equals(exerciseName)).count();
+            this.similarClusters = (int) analyser.getSimilarSolutionClusters().stream().filter(cluster ->
+                    cluster.getExerciseName().equals(exerciseName)).count();
+        }
+    }
 }

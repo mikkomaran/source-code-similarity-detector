@@ -1,5 +1,6 @@
 package ee.ut.similaritydetector.ui.controllers;
 
+import ee.ut.similaritydetector.backend.Exercise;
 import ee.ut.similaritydetector.ui.utils.UserData;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class CodeViewController {
 
+    private final List<AccordionTableView> clusterAccordions;
     private final List<TableView<SimilarSolutionPair>> clusterTables;
 
     private static CodeViewController instance;
@@ -42,15 +44,12 @@ public class CodeViewController {
     public CodeViewController() {
         instance = this;
         clusterTables = new ArrayList<>();
+        clusterAccordions = new ArrayList<>();
         openCodePanes = new ArrayList<>();
     }
 
     public static CodeViewController getInstance() {
         return instance;
-    }
-
-    public List<TableView<SimilarSolutionPair>> getClusterTables() {
-        return clusterTables;
     }
 
     public void setClusters(List<SimilarSolutionCluster> clusters) {
@@ -86,6 +85,7 @@ public class CodeViewController {
         for (SimilarSolutionCluster cluster : clusters) {
             AccordionTableView solutionClusterItem = new AccordionTableView(cluster);
             VBox.setVgrow(solutionClusterItem, Priority.NEVER);
+            clusterAccordions.add(solutionClusterItem);
             solutionClusterView.getChildren().add(solutionClusterItem);
 
             // Gets the tableView and adds to list
@@ -190,7 +190,7 @@ public class CodeViewController {
      * Resizes the cluster tables' columns
      */
     public void resizeClusterTableColumns() {
-        clusterTables.forEach(this::resizeTable);
+        clusterTables.forEach(this::resizeTableColumns);
     }
 
     /**
@@ -198,7 +198,7 @@ public class CodeViewController {
      *
      * @param table the {@code TableView} to be resized
      */
-    private void resizeTable(TableView<?> table) {
+    private void resizeTableColumns(TableView<?> table) {
         double columnsWidth = table.getColumns().stream().mapToDouble(TableColumnBase::getWidth).sum();
         double tableWidth = table.getWidth();
         if (tableWidth > columnsWidth) {

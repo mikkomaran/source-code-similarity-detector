@@ -4,6 +4,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.input.KeyCodeCombination?>
 
@@ -11,7 +12,9 @@
     <menus>
         <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
             <items>
-                <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" text="Save" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem fx:id="exitMenuItem" onAction="#exitMenuItemClicked" mnemonicParsing="false" text="Exit" />
             </items>
             <accelerator>
                 <KeyCodeCombination alt="DOWN" code="F" control="UP" meta="UP" shift="UP" shortcut="UP" />
@@ -37,7 +40,7 @@
         </Menu>
         <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
             <items>
-                <MenuItem fx:id="aboutMenuItem" onAction="#showAboutInfo" mnemonicParsing="false" text="About" />
+                <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#showAboutInfo" text="About" />
             </items>
             <accelerator>
                 <KeyCodeCombination alt="DOWN" code="E" control="UP" meta="UP" shift="UP" shortcut="UP" />

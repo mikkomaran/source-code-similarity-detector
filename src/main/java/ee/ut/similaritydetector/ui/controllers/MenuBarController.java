@@ -1,5 +1,6 @@
 package ee.ut.similaritydetector.ui.controllers;
 
+import ee.ut.similaritydetector.ui.SimilarityDetectorLauncher;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,6 +16,8 @@ public class MenuBarController {
 
     @FXML
     private Menu fileMenu;
+    @FXML
+    private MenuItem exitMenuItem;
 
     @FXML
     private Menu editMenu;
@@ -51,6 +54,11 @@ public class MenuBarController {
         else {
             Platform.runLater(this::activateDarkTheme);
         }
+    }
+
+    @FXML
+    private void exitMenuItemClicked() {
+        MainViewController.stage.close();
     }
 
     /**

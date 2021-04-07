@@ -46,7 +46,7 @@ public class Exercise {
         this.similarityThreshold = similarityThreshold;
     }
 
-    public int getExerciseSolutionCount() {
+    public int getSolutionCount() {
         return solutions.size();
     }
 

@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import ee.ut.similaritydetector.ui.controllers.MainViewController;
 import ee.ut.similaritydetector.ui.utils.UserData;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -61,7 +60,7 @@ public class SimilarityDetectorLauncher extends Application {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("");
         alert.setHeaderText("Are you sure you want to exit?");
-        alert.setContentText("Results will not be saved.");
+        alert.setContentText("Results might not have been saved.");
         ButtonType exitButton = new ButtonType("Exit");
         ButtonType cancelButton = ButtonType.CANCEL;
         alert.getButtonTypes().setAll(cancelButton, exitButton);
@@ -88,7 +87,7 @@ public class SimilarityDetectorLauncher extends Application {
     /**
      * Deletes the files that are generated during analysis.
      */
-    private void deleteOutputFiles() {
+    public static void deleteOutputFiles() {
         File outputDirectory = new File("resources/");
         deleteDirectory(outputDirectory);
     }
@@ -100,7 +99,7 @@ public class SimilarityDetectorLauncher extends Application {
      * @param directory the directory to delete
      */
 
-    void deleteDirectory(File directory) {
+    private static void deleteDirectory(File directory) {
         File[] files = directory.listFiles();
         if(files != null) {
             for(File f : files) {

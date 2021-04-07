@@ -1,5 +1,7 @@
 package ee.ut.similaritydetector.ui.controllers;
 
+import ee.ut.similaritydetector.ui.SimilarityDetectorLauncher;
+import ee.ut.similaritydetector.ui.utils.UserData;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -27,9 +29,9 @@ public class MainViewController {
     @FXML
     private MenuBarController menuBarController;
 
-    // Settings
+    // Options
     @FXML
-    private AnchorPane settingsPane;
+    private AnchorPane optionsPane;
     @FXML
     private CheckBox customSimilarityThresholdCheckbox;
     @FXML
@@ -111,7 +113,7 @@ public class MainViewController {
     @FXML
     private void startAnalysis() {
         // Animates settings pane to disappear left
-        hideSettings();
+        hideOptions();
 
         fileArea.setVisible(false);
         startButton.setVisible(false);
@@ -134,42 +136,52 @@ public class MainViewController {
         analyserThread.start();
 
         analyser.setOnSucceeded(workerStateEvent -> {
+            if (analyser.getSimilarSolutionPairs().size() == 0){
+                resetMainView("No similar solutions were detected",
+                        "Try lowering the similarity threshold or check if the ZIP structure is correct",
+                        Alert.AlertType.WARNING);
+                SimilarityDetectorLauncher.deleteOutputFiles();
+                return;
+            }
             try {
                 openResultsView(analyser);
             } catch (IOException e) {
                 e.printStackTrace();
-                resetMainView("Failed to load results", "");
+                resetMainView("Failed to load results",
+                        "Check your solutions ZIP structure and try again",
+                        Alert.AlertType.ERROR);
             }
         });
 
         analyser.setOnFailed(event -> {
             analyser.getException().printStackTrace();
-            resetMainView("Analysis failed", analyser.getException().getMessage());
+            resetMainView("Analysis failed", analyser.getException().getMessage(), Alert.AlertType.ERROR);
+            SimilarityDetectorLauncher.deleteOutputFiles();
         });
     }
 
     /**
      * Animates the closing of Settings pane.
      */
-    private void hideSettings(){
+    private void hideOptions(){
         Duration duration = Duration.millis(300);
-        settingsPane.setPrefWidth(settingsPane.getMinWidth());
+        optionsPane.setPrefWidth(optionsPane.getMinWidth());
         Timeline timeline = new Timeline(
                 new KeyFrame(duration,
-                        new KeyValue(settingsPane.maxWidthProperty(), 0, Interpolator.EASE_OUT),
-                        new KeyValue(settingsPane.minWidthProperty(), 0, Interpolator.EASE_OUT)));
+                        new KeyValue(optionsPane.maxWidthProperty(), 0, Interpolator.EASE_OUT),
+                        new KeyValue(optionsPane.minWidthProperty(), 0, Interpolator.EASE_OUT)));
         timeline.play();
     }
 
     /**
      * Animates the opening of Settings pane.
      */
-    private void openSettings(){
+    private void openOptions(){
         Duration duration = Duration.millis(300);
         Timeline timeline = new Timeline(
                 new KeyFrame(duration,
-                        new KeyValue(settingsPane.maxWidthProperty(), settingsPane.getPrefWidth(), Interpolator.EASE_OUT),
-                        new KeyValue(settingsPane.minWidthProperty(), settingsPane.getPrefWidth(), Interpolator.EASE_OUT)));
+                        new KeyValue(optionsPane.maxWidthProperty(), optionsPane.getPrefWidth(), Interpolator.EASE_OUT),
+                        new KeyValue(optionsPane.minWidthProperty(), optionsPane.getPrefWidth(), Interpolator.EASE_OUT)));
         timeline.play();
     }
 
@@ -189,14 +201,19 @@ public class MainViewController {
      * @param errorMessage error message to show
      * @param contextMessage error's context message to show
      */
-    private void resetMainView(String errorMessage, String contextMessage) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    private void resetMainView(String errorMessage, String contextMessage, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
         alert.setHeaderText(errorMessage);
         alert.setContentText(contextMessage);
-        alert.showAndWait();
+        // Dark mode
+        if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
+            alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
+                    "/ee/ut/similaritydetector/style/dark_mode.scss")));
+        }
+        alert.show();
 
         // Animates settings pane to reappear
-        openSettings();
+        openOptions();
 
         fileArea.setVisible(true);
         startButton.setVisible(true);
@@ -221,7 +238,7 @@ public class MainViewController {
 
         Scene resultsViewScene = new Scene(root, 800, 600);
         stage.setScene(resultsViewScene);
-        stage.setTitle("Source code similarity detector - Results");
+        stage.setTitle("Source code similarity detector - Results - " + analyser.getZipDirectory().getName());
 
         // Persists dark theme if it was activated before
         Platform.runLater(() -> menuBarController.persistCurrentTheme());

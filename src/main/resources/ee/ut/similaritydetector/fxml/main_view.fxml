@@ -22,9 +22,9 @@
        <fx:include fx:id="menuBar" source="menu_bar.fxml" />
       <HBox VBox.vgrow="ALWAYS">
          <children>
-            <AnchorPane fx:id="settingsPane" minWidth="200.0" HBox.hgrow="NEVER">
+            <AnchorPane fx:id="optionsPane" minWidth="200.0" HBox.hgrow="NEVER">
                <children>
-                  <TitledPane animated="false" collapsible="false" text="Settings" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TitledPane animated="false" collapsible="false" text="Options" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <content>
                       <AnchorPane>
                            <children>
