@@ -42,11 +42,11 @@ public class ResultsViewController {
     @FXML
     private TableColumn<ExerciseStatistics, Integer> suspiciousSolutionsColumn;
     @FXML
-    private TableColumn<ExerciseStatistics, Double> percentageSuspiciousSolutionsColumn;
-    @FXML
     private TableColumn<ExerciseStatistics, Integer> similarPairsColumn;
     @FXML
     private TableColumn<ExerciseStatistics, Integer> similarClustersColumn;
+    @FXML
+    private TableColumn<ExerciseStatistics, String> similarityThresholdColumn;
 
     @FXML
     private Button viewClustersButton;
@@ -82,9 +82,10 @@ public class ResultsViewController {
         exerciseNameColumn.setCellValueFactory(new PropertyValueFactory<>("exerciseName"));
         totalSolutionsColumn.setCellValueFactory(new PropertyValueFactory<>("totalSolutions"));
         suspiciousSolutionsColumn.setCellValueFactory(new PropertyValueFactory<>("suspiciousSolutions"));
-        percentageSuspiciousSolutionsColumn.setCellValueFactory(new PropertyValueFactory<>("percentageSuspiciousSolutions"));
         similarPairsColumn.setCellValueFactory(new PropertyValueFactory<>("similarPairs"));
         similarClustersColumn.setCellValueFactory(new PropertyValueFactory<>("similarClusters"));
+        similarityThresholdColumn.setCellValueFactory(new PropertyValueFactory<>("similarityThreshold"));
+
         analyser.getExercises().forEach(exercise -> exerciseStatisticsTable.getItems().add(new ExerciseStatistics(exercise, analyser)));
     }
 

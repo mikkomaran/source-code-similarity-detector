@@ -20,14 +20,6 @@
                 <KeyCodeCombination alt="DOWN" code="F" control="UP" meta="UP" shift="UP" shortcut="UP" />
             </accelerator>
         </Menu>
-        <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
-            <items>
-                <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-            <accelerator>
-                <KeyCodeCombination alt="DOWN" code="E" control="UP" meta="UP" shift="UP" shortcut="UP" />
-            </accelerator>
-        </Menu>
         <Menu fx:id="themeMenu" mnemonicParsing="false" text="Theme">
             <items>
                 <RadioMenuItem fx:id="lightTheme" mnemonicParsing="false" text="Light">

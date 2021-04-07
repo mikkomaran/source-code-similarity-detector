@@ -2,9 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -22,7 +20,7 @@
                   <Font size="16.0" />
                </font>
                <VBox.margin>
-                  <Insets top="15.0" />
+                  <Insets top="30.0" />
                </VBox.margin>
             </Label>
             <HBox alignment="CENTER" spacing="25.0" VBox.vgrow="ALWAYS">
@@ -57,19 +55,11 @@
                   <TableView fx:id="exerciseStatisticsTable" focusTraversable="false" maxWidth="800.0">
                     <columns>
                       <TableColumn fx:id="exerciseNameColumn" editable="false" prefWidth="125.0" text="Exercise name" />
-                      <TableColumn fx:id="totalSolutionsColumn" editable="false" prefWidth="100.0" styleClass="number-column" text="Total solutions" />
-                        <TableColumn fx:id="suspiciousSolutionsColumn" editable="false" prefWidth="100.0" styleClass="number-column, column-header-alignment-center" text="Suspicious&#10;solutions" />
-                        <TableColumn fx:id="percentageSuspiciousSolutionsColumn" editable="false" prefWidth="100.0" styleClass="number-column, column-header-alignment-center" text="\% suspicious&#10;solutions">
-                           <contextMenu>
-                              <ContextMenu>
-                                <items>
-                                  <MenuItem mnemonicParsing="false" text="Suspicious solutions / Total solutions" />
-                                </items>
-                              </ContextMenu>
-                           </contextMenu>
-                        </TableColumn>
-                        <TableColumn fx:id="similarPairsColumn" editable="false" prefWidth="100.0" styleClass="number-column" text="Similar pairs " />
-                        <TableColumn fx:id="similarClustersColumn" editable="false" prefWidth="100.0" styleClass="number-column" text="Similar clusters" />
+                      <TableColumn fx:id="totalSolutionsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column" text="Total solutions" />
+                        <TableColumn fx:id="suspiciousSolutionsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="Suspicious&#10;solutions" />
+                        <TableColumn fx:id="similarPairsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column" text="Similar pairs " />
+                        <TableColumn fx:id="similarClustersColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column" text="Similar clusters" />
+                        <TableColumn fx:id="similarityThresholdColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="Similarity &#10;threshold&#10;" />
                     </columns>
                      <VBox.margin>
                         <Insets left="75.0" right="75.0" />
@@ -83,7 +73,7 @@
                   <Insets />
                </VBox.margin>
             </VBox>
-            <Button fx:id="viewClustersButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="65.0" minHeight="50.0" mnemonicParsing="false" onAction="#viewClusters" prefHeight="50.0" prefWidth="175.0" text="View similar pairs &amp; clusters" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+            <Button fx:id="viewClustersButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="50.0" minHeight="50.0" mnemonicParsing="false" onAction="#viewClusters" prefHeight="50.0" prefWidth="175.0" text="View similar pairs &amp; clusters" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets bottom="50.0" />
                </VBox.margin>

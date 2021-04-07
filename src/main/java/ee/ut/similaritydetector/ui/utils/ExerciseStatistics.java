@@ -16,6 +16,7 @@ public class ExerciseStatistics {
     private final double percentageSuspiciousSolutions;
     private final int similarPairs;
     private final int similarClusters;
+    private final String similarityThreshold;
 
     public String getExerciseName() {
         return exerciseName;
@@ -41,6 +42,10 @@ public class ExerciseStatistics {
         return similarClusters;
     }
 
+    public String getSimilarityThreshold() {
+        return similarityThreshold;
+    }
+
     public ExerciseStatistics(Exercise exercise, Analyser analyser) {
         this.exerciseName = exercise.getName();
         this.totalSolutions = exercise.getSolutionCount();
@@ -54,5 +59,7 @@ public class ExerciseStatistics {
                 pair.getFirstSolution().getExerciseName().equals(exerciseName)).count();
         this.similarClusters = (int) analyser.getSimilarSolutionClusters().stream().filter(cluster ->
                 cluster.getExerciseName().equals(exerciseName)).count();
+        this.similarityThreshold = String.format("%.1f%%", exercise.getSimilarityThreshold() * 100);
     }
+
 }

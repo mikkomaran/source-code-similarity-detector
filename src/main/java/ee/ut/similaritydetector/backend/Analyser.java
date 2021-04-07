@@ -46,14 +46,6 @@ public class Analyser extends Task<Void> {
         similarSolutionClusters = new ArrayList<>();
     }
 
-    public double getSimilarityThreshold() {
-        return similarityThreshold;
-    }
-
-    public boolean isPreprocessSourceCode() {
-        return preprocessSourceCode;
-    }
-
     public File getZipDirectory() {
         return zipDirectory;
     }
@@ -120,10 +112,10 @@ public class Analyser extends Task<Void> {
         for (Exercise exercise : exercises) {
             // Finds the average solution length for this exercise
             exercise.findAverageSolutionSourceCodeLength();
-            System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionSourceCodeLength() + " preprocessed codes");
+            System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionSourceCodeLength() + " source codes");
             if (preprocessSourceCode){
                 exercise.findAverageSolutionPreprocessedCodeLength();
-                System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionPreprocessedCodeLength() + " source codes");
+                System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionPreprocessedCodeLength() + " preprocessed codes");
                 System.out.println("Preprocessing removed on average " + Math.round(exercise.getAverageSolutionSourceCodeLength()
                         - exercise.getAverageSolutionPreprocessedCodeLength()) + " characters per solution for exercise " + exercise.getName());
             }

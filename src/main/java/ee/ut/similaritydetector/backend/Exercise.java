@@ -72,11 +72,14 @@ public class Exercise {
 
     public void calculateSimilarityThreshold() {
         double averageSolutionLength = averageSolutionPreprocessedCodeLength != 0 ?
-                                        averageSolutionPreprocessedCodeLength :
-                                        averageSolutionSourceCodeLength;
+                averageSolutionPreprocessedCodeLength :
+                averageSolutionSourceCodeLength;
         double lengthMultiplier = 1;
+        if (averageSolutionLength > 100)
+            lengthMultiplier = averageSolutionLength / 100;
 
-        similarityThreshold = 0.95;
+        similarityThreshold = Math.pow(0.985, lengthMultiplier);
+        System.out.println(similarityThreshold);
     }
 
 }
