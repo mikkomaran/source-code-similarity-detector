@@ -9,8 +9,19 @@ public class LevenshteinDistance {
      * <p>Calculates the customised Levenshtein distance metric of two strings.</p>
      * <p>Customisations made:
      * <ol>
-     *     <li>Same characters with case difference have a smaller edit cost</li>
-     *     <li>Estonian special characters [õ,ä,ö,ü,š,ž] change to ascii characters [o,a,u,y,s,z] has a smaller edit cost</li>
+     *     <li>Same characters with case difference have an edit cost of 0.2 (instead of 1).</li>
+     *     <li>String literal markers change cost 0.2:</li>
+     *     <ul><li>" <-> ' </li></ul>
+     *     <li>Estonian accent characters changed to ascii characters (and vice versa) has an edit cost 0.2:
+     *     <ul>
+     *         <li>õ <-> o, 6</li>
+     *         <li>ä <-> a, 2</li>
+     *         <li>ö <-> o</li>
+     *         <li>ü <-> u, y</li>
+     *         <li>š <-> s</li>
+     *         <li>ž <-> z</li>
+     *     </ul>
+     *     </li>
      * </ol></p>
      * <p>There are two optimizations made:
      * <ol>
@@ -103,9 +114,11 @@ public class LevenshteinDistance {
                 charSubstitutionCondition(s1[i], s2[j], 'a', 'ä') ||
                 charSubstitutionCondition(s1[i], s2[j], 'u', 'ü') ||
                 charSubstitutionCondition(s1[i], s2[j], 'y', 'ü') ||
+                charSubstitutionCondition(s1[i], s2[j], '2', 'ä') ||
+                charSubstitutionCondition(s1[i], s2[j], '6', 'õ') ||
                 charSubstitutionCondition(s1[i], s2[j], 's', 'š') ||
                 charSubstitutionCondition(s1[i], s2[j], 'z', 'ž')) {
-            subCost = 0.3;
+            subCost = 0.2;
         }
         return Math.min(
                 currCosts[j] + 1,                 // Cost of insertion

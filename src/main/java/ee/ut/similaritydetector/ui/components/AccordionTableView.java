@@ -65,6 +65,7 @@ public class AccordionTableView extends TitledPane {
         // To remove empty rows from the bottom of the table we have to set fixed cell size
         tableView.setFixedCellSize(cellSize);
         tableView.prefHeightProperty().bind(Bindings.size(tableView.getItems()).multiply(tableView.getFixedCellSize()).add(1));
+        tableView.minHeight(cellSize + 2);
 
         // TitledPane header and content
         this.setText(cluster.getName());

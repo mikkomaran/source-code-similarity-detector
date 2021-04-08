@@ -21,7 +21,7 @@ import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
 
 public class CodeViewController {
 
-    private final List<AccordionTableView> clusterAccordions;
+    private final List<AccordionTableView> clusterPanes;
     private final List<TableView<SimilarSolutionPair>> clusterTables;
 
     private static CodeViewController instance;
@@ -44,7 +44,7 @@ public class CodeViewController {
     public CodeViewController() {
         instance = this;
         clusterTables = new ArrayList<>();
-        clusterAccordions = new ArrayList<>();
+        clusterPanes = new ArrayList<>();
         openCodePanes = new ArrayList<>();
     }
 
@@ -92,7 +92,7 @@ public class CodeViewController {
         for (SimilarSolutionCluster cluster : clusters) {
             AccordionTableView solutionClusterItem = new AccordionTableView(cluster);
             VBox.setVgrow(solutionClusterItem, Priority.NEVER);
-            clusterAccordions.add(solutionClusterItem);
+            clusterPanes.add(solutionClusterItem);
             solutionClusterView.getChildren().add(solutionClusterItem);
 
             // Gets the tableView and adds to list
@@ -101,6 +101,26 @@ public class CodeViewController {
         }
         // Add custom listeners to each table
         clusterTables.forEach(this::addCustomListener);
+
+        // Add custom listener to each TitledPane
+        clusterPanes.forEach(this::addOpenedListener);
+    }
+
+    /**
+     * Adds a custom listener to {@link AccordionTableView} that closes other opened
+     * AccordionTableViews if this one is opened.
+     * @param clusterPane {@link AccordionTableView}
+     */
+    private  void addOpenedListener(AccordionTableView clusterPane) {
+        clusterPane.expandedProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue == null || !newValue) return;
+            // Closes other accordion items that are opened.
+            for (AccordionTableView otherClusterPane : clusterPanes) {
+                if (! clusterPane.equals(otherClusterPane)) {
+                    otherClusterPane.setExpanded(false);
+                }
+            }
+        });
     }
 
     /**
