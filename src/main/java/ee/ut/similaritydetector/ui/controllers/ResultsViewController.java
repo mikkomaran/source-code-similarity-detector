@@ -21,6 +21,7 @@ import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
 public class ResultsViewController {
 
     private Analyser analyser;
+    private MainViewController mainViewController;
 
     @FXML
     private MenuBarController menuBarController;
@@ -32,6 +33,8 @@ public class ResultsViewController {
     private Label totalSolutionsLabel;
     @FXML
     private Label solutionPairsLabel;
+    @FXML
+    private Label analysisDurationLabel;
 
     @FXML
     private TableView<ExerciseStatistics> exerciseStatisticsTable;
@@ -50,6 +53,8 @@ public class ResultsViewController {
 
     @FXML
     private Button viewClustersButton;
+    @FXML
+    private Button runNewAnalysisButton;
 
 
     public ResultsViewController() {
@@ -57,6 +62,10 @@ public class ResultsViewController {
 
     public void setAnalyser(Analyser analyser) {
         this.analyser = analyser;
+    }
+
+    public void setMainViewController(MainViewController mainViewController) {
+        this.mainViewController = mainViewController;
     }
 
     @FXML
@@ -70,6 +79,7 @@ public class ResultsViewController {
         title.setText("Results - " + analyser.getZipDirectory().getName());
         totalSolutionsLabel.setText(String.valueOf(analyser.getExercises().stream().mapToInt(Exercise::getSolutionCount).sum()));
         solutionPairsLabel.setText(String.valueOf(analyser.getAnalysedSolutionPairsCount()));
+        analysisDurationLabel.setText(analyser.getAnalysisDuration() + " s");
         fillExerciseStatisticsTable();
         // To remove empty rows from the bottom of the table we have to set fixed cell
         int cellSize = 30;
@@ -92,7 +102,7 @@ public class ResultsViewController {
     /**
      * If no similar solutions were found then the cluster viewing button is not interactable.
      */
-    public void toggleClusterButtonUsability() {
+    protected void toggleClusterButtonUsability() {
         if (analyser.getSimilarSolutionClusters() != null && analyser.getSimilarSolutionClusters().size() != 0) {
             viewClustersButton.setDisable(false);
         }
@@ -117,15 +127,18 @@ public class ResultsViewController {
      *
      * @throws IOException if the code view could not be opened
      */
-    public void openCodeView() throws IOException {
+    private void openCodeView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "/ee/ut/similaritydetector/fxml/code_view.fxml"));
         Parent root = loader.load();
         CodeViewController controller = loader.getController();
         controller.setClusters(analyser.getSimilarSolutionClusters());
         Platform.runLater(controller::createClusterItems);
-
-        Scene codeViewScene = new Scene(root, 1200, 700);
+        double width = MainViewController.stage.getScene().getWidth() > 1200 ?
+                MainViewController.stage.getScene().getWidth() : 1200;
+        double height = MainViewController.stage.getScene().getHeight() > 700 ?
+                MainViewController.stage.getScene().getHeight() : 700;
+        Scene codeViewScene = new Scene(root, width, height);
         Stage newWindow = new Stage();
         newWindow.setMinWidth(800);
         newWindow.setMinHeight(600);
@@ -142,6 +155,33 @@ public class ResultsViewController {
 
         // Resize cluster table columns
         Platform.runLater(controller::resizeClusterTableColumns);
+    }
+
+    @FXML
+    private void runNewAnalysis() {
+        try {
+            openMainView();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAndWaitAlert("Could not navigate back to main view", "Try restarting the application", Alert.AlertType.ERROR);
+        }
+    }
+
+    private void openMainView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ee/ut/similaritydetector/fxml/main_view.fxml"));
+        Parent root = loader.load();
+        loader.setController(mainViewController);
+        MainViewController.stage.setTitle("Source code similarity detector");
+        Scene scene = new Scene(root, MainViewController.stage.getScene().getWidth(), MainViewController.stage.getScene().getHeight());
+        MainViewController.stage.setScene(scene);
+        // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
+        MainViewController.stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
+
+        // Persists dark theme if it was activated before
+        Platform.runLater(menuBarController::persistCurrentTheme);
+
+        mainViewController.openOptions();
+        MainViewController.stage.show();
     }
 
 }

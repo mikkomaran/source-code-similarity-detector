@@ -31,6 +31,7 @@
                            <children>
                               <Label text="Total solutions:" />
                               <Label text="Solution pairs analysed:" />
+                              <Label layoutX="310.0" layoutY="37.0" text="Analysis duration:" />
                            </children>
                         </VBox>
                      </children>
@@ -41,6 +42,7 @@
                            <children>
                               <Label fx:id="totalSolutionsLabel" />
                               <Label fx:id="solutionPairsLabel" />
+                              <Label fx:id="analysisDurationLabel" layoutX="10.0" layoutY="51.0" />
                            </children>
                            <padding>
                               <Insets right="50.0" />
@@ -73,11 +75,15 @@
                   <Insets />
                </VBox.margin>
             </VBox>
-            <Button fx:id="viewClustersButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="50.0" minHeight="50.0" mnemonicParsing="false" onAction="#viewClusters" prefHeight="50.0" prefWidth="175.0" text="View similar pairs &amp; clusters" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+            <HBox alignment="TOP_CENTER" spacing="50.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="viewClustersButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="65.0" minHeight="55.0" mnemonicParsing="false" onAction="#viewClusters" prefHeight="60.0" prefWidth="175.0" text="View similar pairs &amp; clusters" textAlignment="CENTER" />
+                  <Button fx:id="runNewAnalysisButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="65.0" minHeight="55.0" mnemonicParsing="false" onAction="#runNewAnalysis" prefHeight="60.0" prefWidth="175.0" text="Run new analysis" textAlignment="CENTER" />
+               </children>
                <VBox.margin>
-                  <Insets bottom="50.0" />
+                  <Insets bottom="0.0" />
                </VBox.margin>
-            </Button>
+            </HBox>
          </children>
       </VBox>
    </children>

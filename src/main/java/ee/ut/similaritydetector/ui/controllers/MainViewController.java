@@ -19,6 +19,8 @@ import ee.ut.similaritydetector.ui.utils.IntegerStringConverter;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAlert;
 import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
@@ -135,9 +137,14 @@ public class MainViewController {
         //Starts the backend similarity analysis on a new thread
         Thread analyserThread = new Thread(analyser, "analyser_thread");
         analyserThread.setDaemon(true);
+        long startTime = System.nanoTime();
         analyserThread.start();
 
         analyser.setOnSucceeded(workerStateEvent -> {
+            long endTime = System.nanoTime();
+            BigDecimal duration = new BigDecimal(Double.toString(((double) endTime - startTime) / 1000000000));
+            duration = duration.setScale(1, RoundingMode.HALF_UP);
+            analyser.setAnalysisDuration(duration.doubleValue());
             if (analyser.getSimilarSolutionPairs().size() == 0) {
                 showAlert("No similar solutions were detected",
                         "Try lowering the similarity threshold or check if the ZIP structure is correct",
@@ -181,7 +188,7 @@ public class MainViewController {
     /**
      * Animates the opening of options pane.
      */
-    private void openOptions(){
+    public void openOptions(){
         Duration duration = Duration.millis(300);
         Timeline timeline = new Timeline(
                 new KeyFrame(duration,
@@ -224,9 +231,10 @@ public class MainViewController {
         Parent root = loader.load();
         ResultsViewController controller = loader.getController();
         controller.setAnalyser(analyser);
+        controller.setMainViewController(this);
         Platform.runLater(controller::readStatistics);
 
-        Scene resultsViewScene = new Scene(root, 800, 600);
+        Scene resultsViewScene = new Scene(root, MainViewController.stage.getScene().getWidth(), MainViewController.stage.getScene().getHeight());
         stage.setScene(resultsViewScene);
         stage.setTitle("Source code similarity detector - Results - " + analyser.getZipDirectory().getName());
 

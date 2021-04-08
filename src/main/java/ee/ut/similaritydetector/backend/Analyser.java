@@ -22,6 +22,7 @@ public class Analyser extends Task<Void> {
 
     private int totalSolutionPairsCount;
     private int analysedSolutionPairsCount;
+    private double analysisDuration;
 
     private final MainViewController mainViewController;
 
@@ -64,6 +65,14 @@ public class Analyser extends Task<Void> {
 
     public int getAnalysedSolutionPairsCount() {
         return analysedSolutionPairsCount;
+    }
+
+    public double getAnalysisDuration() {
+        return analysisDuration;
+    }
+
+    public void setAnalysisDuration(double analysisDuration) {
+        this.analysisDuration = analysisDuration;
     }
 
     @Override

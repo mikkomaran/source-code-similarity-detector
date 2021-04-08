@@ -4,15 +4,14 @@
 
 #fileNameLabel:hover {
   -fx-cursor: hand;
-  -fx-text-fill: #0388fc;
+  -fx-text-fill: #1eaefc;
+}
+
+#zipImg {
+  -fx-image: url(/ee/ut/similaritydetector/img/zip_icon_light.png);
 }
 
 #zipImg:hover {
   -fx-cursor: hand;
+  -fx-image: url(/ee/ut/similaritydetector/img/zip_icon_hover.png);
 }
-
-#fileArea {
-
-}
-
-
