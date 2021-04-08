@@ -44,3 +44,7 @@ body .nf { color: #d7b80b !important; } /* Name.Function */
 
 /* Line number color */
 .linenodiv { color: #7c7c7c !important; }
+
+body {
+    margin-top: -25px;
+}

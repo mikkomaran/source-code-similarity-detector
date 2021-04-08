@@ -76,6 +76,13 @@ public class CodeViewController {
                 codeSplitPane.getItems().size() == 0,
                 codeSplitPane.getItems())
         );
+        MenuItem closeAllTabsMenuItem = menuBarController.getCloseAllTabsMenuItem();
+        closeAllTabsMenuItem.disableProperty().bind(Bindings.createBooleanBinding(() ->
+                        codeSplitPane.getItems().size() == 0,
+                codeSplitPane.getItems())
+        );
+        closeAllTabsMenuItem.setVisible(true);
+        closeAllTabsMenuItem.setOnAction(e -> closeAllCodeTabs());
     }
 
     /**

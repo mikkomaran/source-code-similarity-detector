@@ -18,6 +18,8 @@ public class MenuBarController {
     @FXML
     private Menu fileMenu;
     @FXML
+    private MenuItem closeAllTabsMenuItem;
+    @FXML
     private MenuItem exitMenuItem;
 
     @FXML
@@ -36,6 +38,10 @@ public class MenuBarController {
     private MenuItem aboutMenuItem;
 
     public MenuBarController() {
+    }
+
+    public MenuItem getCloseAllTabsMenuItem() {
+        return closeAllTabsMenuItem;
     }
 
     @FXML
