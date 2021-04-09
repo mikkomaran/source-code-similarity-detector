@@ -92,13 +92,13 @@ public class CodeViewController {
         );
         closeAllTabsMenuItem.setVisible(true);
         closeAllTabsMenuItem.setOnAction(e -> closeAllCodeTabs());
-        hideSideBarButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         hideSideBarButton.setOnAction(event -> Platform.runLater(this::hideClusterPane));
         ImageView arrowImg = new ImageView(new Image(
                 getClass().getResourceAsStream("/ee/ut/similaritydetector/img/hidearrow.png")));
         arrowImg.setFitHeight(13);
         arrowImg.setFitWidth(9);
         hideSideBarButton.setGraphic(arrowImg);
+        hideSideBarButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
     }
 
     /**

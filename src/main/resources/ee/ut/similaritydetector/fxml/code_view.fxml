@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="/ee/ut/similaritydetector/style/style.scss, /ee/ut/similaritydetector/style/code_view_style.scss" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ee.ut.similaritydetector.ui.controllers.CodeViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="/ee/ut/similaritydetector/style/style.scss, /ee/ut/similaritydetector/style/code_view_style.scss" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ee.ut.similaritydetector.ui.controllers.CodeViewController">
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -34,7 +34,7 @@
             </BorderPane>
          </center>
          <left>
-            <Button fx:id="hideSideBarButton" focusTraversable="false" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Button" BorderPane.alignment="CENTER">
+            <Button fx:id="hideSideBarButton" focusTraversable="false" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets right="-25.0" />
                </BorderPane.margin>

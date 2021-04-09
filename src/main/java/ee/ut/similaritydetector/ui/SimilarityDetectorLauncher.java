@@ -60,7 +60,7 @@ public class SimilarityDetectorLauncher extends Application {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("");
         alert.setHeaderText("Are you sure you want to exit?");
-        alert.setContentText("Results might not have been saved.");
+        //alert.setContentText("Results might not have been saved.");
         ButtonType exitButton = new ButtonType("Exit");
         ButtonType cancelButton = ButtonType.CANCEL;
         alert.getButtonTypes().setAll(cancelButton, exitButton);

@@ -1,11 +1,13 @@
 package ee.ut.similaritydetector.ui.components;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import ee.ut.similaritydetector.backend.SimilarSolutionPair;
+import javafx.scene.text.Text;
 
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -65,10 +67,28 @@ public class AccordionTableView extends TitledPane {
         tableView.minHeight(cellSize + 1);
 
         // TitledPane header
-        this.setText(cluster.getName());
+        // If title text is too long then wrap text manually with line breaks
+        // Couldn't find a better solution for this
+        Platform.runLater(() -> {
+            StringBuilder headerText = new StringBuilder();
+            StringBuilder lineText = new StringBuilder();
+            for (String word : cluster.getName().split(" ")) {
+                lineText.append(word).append(" ");
+                Text text = new Text(lineText.toString());
+                if (text.getLayoutBounds().getWidth() > 400 - 50) {
+                    System.out.println(lineText);
+                    headerText.append(System.lineSeparator());
+                    lineText.delete(0, lineText.length());
+                    lineText.append(word);
+                }
+                headerText.append(word).append(" ");
+            }
+            this.setText(headerText.toString());
+        });
 
         // TitledPane's content
         this.setContent(anchorPane);
+
 
         // TitledPane restrictions
         this.setExpanded(false);
