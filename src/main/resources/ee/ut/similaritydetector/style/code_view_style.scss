@@ -37,3 +37,12 @@
 .titledPane-multiline > .title > .arrow-button {
   -fx-translate-x: -20; /* move back arrow, which is also subject to the padding */
 }
+
+#hideSideBarButton {
+  -fx-background-radius: 1000;
+  -fx-opacity: 0.85;
+}
+
+#hideSideBarButton:focused {
+  -fx-background-insets: 0;
+}

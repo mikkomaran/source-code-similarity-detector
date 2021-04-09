@@ -72,7 +72,7 @@ public class AccordionTableView extends TitledPane {
 
         // TitledPane restrictions
         this.setExpanded(false);
-        this.setMinWidth(200);
+        this.setMinWidth(0);
         this.setMaxWidth(400);
         this.setWrapText(true);
     }

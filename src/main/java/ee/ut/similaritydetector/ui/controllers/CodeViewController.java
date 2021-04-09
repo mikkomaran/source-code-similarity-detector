@@ -1,11 +1,17 @@
 package ee.ut.similaritydetector.ui.controllers;
 
 import ee.ut.similaritydetector.backend.Analyser;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -13,6 +19,7 @@ import ee.ut.similaritydetector.backend.SimilarSolutionCluster;
 import ee.ut.similaritydetector.backend.SimilarSolutionPair;
 import ee.ut.similaritydetector.backend.Solution;
 import ee.ut.similaritydetector.ui.components.AccordionTableView;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,6 +41,8 @@ public class CodeViewController {
     private VBox solutionClusterView;
     @FXML
     private SplitPane codeSplitPane;
+    @FXML
+    private Button hideSideBarButton;
 
     @FXML
     private MenuItem closeAllTabsMenuItem;
@@ -83,6 +92,50 @@ public class CodeViewController {
         );
         closeAllTabsMenuItem.setVisible(true);
         closeAllTabsMenuItem.setOnAction(e -> closeAllCodeTabs());
+        hideSideBarButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        hideSideBarButton.setOnAction(event -> Platform.runLater(this::hideClusterPane));
+        ImageView arrowImg = new ImageView(new Image(
+                getClass().getResourceAsStream("/ee/ut/similaritydetector/img/hidearrow.png")));
+        arrowImg.setFitHeight(13);
+        arrowImg.setFitWidth(9);
+        hideSideBarButton.setGraphic(arrowImg);
+    }
+
+    /**
+     * Animates the closing of cluster pane.
+     */
+    private void hideClusterPane(){
+        Duration duration = Duration.millis(300);
+        solutionClusterView.setPrefWidth(solutionClusterView.getWidth());
+        solutionClusterView.setMinWidth(solutionClusterView.getWidth());
+        Timeline timeline = new Timeline(
+                new KeyFrame(duration,
+                    new KeyValue(solutionClusterView.maxWidthProperty(), 0, Interpolator.EASE_OUT),
+                    new KeyValue(solutionClusterView.minWidthProperty(), 0, Interpolator.EASE_OUT)));
+        timeline.setOnFinished(event -> {
+            solutionClusterView.setVisible(false);
+            hideSideBarButton.setOnAction(e -> Platform.runLater(this::openClusterPane));
+        });
+        hideSideBarButton.setOnAction(e -> {});
+        timeline.play();
+        hideSideBarButton.setRotate(180);
+
+    }
+
+    /**
+     * Animates the opening of cluster pane.
+     */
+    public void openClusterPane(){
+        Duration duration = Duration.millis(300);
+        Timeline timeline = new Timeline(
+                new KeyFrame(duration,
+                        new KeyValue(solutionClusterView.maxWidthProperty(), solutionClusterView.getPrefWidth(), Interpolator.EASE_OUT),
+                        new KeyValue(solutionClusterView.minWidthProperty(), solutionClusterView.getPrefWidth(), Interpolator.EASE_OUT)));
+        solutionClusterView.setVisible(true);
+        timeline.setOnFinished(event -> hideSideBarButton.setOnAction(e -> Platform.runLater(this::hideClusterPane)));
+        hideSideBarButton.setOnAction(e -> {});
+        timeline.play();
+        hideSideBarButton.setRotate(0);
     }
 
     /**
