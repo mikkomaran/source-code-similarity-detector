@@ -8,6 +8,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import ee.ut.similaritydetector.ui.utils.UserData;
+import javafx.stage.WindowEvent;
 
 import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAlert;
 
@@ -64,7 +65,7 @@ public class MenuBarController {
 
     @FXML
     private void exitMenuItemClicked() {
-        MainViewController.stage.close();
+        MainViewController.stage.fireEvent(new WindowEvent(MainViewController.stage, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 
     /**
