@@ -121,12 +121,12 @@ public class Analyser extends Task<Void> {
         for (Exercise exercise : exercises) {
             // Finds the average solution length for this exercise
             exercise.findAverageSolutionSourceCodeLength();
-            System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionSourceCodeLength() + " source codes");
+            System.out.println("\n" + exercise.getName() + " - Average length of source codes: " + exercise.getAverageSolutionSourceCodeLength() );
             if (preprocessSourceCode){
                 exercise.findAverageSolutionPreprocessedCodeLength();
-                System.out.println(exercise.getName() + " - " + exercise.getAverageSolutionPreprocessedCodeLength() + " preprocessed codes");
-                System.out.println("Preprocessing removed on average " + Math.round(exercise.getAverageSolutionSourceCodeLength()
-                        - exercise.getAverageSolutionPreprocessedCodeLength()) + " characters per solution for exercise " + exercise.getName());
+                System.out.println(exercise.getName() + " - Average length of preprocessed codes: " + exercise.getAverageSolutionPreprocessedCodeLength());
+                System.out.println(exercise.getName() + " - Preprocessing removed on average " + Math.round(exercise.getAverageSolutionSourceCodeLength()
+                        - exercise.getAverageSolutionPreprocessedCodeLength()) + " characters per solution");
             }
 
             // If user chose a custom similarity threshold then it is used, otherwise it is calculated
@@ -147,6 +147,7 @@ public class Analyser extends Task<Void> {
      * @param exercise the {@code Exercise} on which the comparison is performed
      */
     private void compareSolutions(Exercise exercise) {
+        System.out.println("\nSimilar pairs for " + exercise.getName() + ":");
         List<Solution> solutions = exercise.getSolutions();
         for (int i = 0, solutionCount = solutions.size(); i < solutionCount; i++) {
             Solution solution1 = solutions.get(i);
@@ -157,8 +158,8 @@ public class Analyser extends Task<Void> {
                     solution1.addSimilarSolution(solution2);
                     solution2.addSimilarSolution(solution1);
                     similarSolutionPairs.add(new SimilarSolutionPair(similarity, solution1, solution2));
-                    System.out.println(solution1.getExerciseName() + ": " + solution1.getAuthor() + ", " +
-                            solution2.getAuthor() + " - " + String.format("%.1f%%", similarity * 100));
+                    System.out.println("\t" + String.format("%.1f%%", similarity * 100) + "\t" +
+                            solution1.getAuthor() + ", " + solution2.getAuthor() );
                 }
                 analysedSolutionPairsCount++;
                 updateAnalysingProgress();

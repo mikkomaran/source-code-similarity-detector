@@ -1,10 +1,7 @@
 package ee.ut.similaritydetector.ui.components;
 
 import javafx.beans.binding.Bindings;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import ee.ut.similaritydetector.backend.SimilarSolutionCluster;
@@ -65,10 +62,12 @@ public class AccordionTableView extends TitledPane {
         // To remove empty rows from the bottom of the table we have to set fixed cell size
         tableView.setFixedCellSize(cellSize);
         tableView.prefHeightProperty().bind(Bindings.size(tableView.getItems()).multiply(tableView.getFixedCellSize()).add(1));
-        tableView.minHeight(cellSize + 2);
+        tableView.minHeight(cellSize + 1);
 
-        // TitledPane header and content
+        // TitledPane header
         this.setText(cluster.getName());
+
+        // TitledPane's content
         this.setContent(anchorPane);
 
         // TitledPane restrictions

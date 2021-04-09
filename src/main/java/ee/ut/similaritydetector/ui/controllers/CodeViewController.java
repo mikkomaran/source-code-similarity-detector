@@ -1,5 +1,6 @@
 package ee.ut.similaritydetector.ui.controllers;
 
+import ee.ut.similaritydetector.backend.Analyser;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -23,6 +24,7 @@ public class CodeViewController {
 
     private final List<AccordionTableView> clusterPanes;
     private final List<TableView<SimilarSolutionPair>> clusterTables;
+    private Analyser analyser;
 
     private static CodeViewController instance;
 
@@ -35,8 +37,6 @@ public class CodeViewController {
 
     @FXML
     private MenuItem closeAllTabsMenuItem;
-
-    private List<SimilarSolutionCluster> clusters;
 
     private final List<CodePaneController> openCodePanes;
 
@@ -52,18 +52,18 @@ public class CodeViewController {
         return instance;
     }
 
-    public void setClusters(List<SimilarSolutionCluster> clusters) {
-        this.clusters = clusters;
+    public void setAnalyser(Analyser analyser) {
+        this.analyser = analyser;
     }
 
     public void addCodePane(CodePaneController codePaneController) {
-        openCodePanes.add(codePaneController);
-        codeSplitPane.getItems().add(codePaneController.getRoot());
+        Platform.runLater(() -> openCodePanes.add(codePaneController));
+        Platform.runLater(() -> codeSplitPane.getItems().add(codePaneController.getRoot()));
     }
 
     public void removeCodePane(CodePaneController codePaneController) {
-        openCodePanes.remove(codePaneController);
-        codeSplitPane.getItems().remove(codePaneController.getRoot());
+        Platform.runLater(() -> openCodePanes.remove(codePaneController));
+        Platform.runLater(() -> codeSplitPane.getItems().remove(codePaneController.getRoot()));
     }
 
     public List<CodePaneController> getOpenCodePanes() {
@@ -89,7 +89,7 @@ public class CodeViewController {
      * Creates the {@code AccordionTableView} elements from each {@code SimilarSolutionCluster} and adds to the view.
      */
     public void createClusterItems() {
-        for (SimilarSolutionCluster cluster : clusters) {
+        for (SimilarSolutionCluster cluster : analyser.getSimilarSolutionClusters()) {
             AccordionTableView solutionClusterItem = new AccordionTableView(cluster);
             VBox.setVgrow(solutionClusterItem, Priority.NEVER);
             clusterPanes.add(solutionClusterItem);
@@ -136,6 +136,14 @@ public class CodeViewController {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     SimilarSolutionPair solutionPair = row.getItem();
+                    // Closes opened tabs that are from a different cluster than this solution pair
+                    SimilarSolutionCluster currentCluster = analyser.getSimilarSolutionClusters().stream().filter(cluster ->
+                            cluster.getSolutionPairs().contains(solutionPair)).findAny().get();
+                    for (CodePaneController codeTab : openCodePanes) {
+                        if (! currentCluster.containsSolution(codeTab.getSolution())) {
+                            closeCodeTab(codeTab);
+                        }
+                    }
                     // First solution
                     try {
                         createNewCodePane(solutionPair.getFirstSolution());
@@ -150,6 +158,8 @@ public class CodeViewController {
                         e.printStackTrace();
                         showSolutionCodeReadingErrorAlert(solutionPair.getFirstSolution());
                     }
+                    // Resize code panes equally
+                    Platform.runLater(this::resizeCodePanes);
                 }
             });
             return row;
@@ -219,9 +229,14 @@ public class CodeViewController {
      * @param table the {@code TableView} to be resized
      */
     private void resizeTableColumns(TableView<?> table) {
+        table.applyCss();
+        table.layout();
         double columnsWidth = table.getColumns().stream().mapToDouble(TableColumnBase::getWidth).sum();
         double tableWidth = table.getWidth();
-        System.out.println(columnsWidth + " - " + tableWidth);
+        if (tableWidth == 0) {
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            return;
+        }
         if (tableWidth > columnsWidth) {
             tableWidth -= 4; // So random horizontal scroll doesn't happen
             TableColumn<?, ?> col1 = table.getColumns().get(0);
@@ -247,6 +262,16 @@ public class CodeViewController {
         }
     }
 
+    private void resizeCodePanes() {
+        int nrPanes = openCodePanes.size();
+        double[] dividerPositions = new double[nrPanes];
+        double dividerSize = 1.0 / nrPanes;
+        for (int i = 0; i < nrPanes; i++) {
+            dividerPositions[i] = dividerSize * (i + 1);
+        }
+        Platform.runLater(() -> codeSplitPane.setDividerPositions(dividerPositions));
+    }
+
     /**
      * Closes the given code tab
      *
@@ -254,7 +279,6 @@ public class CodeViewController {
      */
     public void closeCodeTab(CodePaneController codePaneController) {
         removeCodePane(codePaneController);
-        codeSplitPane.getItems().remove(codePaneController.getRoot());
     }
 
     /**
@@ -262,8 +286,8 @@ public class CodeViewController {
      */
     @FXML
     private void closeAllCodeTabs() {
-        openCodePanes.clear();
-        codeSplitPane.getItems().clear();
+        Platform.runLater(openCodePanes::clear);
+        Platform.runLater(() -> codeSplitPane.getItems().clear());
     }
 
 }

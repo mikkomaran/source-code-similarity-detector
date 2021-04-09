@@ -69,7 +69,7 @@
                               <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
                                     <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="-125.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <Button fx:id="fileChooseButton" alignment="CENTER" mnemonicParsing="false" onAction="#chooseFile" prefHeight="60.0" prefWidth="175.0" text="Choose the solutions ZIP" />
+                                       <Button fx:id="fileChooseButton" alignment="CENTER" mnemonicParsing="false" onAction="#chooseFile" prefHeight="60.0" prefWidth="175.0" text="Choose solutions ZIP" />
                                        <VBox fx:id="fileArea" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="BOTTOM_CENTER" spacing="-10">
                                           <ImageView id="zipImg" fx:id="zipImg" fitHeight="125.0" fitWidth="80.0" onMouseClicked="#chooseFile" pickOnBounds="true" preserveRatio="true">
                                              <Image url="/ee/ut/similaritydetector/img/zip_icon.png" />

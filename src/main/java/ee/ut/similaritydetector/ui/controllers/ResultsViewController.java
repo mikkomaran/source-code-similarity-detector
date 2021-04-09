@@ -132,7 +132,7 @@ public class ResultsViewController {
                 "/ee/ut/similaritydetector/fxml/code_view.fxml"));
         Parent root = loader.load();
         CodeViewController controller = loader.getController();
-        controller.setClusters(analyser.getSimilarSolutionClusters());
+        controller.setAnalyser(analyser);
         Platform.runLater(controller::createClusterItems);
         double width = MainViewController.stage.getScene().getWidth() > 1200 ?
                 MainViewController.stage.getScene().getWidth() : 1200;
