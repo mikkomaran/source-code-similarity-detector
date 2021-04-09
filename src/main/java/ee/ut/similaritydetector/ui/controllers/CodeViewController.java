@@ -99,6 +99,9 @@ public class CodeViewController {
         arrowImg.setFitWidth(9);
         hideSideBarButton.setGraphic(arrowImg);
         hideSideBarButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+
+        // Persists dark theme if it was activated before
+        Platform.runLater(menuBarController::persistCurrentTheme);
     }
 
     /**

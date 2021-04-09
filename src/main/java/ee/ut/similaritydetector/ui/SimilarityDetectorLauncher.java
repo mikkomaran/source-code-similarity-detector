@@ -46,7 +46,7 @@ public class SimilarityDetectorLauncher extends Application {
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         stage.show();
-        stage.setUserData(new UserData(true));
+        UserData.getInstance().setDarkMode(true);
         stage.setOnCloseRequest(this::showExitConfirmationAlert);
         MainViewController.stage = stage;
     }
@@ -74,7 +74,7 @@ public class SimilarityDetectorLauncher extends Application {
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         // Dark mode
-        if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
+        if (UserData.getInstance().isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
                     "/ee/ut/similaritydetector/style/dark_mode.scss")));
         }

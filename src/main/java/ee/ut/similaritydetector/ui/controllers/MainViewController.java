@@ -85,6 +85,9 @@ public class MainViewController {
         toolTipManager.setDismissDelay(10000);
         toolTipManager.setInitialDelay(600);
         toolTipManager.setReshowDelay(300);
+
+        // Persists dark theme if it was activated before
+        Platform.runLater(menuBarController::persistCurrentTheme);
     }
 
     /**
@@ -237,9 +240,6 @@ public class MainViewController {
         Scene resultsViewScene = new Scene(root, MainViewController.stage.getScene().getWidth(), MainViewController.stage.getScene().getHeight());
         stage.setScene(resultsViewScene);
         stage.setTitle("Source code similarity detector - Results - " + analyser.getZipDirectory().getName());
-
-        // Persists dark theme if it was activated before
-        Platform.runLater(() -> menuBarController.persistCurrentTheme());
 
         // Makes the "View clusters" button clickable if analysis found any clusters
         controller.toggleClusterButtonUsability();

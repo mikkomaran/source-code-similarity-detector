@@ -76,7 +76,6 @@ public class AccordionTableView extends TitledPane {
                 lineText.append(word).append(" ");
                 Text text = new Text(lineText.toString());
                 if (text.getLayoutBounds().getWidth() > 400 - 50) {
-                    System.out.println(lineText);
                     headerText.append(System.lineSeparator());
                     lineText.delete(0, lineText.length());
                     lineText.append(word);

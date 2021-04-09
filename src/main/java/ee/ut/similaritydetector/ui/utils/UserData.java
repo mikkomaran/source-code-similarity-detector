@@ -14,6 +14,9 @@ public class UserData {
     }
 
     public static UserData getInstance() {
+        if (instance == null) {
+            instance = new UserData(true);
+        }
         return instance;
     }
 

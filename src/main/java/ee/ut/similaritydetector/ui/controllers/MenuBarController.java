@@ -46,12 +46,11 @@ public class MenuBarController {
 
     @FXML
     private void initialize() {
-        lightTheme.setOnAction(event -> Platform.runLater(this::activateClassicTheme));
+        lightTheme.setOnAction(event -> Platform.runLater(this::activateLightTheme));
         darkTheme.setOnAction(event -> Platform.runLater(this::activateDarkTheme));
         // When scenes are switched then persists theme
         if (MainViewController.stage != null) {
-            UserData userData = (UserData) MainViewController.stage.getUserData();
-            if (userData.isDarkMode()) {
+            if (UserData.getInstance().isDarkMode()) {
                 darkTheme.setSelected(true);
             } else {
                 lightTheme.setSelected(true);
@@ -72,9 +71,7 @@ public class MenuBarController {
      * Activates dark theme on every currently opened window by adding a css stylesheet to the scenes.
      */
     private void activateDarkTheme() {
-        UserData userData = (UserData) MainViewController.stage.getUserData();
-        userData.setDarkMode(true);
-        MainViewController.stage.setUserData(userData);
+        UserData.getInstance().setDarkMode(true);
         Stage.getWindows().forEach(window -> {
             ObservableList<String> stylesheets = window.getScene().getStylesheets();
             if (! stylesheets.contains(String.valueOf(this.getClass().getResource(darkThemeStylesheetPath)))) {
@@ -89,10 +86,8 @@ public class MenuBarController {
     /**
      * Activates light theme on every currently opened window by adding a css stylesheet to the scenes.
      */
-    private void activateClassicTheme() {
-        UserData userData = (UserData) MainViewController.stage.getUserData();
-        userData.setDarkMode(false);
-        MainViewController.stage.setUserData(userData);
+    private void activateLightTheme() {
+        UserData.getInstance().setDarkMode(false);
         Stage.getWindows().forEach(window -> window.getScene().getStylesheets().remove(String.valueOf(this.getClass().getResource(darkThemeStylesheetPath))));
         if (CodeViewController.getInstance() != null){
             CodeViewController.getInstance().getOpenCodePanes().forEach(CodePaneController::loadLightThemeHTML);
@@ -106,7 +101,7 @@ public class MenuBarController {
         if (darkTheme.isSelected()) {
             activateDarkTheme();
         } else {
-            activateClassicTheme();
+            activateLightTheme();
         }
     }
 

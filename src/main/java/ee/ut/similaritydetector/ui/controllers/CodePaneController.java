@@ -55,8 +55,7 @@ public class CodePaneController {
      */
     public void loadSolutionSourceCode() throws Exception {
         codeTab.setText(solution.getAuthor() + " - " + solution.getExerciseName());
-        UserData userData = (UserData) MainViewController.stage.getUserData();
-        if (userData.isDarkMode()) {
+        if (UserData.getInstance().isDarkMode()) {
             loadDarkThemeHTML();
         } else {
             loadLightThemeHTML();

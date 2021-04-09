@@ -23,7 +23,7 @@ public class AlertUtils {
         stage.setTitle("");
         stage.getIcons().add(new Image(AlertUtils.class.getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         // Dark mode
-        if (((UserData) MainViewController.stage.getUserData()).isDarkMode()) {
+        if (UserData.getInstance().isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(AlertUtils.class.getResource(
                     "/ee/ut/similaritydetector/style/dark_mode.scss")));
         }

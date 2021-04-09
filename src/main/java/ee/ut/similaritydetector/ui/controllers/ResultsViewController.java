@@ -22,6 +22,7 @@ public class ResultsViewController {
 
     private Analyser analyser;
     private MainViewController mainViewController;
+    private Stage codeViewStage;
 
     @FXML
     private MenuBarController menuBarController;
@@ -70,6 +71,8 @@ public class ResultsViewController {
 
     @FXML
     private void initialize() {
+        // Persists dark theme if it was activated before
+        Platform.runLater(menuBarController::persistCurrentTheme);
     }
 
     /**
@@ -148,10 +151,8 @@ public class ResultsViewController {
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         newWindow.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
 
-        // Persists dark theme if it was activated before
-        Platform.runLater(menuBarController::persistCurrentTheme);
-
         newWindow.show();
+        codeViewStage = newWindow;
 
         // Resize cluster table columns
         Platform.runLater(controller::resizeClusterTableColumns);
@@ -160,6 +161,11 @@ public class ResultsViewController {
     @FXML
     private void runNewAnalysis() {
         try {
+            // Close code view if open
+            if (codeViewStage != null) {
+                codeViewStage.close();
+                codeViewStage = null;
+            }
             openMainView();
         } catch (IOException e) {
             e.printStackTrace();
@@ -176,9 +182,6 @@ public class ResultsViewController {
         MainViewController.stage.setScene(scene);
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         MainViewController.stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
-
-        // Persists dark theme if it was activated before
-        Platform.runLater(menuBarController::persistCurrentTheme);
 
         mainViewController.openOptions();
         MainViewController.stage.show();
