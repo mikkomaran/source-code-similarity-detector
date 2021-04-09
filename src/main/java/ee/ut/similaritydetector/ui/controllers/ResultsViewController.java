@@ -147,7 +147,7 @@ public class ResultsViewController {
         newWindow.setMinHeight(600);
         newWindow.setScene(codeViewScene);
         newWindow.centerOnScreen();
-        newWindow.setTitle("Source code similarity detector - Similar clusters & pairs - " + analyser.getZipDirectory().getName());
+        newWindow.setTitle("Source code similarity detector - Code review - " + analyser.getZipDirectory().getName());
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         newWindow.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
 

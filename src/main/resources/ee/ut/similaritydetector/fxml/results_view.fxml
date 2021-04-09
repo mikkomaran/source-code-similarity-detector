@@ -77,7 +77,7 @@
             </VBox>
             <HBox alignment="TOP_CENTER" spacing="50.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button fx:id="viewClustersButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="65.0" minHeight="55.0" mnemonicParsing="false" onAction="#viewClusters" prefHeight="60.0" prefWidth="175.0" text="View similar pairs &amp; clusters" textAlignment="CENTER" />
+                  <Button fx:id="viewClustersButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="65.0" minHeight="55.0" mnemonicParsing="false" onAction="#viewClusters" prefHeight="60.0" prefWidth="175.0" text="Review suspicious solutions" textAlignment="CENTER" />
                   <Button fx:id="runNewAnalysisButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="65.0" minHeight="55.0" mnemonicParsing="false" onAction="#runNewAnalysis" prefHeight="60.0" prefWidth="175.0" text="Run new analysis" textAlignment="CENTER" />
                </children>
                <VBox.margin>
