@@ -13,7 +13,7 @@
         <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
             <items>
                 <MenuItem fx:id="closeAllTabsMenuItem" mnemonicParsing="false" text="Close all tabs" visible="false"/>
-                <MenuItem mnemonicParsing="false" text="Save" />
+<!--                <MenuItem mnemonicParsing="false" text="Save" /> -->
             <SeparatorMenuItem mnemonicParsing="false" />
                 <MenuItem fx:id="exitMenuItem" onAction="#exitMenuItemClicked" mnemonicParsing="false" text="Exit" />
             </items>
