@@ -63,16 +63,10 @@ public class SimilarityDetectorLauncher extends Application {
         alert.setTitle("");
         alert.setHeaderText("Are you sure you want to exit?");
         //alert.setContentText("Results might not have been saved.");
-        ButtonType exitButton = new ButtonType("Exit");
-        ButtonType cancelButton = ButtonType.CANCEL;
-        alert.getButtonTypes().setAll(cancelButton, exitButton);
-        // TODO: default button
-        //Deactivate Defaultbehavior for yes-Button:
-        Button yesButton = (Button) alert.getDialogPane().lookupButton(exitButton);
-        yesButton.setDefaultButton(false);
-        //Activate Defaultbehavior for no-Button:
-        Button noButton = (Button) alert.getDialogPane().lookupButton(cancelButton);
-        noButton.setDefaultButton(true);
+        ButtonType exitButtonType = ButtonType.OK;
+        Button exitButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+        exitButton.setText("Exit");
+
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         // Dark mode
@@ -81,7 +75,7 @@ public class SimilarityDetectorLauncher extends Application {
                     "/ee/ut/similaritydetector/style/dark_mode.scss")));
         }
         Optional<ButtonType> buttonType = alert.showAndWait();
-        if (buttonType.isPresent() && buttonType.get() == exitButton) {
+        if (buttonType.isPresent() && buttonType.get() == exitButtonType) {
             Platform.exit();
         } else {
             windowEvent.consume();
