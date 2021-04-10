@@ -131,6 +131,11 @@ public class ResultsViewController {
      * @throws IOException if the code view could not be opened
      */
     private void openCodeView() throws IOException {
+        // If already open then bring to front and don't open new one
+        if (codeViewStage != null) {
+            codeViewStage.toFront();
+            return;
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "/ee/ut/similaritydetector/fxml/code_view.fxml"));
         Parent root = loader.load();
@@ -153,6 +158,7 @@ public class ResultsViewController {
 
         newWindow.show();
         codeViewStage = newWindow;
+        codeViewStage.setOnCloseRequest(event -> codeViewStage = null);
 
         // Resize cluster table columns
         Platform.runLater(controller::resizeClusterTableColumns);
