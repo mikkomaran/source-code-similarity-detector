@@ -19,7 +19,7 @@ import java.util.zip.ZipInputStream;
 
 public class SolutionParser {
 
-    public static final String outputDirectoryPath = "resources/";
+    public static final String outputDirectoryPath = "analyser_resources/";
     private final File contentDirectory;
     private final File outputDirectory;
     private final boolean preprocessSourceCode;
