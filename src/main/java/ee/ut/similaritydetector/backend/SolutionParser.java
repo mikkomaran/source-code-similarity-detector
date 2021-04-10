@@ -19,6 +19,7 @@ import java.util.zip.ZipInputStream;
 
 public class SolutionParser {
 
+    public static final String outputDirectoryPath = "resources/";
     private final File contentDirectory;
     private final File outputDirectory;
     private final boolean preprocessSourceCode;
@@ -28,7 +29,8 @@ public class SolutionParser {
 
     public SolutionParser(File contentDirectory, boolean preprocessSourceCode, boolean anonymousResults, Analyser analyser) {
         this.contentDirectory = contentDirectory;
-        this.outputDirectory = new File("resources/");
+        this.outputDirectory = new File(outputDirectoryPath);
+        System.out.println(outputDirectory.getAbsolutePath());
         this.preprocessSourceCode = preprocessSourceCode;
         this.anonymousResults = anonymousResults;
         this.analyser = analyser;
@@ -166,7 +168,5 @@ public class SolutionParser {
         interpreter.set("source_code_filepath", filePath);
         interpreter.execfile(getClass().getResourceAsStream(preprocessorScript));
     }
-
-
 
 }

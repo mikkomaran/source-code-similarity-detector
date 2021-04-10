@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 
+import static ee.ut.similaritydetector.backend.SolutionParser.outputDirectoryPath;
+
 public class SimilarityDetectorLauncher extends Application {
 
     public static void main(String[] args) {
@@ -90,8 +92,12 @@ public class SimilarityDetectorLauncher extends Application {
      * Deletes the files that are generated during runtime for analysis.
      */
     public static void deleteOutputFiles() {
-        File outputDirectory = new File("resources/");
-        deleteDirectory(outputDirectory);
+        Platform.runLater(() -> {
+            File outputDirectory = new File(outputDirectoryPath);
+            if (deleteDirectory(outputDirectory)) {
+                System.out.println("Deleted analysis files.");
+            }
+        });
     }
 
     /**
@@ -100,7 +106,7 @@ public class SimilarityDetectorLauncher extends Application {
      *
      * @param directory the directory to delete
      */
-    private static void deleteDirectory(File directory) {
+    private static boolean deleteDirectory(File directory) {
         File[] files = directory.listFiles();
         if(files != null) {
             for(File f : files) {
@@ -111,7 +117,7 @@ public class SimilarityDetectorLauncher extends Application {
                 }
             }
         }
-        directory.delete();
+        return directory.delete();
     }
 
     /**

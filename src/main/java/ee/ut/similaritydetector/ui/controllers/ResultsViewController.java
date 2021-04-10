@@ -16,6 +16,7 @@ import ee.ut.similaritydetector.backend.Exercise;
 
 import java.io.IOException;
 
+import static ee.ut.similaritydetector.ui.SimilarityDetectorLauncher.deleteOutputFiles;
 import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
 
 public class ResultsViewController {
@@ -188,7 +189,7 @@ public class ResultsViewController {
         MainViewController.stage.setScene(scene);
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         MainViewController.stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
-
+        deleteOutputFiles();
         mainViewController.openOptions();
         MainViewController.stage.show();
     }
