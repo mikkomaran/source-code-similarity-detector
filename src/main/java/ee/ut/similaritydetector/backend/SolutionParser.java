@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.InvalidPathException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -100,7 +99,6 @@ public class SolutionParser {
                                 // Replace with latest submission of solution if a solution is already present for the author
                                 if (existingSolution.isPresent()) {
                                     if (existingSolution.get().getSubmissionTime().isBefore(newSolution.getSubmissionTime())) {
-                                        System.out.println(newSolution.getAuthor() + " - " + existingSolution.get().getSubmissionTime() + " - " + newSolution.getSubmissionTime());
                                         exercise.replaceSolution(exercise.getSolutions().indexOf(existingSolution.get()), newSolution);
                                     }
                                 } else {

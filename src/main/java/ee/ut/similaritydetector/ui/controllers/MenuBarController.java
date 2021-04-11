@@ -50,11 +50,7 @@ public class MenuBarController {
         lightTheme.setOnAction(event -> Platform.runLater(this::activateLightTheme));
         darkTheme.setOnAction(event -> Platform.runLater(this::activateDarkTheme));
         // When scenes are switched then persists theme selection
-        if (UserData.getInstance().isDarkMode()) {
-            darkTheme.setSelected(true);
-        } else {
-            lightTheme.setSelected(true);
-        }
+        persistCurrentTheme();
     }
 
     @FXML
@@ -66,6 +62,7 @@ public class MenuBarController {
      * Activates dark theme on every currently opened window by adding a css stylesheet to the scenes.
      */
     private void activateDarkTheme() {
+        darkTheme.setSelected(true);
         UserData.getInstance().setDarkMode(true);
         Stage.getWindows().forEach(window -> {
             ObservableList<String> stylesheets = window.getScene().getStylesheets();
@@ -82,6 +79,7 @@ public class MenuBarController {
      * Activates light theme on every currently opened window by adding a css stylesheet to the scenes.
      */
     private void activateLightTheme() {
+        lightTheme.setSelected(true);
         UserData.getInstance().setDarkMode(false);
         Stage.getWindows().forEach(window -> window.getScene().getStylesheets().remove(String.valueOf(this.getClass().getResource(darkThemeStylesheetPath))));
         if (CodeViewController.getInstance() != null){

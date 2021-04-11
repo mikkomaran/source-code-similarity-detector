@@ -47,6 +47,10 @@ public class Analyser extends Task<Void> {
         similarSolutionClusters = new ArrayList<>();
     }
 
+    public boolean isPreprocessSourceCode() {
+        return preprocessSourceCode;
+    }
+
     public File getZipDirectory() {
         return zipDirectory;
     }

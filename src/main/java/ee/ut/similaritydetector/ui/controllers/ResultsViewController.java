@@ -51,6 +51,8 @@ public class ResultsViewController {
     @FXML
     private TableColumn<ExerciseStatistics, Integer> similarClustersColumn;
     @FXML
+    private TableColumn<ExerciseStatistics, Integer> averageSolutionLengthColumn;
+    @FXML
     private TableColumn<ExerciseStatistics, String> similarityThresholdColumn;
 
     @FXML
@@ -98,6 +100,7 @@ public class ResultsViewController {
         suspiciousSolutionsColumn.setCellValueFactory(new PropertyValueFactory<>("suspiciousSolutions"));
         similarPairsColumn.setCellValueFactory(new PropertyValueFactory<>("similarPairs"));
         similarClustersColumn.setCellValueFactory(new PropertyValueFactory<>("similarClusters"));
+        averageSolutionLengthColumn.setCellValueFactory(new PropertyValueFactory<>("averageSolutionLength"));
         similarityThresholdColumn.setCellValueFactory(new PropertyValueFactory<>("similarityThreshold"));
 
         analyser.getExercises().forEach(exercise -> exerciseStatisticsTable.getItems().add(new ExerciseStatistics(exercise, analyser)));
