@@ -26,6 +26,10 @@ public class Exercise {
         return solutions;
     }
 
+    public void replaceSolution(int index, Solution newSolution) {
+        solutions.set(index, newSolution);
+    }
+
     public void addSolution(Solution solution) {
         solutions.add(solution);
     }

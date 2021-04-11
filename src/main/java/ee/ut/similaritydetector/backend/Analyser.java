@@ -157,7 +157,13 @@ public class Analyser extends Task<Void> {
                 if (similarity > exercise.getSimilarityThreshold()) {
                     solution1.addSimilarSolution(solution2);
                     solution2.addSimilarSolution(solution1);
-                    similarSolutionPairs.add(new SimilarSolutionPair(similarity, solution1, solution2));
+                    SimilarSolutionPair newSolutionPair;
+                    if (solution1.getSubmissionTime().isBefore(solution2.getSubmissionTime())) {
+                        newSolutionPair = new SimilarSolutionPair(similarity, solution1, solution2);
+                    } else {
+                        newSolutionPair = new SimilarSolutionPair(similarity, solution2, solution1);
+                    }
+                    similarSolutionPairs.add(newSolutionPair);
                     System.out.println("\t" + String.format("%.1f%%", similarity * 100) + "\t" +
                             solution1.getAuthor() + ", " + solution2.getAuthor() );
                 }

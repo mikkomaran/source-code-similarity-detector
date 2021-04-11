@@ -49,17 +49,11 @@ public class MenuBarController {
     private void initialize() {
         lightTheme.setOnAction(event -> Platform.runLater(this::activateLightTheme));
         darkTheme.setOnAction(event -> Platform.runLater(this::activateDarkTheme));
-        // When scenes are switched then persists theme
-        if (MainViewController.stage != null) {
-            if (UserData.getInstance().isDarkMode()) {
-                darkTheme.setSelected(true);
-            } else {
-                lightTheme.setSelected(true);
-            }
-        }
-        // When application is started
-        else {
-            Platform.runLater(this::activateDarkTheme);
+        // When scenes are switched then persists theme selection
+        if (UserData.getInstance().isDarkMode()) {
+            darkTheme.setSelected(true);
+        } else {
+            lightTheme.setSelected(true);
         }
     }
 
@@ -99,7 +93,7 @@ public class MenuBarController {
      * Persists the current theme through scene changes.
      */
     public void persistCurrentTheme() {
-        if (darkTheme.isSelected()) {
+        if (UserData.getInstance().isDarkMode()) {
             activateDarkTheme();
         } else {
             activateLightTheme();

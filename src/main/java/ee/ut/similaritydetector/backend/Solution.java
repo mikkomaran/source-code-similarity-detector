@@ -6,10 +6,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class Solution {
 
@@ -17,15 +15,17 @@ public class Solution {
     private final String exerciseName;
     private final File sourceCodeFile;
     private final Set<Solution> similarSolutions;
+    private final LocalDateTime submissionTime;
     private File preprocessedCodeFile;
     private File sourceCodeHTMLLight;
     private File sourceCodeHTMLDark;
 
-    public Solution(String author, String exerciseName, File sourceCodeFile) {
+    public Solution(String author, String exerciseName, File sourceCodeFile, LocalDateTime submissionTime) {
         this.author = author;
         this.exerciseName = exerciseName;
         this.sourceCodeFile = sourceCodeFile;
         similarSolutions = new HashSet<>();
+        this.submissionTime = submissionTime;
     }
 
     public Set<Solution> getSimilarSolutions() {
@@ -62,6 +62,10 @@ public class Solution {
 
     public String getExerciseName() {
         return exerciseName;
+    }
+
+    public LocalDateTime getSubmissionTime() {
+        return submissionTime;
     }
 
     /**
@@ -142,6 +146,5 @@ public class Solution {
         interpreter.execfile(getClass().getResourceAsStream(syntaxHighlighterScript));
         sourceCodeHTMLLight = new File(lightHTMLPath);
     }
-
 
 }

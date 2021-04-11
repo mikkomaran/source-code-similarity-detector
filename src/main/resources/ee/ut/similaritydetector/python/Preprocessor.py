@@ -53,4 +53,6 @@ with open(source_code_filepath, 'rb') as source_code_file:
             preprocessed_code_file.write(preprocessed_code)
     # If the source code is syntactically incorrect
     except IndentationError:
-        sys.stderr.write("Syntactically incorrect program: " + source_code_file.name + "\n")
+        sys.stderr.write("[Preprocessing] Syntactically incorrect program: " + source_code_file.name + "\n")
+    except Exception:
+        sys.stderr.write("[Preprocessing] Unexpected error: " + source_code_file.name + "\n")
