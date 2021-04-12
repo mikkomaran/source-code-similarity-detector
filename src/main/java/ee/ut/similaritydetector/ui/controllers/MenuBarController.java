@@ -163,6 +163,7 @@ public class MenuBarController {
                 codeViewStage.close();
                 codeViewStage = null;
             }
+            Platform.runLater(SimilarityDetectorLauncher::deleteOutputFiles);
             MainViewController.stage.close();
             Platform.runLater( () -> {
                 try {
