@@ -56,7 +56,7 @@
                <children>
                   <TableView fx:id="exerciseStatisticsTable" focusTraversable="false" maxWidth="800.0">
                     <columns>
-                      <TableColumn fx:id="exerciseNameColumn" editable="false" prefWidth="125.0" text="%exercise_name" />
+                      <TableColumn fx:id="exerciseNameColumn" editable="false" prefWidth="100.0" text="%exercise_name" />
                       <TableColumn fx:id="totalSolutionsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="%total_solutions"/>
                         <TableColumn fx:id="suspiciousSolutionsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="%suspicious_solutions" />
                         <TableColumn fx:id="similarPairsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="%similar_pairs" />

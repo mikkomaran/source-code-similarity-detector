@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static ee.ut.similaritydetector.ui.controllers.ResultsViewController.codeViewStage;
 import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAlert;
 
 public class MenuBarController {
@@ -158,6 +159,10 @@ public class MenuBarController {
         Optional<ButtonType> buttonType = alert.showAndWait();
         if (buttonType.isPresent() && buttonType.get() == restartButtonType) {
             UserPreferences.getInstance().setLocale(langTag);
+            if (codeViewStage != null) {
+                codeViewStage.close();
+                codeViewStage = null;
+            }
             MainViewController.stage.close();
             Platform.runLater( () -> {
                 try {
@@ -166,7 +171,6 @@ public class MenuBarController {
                     e.printStackTrace();
                 }
             });
-            //Platform.exit();
         } else {
             if (newLocale.equals(Locale.forLanguageTag("et_EE"))) {
                 englishLang.setSelected(true);

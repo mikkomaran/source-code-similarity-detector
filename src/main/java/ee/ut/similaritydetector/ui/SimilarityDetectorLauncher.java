@@ -42,10 +42,10 @@ public class SimilarityDetectorLauncher extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ee/ut/similaritydetector/fxml/main_view.fxml"));
         loader.setResources(langBundle);
         Parent root = loader.load();
-        stage.setMinWidth(800);
+        stage.setMinWidth(900);
         stage.setMinHeight(600);
         stage.setTitle(langBundle.getString("app_name"));
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 900, 600);
         stage.setScene(scene);
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));

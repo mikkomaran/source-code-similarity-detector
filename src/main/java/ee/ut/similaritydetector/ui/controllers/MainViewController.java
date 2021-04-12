@@ -25,7 +25,6 @@ import java.math.RoundingMode;
 import java.util.ResourceBundle;
 
 import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAlert;
-import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
 
 public class MainViewController {
 
@@ -175,7 +174,7 @@ public class MainViewController {
 
         analyser.setOnFailed(event -> {
             analyser.getException().printStackTrace();
-            showAndWaitAlert(langBundle.getString("error_msg3"),
+            showAlert(langBundle.getString("error_msg3"),
                     langBundle.getString("context_msg2"),
                     Alert.AlertType.ERROR);
             resetMainView();

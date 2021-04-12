@@ -27,7 +27,7 @@ public class ResultsViewController {
 
     private Analyser analyser;
     private MainViewController mainViewController;
-    private Stage codeViewStage;
+    public static Stage codeViewStage;
 
     @FXML
     private MenuBarController menuBarController;
@@ -96,7 +96,7 @@ public class ResultsViewController {
         int cellSize = 30;
         exerciseStatisticsTable.setFixedCellSize(cellSize);
         exerciseStatisticsTable.prefHeightProperty().bind(Bindings.size(exerciseStatisticsTable.getItems()).
-                multiply(exerciseStatisticsTable.getFixedCellSize()).add(cellSize + 6));
+                multiply(exerciseStatisticsTable.getFixedCellSize()).add(cellSize + 23));
     }
 
     private void fillExerciseStatisticsTable() {

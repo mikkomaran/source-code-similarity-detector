@@ -22,7 +22,7 @@
        <fx:include fx:id="menuBar" source="menu_bar.fxml" />
       <HBox VBox.vgrow="ALWAYS">
          <children>
-            <AnchorPane fx:id="optionsPane" minWidth="200.0" HBox.hgrow="NEVER">
+            <AnchorPane fx:id="optionsPane" minWidth="210.0" HBox.hgrow="NEVER">
                <children>
                   <TitledPane animated="false" collapsible="false" text="%options" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <content>
@@ -69,7 +69,7 @@
                               <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
                                     <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="-125.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <Button fx:id="fileChooseButton" alignment="CENTER" mnemonicParsing="false" onAction="#chooseFile" prefHeight="60.0" prefWidth="175.0" text="%solutions_zip" />
+                                       <Button fx:id="fileChooseButton" alignment="CENTER" mnemonicParsing="false" onAction="#chooseFile" prefHeight="75.0" prefWidth="175.0" text="%solutions_zip" />
                                        <VBox fx:id="fileArea" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="BOTTOM_CENTER" spacing="-10">
                                           <ImageView id="zipImg" fx:id="zipImg" fitHeight="125.0" fitWidth="80.0" onMouseClicked="#chooseFile" pickOnBounds="true" preserveRatio="true">
                                              <Image url="/ee/ut/similaritydetector/img/zip_icon.png" />
@@ -85,7 +85,7 @@
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
-                                       <Button fx:id="startButton" minWidth="100.0" mnemonicParsing="false" onAction="#startAnalysis" prefHeight="50.0" prefWidth="125.0" text="%start_analysis" />
+                                       <Button fx:id="startButton" minWidth="100.0" mnemonicParsing="false" onAction="#startAnalysis" prefHeight="60.0" prefWidth="125.0" text="%start_analysis" />
                                     </VBox>
                                  </children>
                               </AnchorPane>
