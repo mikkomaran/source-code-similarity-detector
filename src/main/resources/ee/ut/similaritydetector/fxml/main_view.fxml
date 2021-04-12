@@ -24,15 +24,15 @@
          <children>
             <AnchorPane fx:id="optionsPane" minWidth="200.0" HBox.hgrow="NEVER">
                <children>
-                  <TitledPane animated="false" collapsible="false" text="Options" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TitledPane animated="false" collapsible="false" text="%options" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <content>
                       <AnchorPane>
                            <children>
                               <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <CheckBox fx:id="customSimilarityThresholdCheckbox" mnemonicParsing="false" text="Custom similarity threshold">
+                                    <CheckBox fx:id="customSimilarityThresholdCheckbox" mnemonicParsing="false" text="%custom_similarity_threshold">
                                        <tooltip>
-                                          <Tooltip maxWidth="-Infinity" prefWidth="200.0" text="If selected, the user can choose the allowed similarity percentage for solutions. Otherwise, it's calculated automatically." wrapText="true" />
+                                          <Tooltip maxWidth="-Infinity" prefWidth="200.0" text="%custom_similarity_threshold.tooltip" wrapText="true" />
                                        </tooltip></CheckBox>
                                     <Spinner fx:id="customSimilarityThresholdSpinner" editable="true" prefWidth="75.0">
                                        <VBox.margin>
@@ -40,15 +40,15 @@
                                        </VBox.margin>
                                     </Spinner>
                                     <Separator prefWidth="200.0" />
-                                    <CheckBox fx:id="preprocessCodeCheckbox" mnemonicParsing="false" selected="true" text="Preprocess source code">
+                                    <CheckBox fx:id="preprocessCodeCheckbox" mnemonicParsing="false" selected="true" text="%preprocess_source_code">
                                        <tooltip>
-                                          <Tooltip maxWidth="250.0" text="If selected, preprocesses the source code by removing comments and empty lines. Recommended for more accurate analysis results." wrapText="true" />
+                                          <Tooltip maxWidth="250.0" text="%preprocess_source_code.tooltip" wrapText="true" />
                                        </tooltip>
                                     </CheckBox>
                                     <Separator prefWidth="200.0" />
-                                    <CheckBox fx:id="anonymousResultsCheckbox" mnemonicParsing="false" text="Anonymous results">
+                                    <CheckBox fx:id="anonymousResultsCheckbox" mnemonicParsing="false" text="%anonymous_results">
                                        <tooltip>
-                                          <Tooltip maxWidth="250.0" text="If selected then results are made anonmous. Otherwise, results are provided with solution author names." wrapText="true" />
+                                          <Tooltip maxWidth="250.0" text="%anonymous_results.tooltip" wrapText="true" />
                                        </tooltip>
                                     </CheckBox>
                                     <Separator layoutX="10.0" layoutY="132.0" prefWidth="200.0" />
@@ -69,7 +69,7 @@
                               <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
                                     <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="-125.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <Button fx:id="fileChooseButton" alignment="CENTER" mnemonicParsing="false" onAction="#chooseFile" prefHeight="60.0" prefWidth="175.0" text="Choose solutions ZIP" />
+                                       <Button fx:id="fileChooseButton" alignment="CENTER" mnemonicParsing="false" onAction="#chooseFile" prefHeight="60.0" prefWidth="175.0" text="%solutions_zip" />
                                        <VBox fx:id="fileArea" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="BOTTOM_CENTER" spacing="-10">
                                           <ImageView id="zipImg" fx:id="zipImg" fitHeight="125.0" fitWidth="80.0" onMouseClicked="#chooseFile" pickOnBounds="true" preserveRatio="true">
                                              <Image url="/ee/ut/similaritydetector/img/zip_icon.png" />
@@ -85,7 +85,7 @@
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
-                                       <Button fx:id="startButton" minWidth="100.0" mnemonicParsing="false" onAction="#startAnalysis" prefHeight="50.0" prefWidth="125.0" text="Start analysis" />
+                                       <Button fx:id="startButton" minWidth="100.0" mnemonicParsing="false" onAction="#startAnalysis" prefHeight="50.0" prefWidth="125.0" text="%start_analysis" />
                                     </VBox>
                                  </children>
                               </AnchorPane>

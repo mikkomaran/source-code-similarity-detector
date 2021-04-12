@@ -1,6 +1,7 @@
 package ee.ut.similaritydetector.ui.controllers;
 
 import ee.ut.similaritydetector.backend.Analyser;
+import ee.ut.similaritydetector.ui.utils.UserPreferences;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -24,10 +25,13 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
 
 public class CodeViewController {
+
+    public static final String resourceBundlePath = "ee.ut.similaritydetector.language.code_view";
 
     private final List<AccordionTableView> clusterPanes;
     private final List<TableView<SimilarSolutionPair>> clusterTables;
@@ -267,7 +271,8 @@ public class CodeViewController {
      * @param solution {@link Solution}
      */
     private void showSolutionCodeReadingErrorAlert(Solution solution) {
-        showAndWaitAlert("Could not load solution code",
+        ResourceBundle langBundle = ResourceBundle.getBundle(resourceBundlePath, UserPreferences.getInstance().getLocale());
+        showAndWaitAlert(langBundle.getString("error_msg1"),
                 solution.getExerciseName() + " - " + solution.getAuthor(),
                 Alert.AlertType.ERROR);
     }

@@ -1,11 +1,13 @@
 package ee.ut.similaritydetector.backend;
 
+import ee.ut.similaritydetector.ui.utils.UserPreferences;
 import javafx.concurrent.Task;
 import ee.ut.similaritydetector.ui.controllers.MainViewController;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ee.ut.similaritydetector.backend.LevenshteinDistance.normalisedLevenshteinSimilarity;
@@ -99,11 +101,12 @@ public class Analyser extends Task<Void> {
     }
 
     public void startAnalysis() {
-        mainViewController.setProgressText("Processing solutions...");
+        ResourceBundle langBundle = ResourceBundle.getBundle(MainViewController.resourceBundlePath, UserPreferences.getInstance().getLocale());
+        mainViewController.setProgressText(langBundle.getString("processing_solutions"));
         SolutionParser solutionParser = new SolutionParser(zipDirectory, preprocessSourceCode, anonymousResults, this);
         exercises = solutionParser.parseSolutions();
 
-        mainViewController.setProgressText("Analysing solutions...");
+        mainViewController.setProgressText(langBundle.getString("analysing_solutions"));
         analyseSolutions();
 
         // Performing the pairwise comparison of solutions for each exercise
@@ -262,7 +265,8 @@ public class Analyser extends Task<Void> {
      * Generates syntax highlighting HTML for each suspicious solution.
      */
     private void generateSyntaxHighlightingHTML() {
-        mainViewController.setProgressText("Preparing results...");
+        ResourceBundle langBundle = ResourceBundle.getBundle(MainViewController.resourceBundlePath, UserPreferences.getInstance().getLocale());
+        mainViewController.setProgressText(langBundle.getString("preparing_results"));
         int total = similarSolutionClusters.stream().mapToInt(cluster -> cluster.getSolutions().size()).sum();
         AtomicInteger done = new AtomicInteger();
         similarSolutionClusters.forEach(cluster -> cluster.getSolutions().forEach(solution -> {

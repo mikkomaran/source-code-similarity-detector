@@ -15,7 +15,7 @@
        <fx:include fx:id="menuBar" source="menu_bar.fxml" />
       <VBox alignment="TOP_CENTER" spacing="25.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label fx:id="title" text="Results" VBox.vgrow="ALWAYS">
+            <Label fx:id="title" text="%results" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="16.0" />
                </font>
@@ -29,9 +29,9 @@
                      <children>
                         <VBox alignment="CENTER_RIGHT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Label text="Total solutions:" />
-                              <Label text="Solution pairs analysed:" />
-                              <Label layoutX="310.0" layoutY="37.0" text="Analysis duration:" />
+                              <Label text="%total_solutions.colon" />
+                              <Label text="%solutions_pairs_analysed" />
+                              <Label layoutX="310.0" layoutY="37.0" text="%analysis_duration" />
                            </children>
                         </VBox>
                      </children>
@@ -56,13 +56,13 @@
                <children>
                   <TableView fx:id="exerciseStatisticsTable" focusTraversable="false" maxWidth="800.0">
                     <columns>
-                      <TableColumn fx:id="exerciseNameColumn" editable="false" prefWidth="125.0" text="Exercise name" />
-                      <TableColumn fx:id="totalSolutionsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column" text="Total solutions" />
-                        <TableColumn fx:id="suspiciousSolutionsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="Suspicious&#10;solutions" />
-                        <TableColumn fx:id="similarPairsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column" text="Similar pairs " />
-                        <TableColumn fx:id="similarClustersColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column" text="Similar clusters" />
-                       <TableColumn fx:id="averageSolutionLengthColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="Average&#10;solution length" />
-                       <TableColumn fx:id="similarityThresholdColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="Used similarity &#10;threshold" />
+                      <TableColumn fx:id="exerciseNameColumn" editable="false" prefWidth="125.0" text="%exercise_name" />
+                      <TableColumn fx:id="totalSolutionsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="%total_solutions"/>
+                        <TableColumn fx:id="suspiciousSolutionsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="%suspicious_solutions" />
+                        <TableColumn fx:id="similarPairsColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="%similar_pairs" />
+                        <TableColumn fx:id="similarClustersColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="%similar_clusters" />
+                       <TableColumn fx:id="averageSolutionLengthColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="%avg_solution_length" />
+                       <TableColumn fx:id="similarityThresholdColumn" editable="false" prefWidth="100.0" sortType="DESCENDING" styleClass="number-column, column-header-alignment-center" text="%used_similarity_threshold" />
                     </columns>
                      <VBox.margin>
                         <Insets left="75.0" right="75.0" />
@@ -78,8 +78,8 @@
             </VBox>
             <HBox alignment="TOP_CENTER" spacing="50.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button fx:id="viewClustersButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="65.0" minHeight="55.0" mnemonicParsing="false" onAction="#viewClusters" prefHeight="60.0" prefWidth="175.0" text="Review suspicious solutions" textAlignment="CENTER" />
-                  <Button fx:id="runNewAnalysisButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="65.0" minHeight="55.0" mnemonicParsing="false" onAction="#runNewAnalysis" prefHeight="60.0" prefWidth="175.0" text="Run new analysis" textAlignment="CENTER" />
+                  <Button fx:id="viewClustersButton" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="65.0" minHeight="55.0" mnemonicParsing="false" onAction="#viewClusters" prefHeight="60.0" prefWidth="175.0" text="%review" textAlignment="CENTER" />
+                  <Button fx:id="runNewAnalysisButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="65.0" minHeight="55.0" mnemonicParsing="false" onAction="#runNewAnalysis" prefHeight="60.0" prefWidth="175.0" text="%new_analysis" textAlignment="CENTER" />
                </children>
                <VBox.margin>
                   <Insets bottom="0.0" />

@@ -10,30 +10,40 @@
 
 <MenuBar stylesheets="/ee/ut/similaritydetector/style/style.scss, /ee/ut/similaritydetector/style/menu_bar_style.scss" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ee.ut.similaritydetector.ui.controllers.MenuBarController">
     <menus>
-        <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
+        <Menu fx:id="fileMenu" mnemonicParsing="false">
             <items>
-                <MenuItem fx:id="closeAllTabsMenuItem" mnemonicParsing="false" text="Close all tabs" visible="false"/>
-<!--                <MenuItem mnemonicParsing="false" text="Save" /> -->
+                <MenuItem fx:id="closeAllTabsMenuItem" mnemonicParsing="false" visible="false" />
+<!--                <MenuItem mnemonicParsing="false" text="%save" /> -->
             <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem fx:id="exitMenuItem" onAction="#exitMenuItemClicked" mnemonicParsing="false" text="Exit" />
+                <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#exitMenuItemClicked" />
             </items>
             <accelerator>
                 <KeyCodeCombination alt="DOWN" code="F" control="UP" meta="UP" shift="UP" shortcut="UP" />
             </accelerator>
         </Menu>
-        <Menu fx:id="themeMenu" mnemonicParsing="false" text="Theme">
+        <Menu fx:id="themeMenu" mnemonicParsing="false" >
             <items>
-                <RadioMenuItem fx:id="lightTheme" mnemonicParsing="false" text="Light">
+                <RadioMenuItem fx:id="lightTheme" mnemonicParsing="false" >
                     <toggleGroup>
                         <ToggleGroup fx:id="themeGroup" />
                     </toggleGroup>
                 </RadioMenuItem>
-                <RadioMenuItem fx:id="darkTheme" mnemonicParsing="false" text="Dark" toggleGroup="$themeGroup" />
+                <RadioMenuItem fx:id="darkTheme" mnemonicParsing="false" toggleGroup="$themeGroup" />
             </items>
         </Menu>
-        <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+      <Menu fx:id="languageMenu" mnemonicParsing="false" >
+         <items>
+            <RadioMenuItem fx:id="estonianLang" mnemonicParsing="false" selected="true" text="Eesti">
+               <toggleGroup>
+                  <ToggleGroup fx:id="langGroup" />
+               </toggleGroup>
+            </RadioMenuItem>
+            <RadioMenuItem fx:id="englishLang" mnemonicParsing="false" text="English" toggleGroup="$langGroup" />
+         </items>
+      </Menu>
+        <Menu fx:id="helpMenu" mnemonicParsing="false" >
             <items>
-                <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#showAboutInfo" text="About" />
+                <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#showAboutInfo" />
             </items>
             <accelerator>
                 <KeyCodeCombination alt="DOWN" code="E" control="UP" meta="UP" shift="UP" shortcut="UP" />

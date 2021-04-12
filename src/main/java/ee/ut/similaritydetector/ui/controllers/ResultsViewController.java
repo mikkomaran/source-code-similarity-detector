@@ -1,6 +1,7 @@
 package ee.ut.similaritydetector.ui.controllers;
 
 import ee.ut.similaritydetector.ui.utils.ExerciseStatistics;
+import ee.ut.similaritydetector.ui.utils.UserPreferences;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -15,11 +16,14 @@ import ee.ut.similaritydetector.backend.Analyser;
 import ee.ut.similaritydetector.backend.Exercise;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import static ee.ut.similaritydetector.ui.SimilarityDetectorLauncher.deleteOutputFiles;
 import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
 
 public class ResultsViewController {
+
+    public static final String resourceBundlePath = "ee.ut.similaritydetector.language.results_view";
 
     private Analyser analyser;
     private MainViewController mainViewController;
@@ -82,7 +86,8 @@ public class ResultsViewController {
      * Loads the statistics from the {@link Analyser} onto the results view.
      */
     public void readStatistics() {
-        title.setText("Results - " + analyser.getZipDirectory().getName());
+        ResourceBundle langBundle = ResourceBundle.getBundle(resourceBundlePath, UserPreferences.getInstance().getLocale());
+        title.setText(langBundle.getString("results") + " - " + analyser.getZipDirectory().getName());
         totalSolutionsLabel.setText(String.valueOf(analyser.getExercises().stream().mapToInt(Exercise::getSolutionCount).sum()));
         solutionPairsLabel.setText(String.valueOf(analyser.getAnalysedSolutionPairsCount()));
         analysisDurationLabel.setText(analyser.getAnalysisDuration() + " s");
@@ -125,7 +130,11 @@ public class ResultsViewController {
             openCodeView();
         } catch (IOException e) {
             e.printStackTrace();
-            showAndWaitAlert("Could not view clusters", "", Alert.AlertType.ERROR);
+            ResourceBundle langBundle = ResourceBundle.getBundle(resourceBundlePath, UserPreferences.getInstance().getLocale());
+            showAndWaitAlert(
+                    langBundle.getString("error_msg1"),
+                    langBundle.getString("context_msg1"),
+                    Alert.AlertType.ERROR);
         }
     }
 
@@ -140,8 +149,10 @@ public class ResultsViewController {
             codeViewStage.toFront();
             return;
         }
+        ResourceBundle langBundle = ResourceBundle.getBundle(CodeViewController.resourceBundlePath, UserPreferences.getInstance().getLocale());
         FXMLLoader loader = new FXMLLoader(getClass().getResource(
                 "/ee/ut/similaritydetector/fxml/code_view.fxml"));
+        loader.setResources(langBundle);
         Parent root = loader.load();
         CodeViewController controller = loader.getController();
         controller.setAnalyser(analyser);
@@ -156,7 +167,7 @@ public class ResultsViewController {
         newWindow.setMinHeight(600);
         newWindow.setScene(codeViewScene);
         newWindow.centerOnScreen();
-        newWindow.setTitle("Source code similarity detector - Code review - " + analyser.getZipDirectory().getName());
+        newWindow.setTitle(langBundle.getString("app_name") + " - " + langBundle.getString("similar_solutions") + " - " + analyser.getZipDirectory().getName());
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         newWindow.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
 
@@ -179,15 +190,21 @@ public class ResultsViewController {
             openMainView();
         } catch (IOException e) {
             e.printStackTrace();
-            showAndWaitAlert("Could not navigate back to main view", "Try restarting the application", Alert.AlertType.ERROR);
+            ResourceBundle langBundle = ResourceBundle.getBundle(resourceBundlePath, UserPreferences.getInstance().getLocale());
+            showAndWaitAlert(
+                    langBundle.getString("error_msg2"),
+                    langBundle.getString("context_msg2"),
+                    Alert.AlertType.ERROR);
         }
     }
 
     private void openMainView() throws IOException {
+        ResourceBundle langBundle = ResourceBundle.getBundle(MainViewController.resourceBundlePath, UserPreferences.getInstance().getLocale());
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ee/ut/similaritydetector/fxml/main_view.fxml"));
+        loader.setResources(langBundle);
         Parent root = loader.load();
         loader.setController(mainViewController);
-        MainViewController.stage.setTitle("Source code similarity detector");
+        MainViewController.stage.setTitle(langBundle.getString("app_name"));
         Scene scene = new Scene(root, MainViewController.stage.getScene().getWidth(), MainViewController.stage.getScene().getHeight());
         MainViewController.stage.setScene(scene);
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]

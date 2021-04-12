@@ -1,6 +1,5 @@
 package ee.ut.similaritydetector.ui.utils;
 
-import ee.ut.similaritydetector.ui.controllers.MainViewController;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -23,7 +22,7 @@ public class AlertUtils {
         stage.setTitle("");
         stage.getIcons().add(new Image(AlertUtils.class.getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         // Dark mode
-        if (UserData.getInstance().isDarkMode()) {
+        if (UserPreferences.getInstance().isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(AlertUtils.class.getResource(
                     "/ee/ut/similaritydetector/style/dark_mode.scss")));
         }

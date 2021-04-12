@@ -19,7 +19,7 @@
                      <contextMenu>
                         <ContextMenu>
                           <items>
-                            <MenuItem fx:id="closeAllTabsMenuItem" mnemonicParsing="false" onAction="#closeAllCodeTabs" text="Close all tabs" />
+                            <MenuItem fx:id="closeAllTabsMenuItem" mnemonicParsing="false" onAction="#closeAllCodeTabs" text="%close_all_tabs" />
                           </items>
                         </ContextMenu>
                      </contextMenu>

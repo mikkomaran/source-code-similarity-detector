@@ -1,6 +1,7 @@
 package ee.ut.similaritydetector.ui.controllers;
 
 import ee.ut.similaritydetector.ui.SimilarityDetectorLauncher;
+import ee.ut.similaritydetector.ui.utils.UserPreferences;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -21,11 +22,14 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ResourceBundle;
 
 import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAlert;
 import static ee.ut.similaritydetector.ui.utils.AlertUtils.showAndWaitAlert;
 
 public class MainViewController {
+
+    public static final String resourceBundlePath = "ee.ut.similaritydetector.language.main_view";
 
     public static Stage stage;
     public static File zipDirectory;
@@ -82,9 +86,9 @@ public class MainViewController {
 
         // Tooltip rules
         ToolTipManager toolTipManager = ToolTipManager.sharedInstance();
-        toolTipManager.setDismissDelay(10000);
-        toolTipManager.setInitialDelay(600);
-        toolTipManager.setReshowDelay(300);
+        toolTipManager.setDismissDelay(20000);
+        toolTipManager.setInitialDelay(500);
+        toolTipManager.setReshowDelay(100);
 
         // Persists dark theme if it was activated before
         Platform.runLater(menuBarController::persistCurrentTheme);
@@ -96,7 +100,8 @@ public class MainViewController {
     @FXML
     private void chooseFile() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("ZIP files (*.zip)", "*.zip");
+        ResourceBundle langBundle = ResourceBundle.getBundle(resourceBundlePath, UserPreferences.getInstance().getLocale());
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(langBundle.getString("zip_descriptor"), "*.zip");
         fileChooser.getExtensionFilters().add(extFilter);
         if (zipDirectory != null) {
             fileChooser.setInitialDirectory(zipDirectory.getParentFile());
@@ -135,7 +140,8 @@ public class MainViewController {
         }
         progressBar.progressProperty().bind(analyser.progressProperty());
         progressPercentageLabel.textProperty().bind(analyser.progressProperty().multiply(100).asString("%.0f%%"));
-        setProgressText("Starting analysis...");
+        ResourceBundle langBundle = ResourceBundle.getBundle(resourceBundlePath, UserPreferences.getInstance().getLocale());
+        setProgressText(langBundle.getString("starting_analysis"));
 
         //Starts the backend similarity analysis on a new thread
         Thread analyserThread = new Thread(analyser, "analyser_thread");
@@ -149,8 +155,8 @@ public class MainViewController {
             duration = duration.setScale(1, RoundingMode.HALF_UP);
             analyser.setAnalysisDuration(duration.doubleValue());
             if (analyser.getSimilarSolutionPairs().size() == 0) {
-                showAlert("No similar solutions were detected",
-                        "Try lowering the similarity threshold or check if the ZIP structure is correct",
+                showAlert(langBundle.getString("error_msg1"),
+                        langBundle.getString("context_msg1"),
                         Alert.AlertType.INFORMATION);
                 resetMainView();
                 SimilarityDetectorLauncher.deleteOutputFiles();
@@ -160,8 +166,8 @@ public class MainViewController {
                 openResultsView(analyser);
             } catch (IOException e) {
                 e.printStackTrace();
-                showAlert("Failed to load results",
-                        "Check your solutions ZIP structure and try again",
+                showAlert(langBundle.getString("error_msg2"),
+                        langBundle.getString("context_msg2"),
                         Alert.AlertType.ERROR);
                 resetMainView();
             }
@@ -169,7 +175,9 @@ public class MainViewController {
 
         analyser.setOnFailed(event -> {
             analyser.getException().printStackTrace();
-            showAndWaitAlert("Analysis failed", analyser.getException().getMessage(), Alert.AlertType.ERROR);
+            showAndWaitAlert(langBundle.getString("error_msg3"),
+                    langBundle.getString("context_msg2"),
+                    Alert.AlertType.ERROR);
             resetMainView();
             SimilarityDetectorLauncher.deleteOutputFiles();
         });
@@ -229,8 +237,9 @@ public class MainViewController {
      */
     @FXML
     private void openResultsView(Analyser analyser) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "/ee/ut/similaritydetector/fxml/results_view.fxml"));
+        ResourceBundle langBundle = ResourceBundle.getBundle(ResultsViewController.resourceBundlePath, UserPreferences.getInstance().getLocale());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ee/ut/similaritydetector/fxml/results_view.fxml"));
+        loader.setResources(langBundle);
         Parent root = loader.load();
         ResultsViewController controller = loader.getController();
         controller.setAnalyser(analyser);
@@ -239,7 +248,7 @@ public class MainViewController {
 
         Scene resultsViewScene = new Scene(root, MainViewController.stage.getScene().getWidth(), MainViewController.stage.getScene().getHeight());
         stage.setScene(resultsViewScene);
-        stage.setTitle("Source code similarity detector - Results - " + analyser.getZipDirectory().getName());
+        stage.setTitle(langBundle.getString("app_name") + " - " + langBundle.getString("results") + " - " + analyser.getZipDirectory().getName());
 
         // Makes the "View clusters" button clickable if analysis found any clusters
         controller.toggleClusterButtonUsability();

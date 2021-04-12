@@ -1,7 +1,7 @@
 package ee.ut.similaritydetector.ui.controllers;
 
 import ee.ut.similaritydetector.backend.Solution;
-import ee.ut.similaritydetector.ui.utils.UserData;
+import ee.ut.similaritydetector.ui.utils.UserPreferences;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -55,7 +55,7 @@ public class CodePaneController {
      */
     public void loadSolutionSourceCode() throws Exception {
         codeTab.setText(solution.getAuthor() + " - " + solution.getExerciseName());
-        if (UserData.getInstance().isDarkMode()) {
+        if (UserPreferences.getInstance().isDarkMode()) {
             loadDarkThemeHTML();
         } else {
             loadLightThemeHTML();

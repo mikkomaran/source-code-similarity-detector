@@ -12,11 +12,11 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import ee.ut.similaritydetector.ui.controllers.MainViewController;
-import ee.ut.similaritydetector.ui.utils.UserData;
+import ee.ut.similaritydetector.ui.utils.UserPreferences;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static ee.ut.similaritydetector.backend.SolutionParser.outputDirectoryPath;
 
@@ -38,17 +38,18 @@ public class SimilarityDetectorLauncher extends Application {
      * @throws IOException if fails to load main_view.fxml
      */
     public void loadMainView(Stage stage) throws IOException {
-        URL fxmlLocation = this.getClass().getResource("/ee/ut/similaritydetector/fxml/main_view.fxml");
-        Parent root = FXMLLoader.load(fxmlLocation);
+        ResourceBundle langBundle = ResourceBundle.getBundle(MainViewController.resourceBundlePath, UserPreferences.getInstance().getLocale());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ee/ut/similaritydetector/fxml/main_view.fxml"));
+        loader.setResources(langBundle);
+        Parent root = loader.load();
         stage.setMinWidth(800);
         stage.setMinHeight(600);
-        stage.setTitle("Source code similarity detector");
+        stage.setTitle(langBundle.getString("app_name"));
         Scene scene = new Scene(root, 800, 600);
         stage.setScene(scene);
         // Icon from: https://icons-for-free.com/spy-131964785010048699/ [25.03.2021]
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         stage.show();
-        UserData.getInstance().setDarkMode(false);
         stage.setOnCloseRequest(this::showExitConfirmationAlert);
         MainViewController.stage = stage;
     }
@@ -61,16 +62,19 @@ public class SimilarityDetectorLauncher extends Application {
     private void showExitConfirmationAlert(WindowEvent windowEvent) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("");
-        alert.setHeaderText("Are you sure you want to exit?");
+        ResourceBundle langBundle = ResourceBundle.getBundle(MainViewController.resourceBundlePath, UserPreferences.getInstance().getLocale());
+        alert.setHeaderText(langBundle.getString("exit_msg"));
         //alert.setContentText("Results might not have been saved.");
         ButtonType exitButtonType = ButtonType.OK;
-        Button exitButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
-        exitButton.setText("Exit");
+        Button exitButton = (Button) alert.getDialogPane().lookupButton(exitButtonType);
+        exitButton.setText(langBundle.getString("exit"));
+        Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelButton.setText(langBundle.getString("cancel"));
 
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/ee/ut/similaritydetector/img/app_icon.png")));
         // Dark mode
-        if (UserData.getInstance().isDarkMode()) {
+        if (UserPreferences.getInstance().isDarkMode()) {
             alert.getDialogPane().getStylesheets().add(String.valueOf(this.getClass().getResource(
                     "/ee/ut/similaritydetector/style/dark_mode.scss")));
         }
@@ -119,9 +123,6 @@ public class SimilarityDetectorLauncher extends Application {
      */
     @Override
     public void stop() throws Exception {
-        /* TODO: siin teha asjad, mida sulgemisel vaja oleks:
-                resources kausta kustutamine?,
-                salvestada äkki ümber sarnased tööd kuhugi? */
         deleteOutputFiles();
         super.stop();
     }
