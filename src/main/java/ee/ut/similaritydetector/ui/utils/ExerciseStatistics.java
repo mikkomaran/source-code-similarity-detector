@@ -5,6 +5,7 @@ import ee.ut.similaritydetector.backend.Exercise;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Locale;
 
 /**
  * Data class for convenient inserting of data to the table in results view.
@@ -68,7 +69,7 @@ public class ExerciseStatistics {
                 analyser.isPreprocessSourceCode() ?
                 exercise.getAverageSolutionPreprocessedCodeLength() :
                 exercise.getAverageSolutionSourceCodeLength());
-        this.similarityThreshold = String.format("%.1f%%", exercise.getSimilarityThreshold() * 100);
+        this.similarityThreshold = String.format(Locale.ENGLISH,"%.1f%%", exercise.getSimilarityThreshold() * 100);
     }
 
 }

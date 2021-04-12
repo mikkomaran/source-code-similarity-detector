@@ -1,5 +1,7 @@
 package ee.ut.similaritydetector.backend;
 
+import java.util.Locale;
+
 public class SimilarSolutionPair {
 
     private final double similarity;
@@ -17,7 +19,7 @@ public class SimilarSolutionPair {
         this.secondSolution = secondSolution;
         author1 = firstSolution.getAuthor();
         author2 = secondSolution.getAuthor();
-        similarityPercentage = String.format("%.1f%%", similarity * 100);
+        similarityPercentage = String.format(Locale.ENGLISH,"%.1f%%", similarity * 100);
     }
 
     public double getSimilarity() {
