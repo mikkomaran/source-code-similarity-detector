@@ -210,13 +210,13 @@ public class Analyser extends Task<Void> {
         for (SimilarSolutionPair pair : similarSolutionPairs) {
             Solution sol1 = pair.getFirstSolution();
             Solution sol2 = pair.getSecondSolution();
-            SimilarSolutionCluster cluster;
+            SimilarSolutionCluster newCluster;
             // If both solutions are not in an existing cluster
             if (similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol1)) &&
                 similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol2))) {
-                cluster = new SimilarSolutionCluster(sol1.getExerciseName(), sol1, sol2);
-                cluster.addSolutionPair(pair);
-                similarSolutionClusters.add(cluster);
+                newCluster = new SimilarSolutionCluster(sol1.getExerciseName(), sol1, sol2);
+                newCluster.addSolutionPair(pair);
+                similarSolutionClusters.add(newCluster);
             }
             // If only first solution is in an existing cluster
             else if (similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol1)) &&
