@@ -9,7 +9,6 @@ import tokenize
 """ Function taken from: https://stackoverflow.com/questions/1769332/script-to-remove-python-comments-docstrings [04.03.2021]
     Original author: Dan McDougall (https://stackoverflow.com/users/357007/dan-mcdougall) 
     Modifications made by: Basj (https://stackoverflow.com/users/1422096/basj)
-    I also made some customisations.
 """
 def preprocess_source_code(source_code):
     source_code_io = io.BytesIO(source_code)
@@ -44,6 +43,7 @@ def preprocess_source_code(source_code):
     return output
 
 
+# Starting the preprocessing
 preprocessed_code_filepath = source_code_filepath[0: len(source_code_filepath) - 3] + "_preprocessed.py"
 
 with open(source_code_filepath, 'rb') as source_code_file:

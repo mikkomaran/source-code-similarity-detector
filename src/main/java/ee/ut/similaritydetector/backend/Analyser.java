@@ -161,7 +161,7 @@ public class Analyser extends Task<Void> {
             for (int j = i + 1; j < solutionCount; j++) {
                 Solution solution2 = solutions.get(j);
                 double similarity = findSimilarity(solution1, solution2, exercise.getSimilarityThreshold());
-                if (similarity > exercise.getSimilarityThreshold()) {
+                if (similarity >= exercise.getSimilarityThreshold()) {
                     solution1.addSimilarSolution(solution2);
                     solution2.addSimilarSolution(solution1);
                     SimilarSolutionPair newSolutionPair;
@@ -207,55 +207,50 @@ public class Analyser extends Task<Void> {
      * then A, B and C all belong to the same cluster.
      */
     private void clusterSimilarPairs() {
-        for (SimilarSolutionPair pair1 : similarSolutionPairs) {
-            Solution sol1 = pair1.getFirstSolution();
-            Solution sol2 = pair1.getSecondSolution();
-            SimilarSolutionCluster cluster = null;
+        for (SimilarSolutionPair pair : similarSolutionPairs) {
+            Solution sol1 = pair.getFirstSolution();
+            Solution sol2 = pair.getSecondSolution();
+            SimilarSolutionCluster cluster;
             // If both solutions are not in an existing cluster
             if (similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol1)) &&
-                    similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol2))) {
+                similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol2))) {
                 cluster = new SimilarSolutionCluster(sol1.getExerciseName(), sol1, sol2);
-            }
-            // If only first solution is in an existing cluster
-            else if (similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol1)) && similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol2))) {
-                SimilarSolutionCluster existingCluster = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol1)).findAny().get();
-                existingCluster.addSolution(sol2);
-                existingCluster.addSolutionPair(pair1);
-            }
-            // If only second solution is in an existing cluster
-            else if (similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol1)) && similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol2))) {
-                SimilarSolutionCluster existingCluster = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol2)).findAny().get();
-                existingCluster.addSolution(sol1);
-                existingCluster.addSolutionPair(pair1);
-            }
-            // If both are in an existing cluster
-            else if (similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol1)) && similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol2))) {
-                SimilarSolutionCluster existingCluster1 = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol1)).findAny().get();
-                SimilarSolutionCluster existingCluster2 = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol2)).findAny().get();
-                if (existingCluster1 == existingCluster2) {
-                    existingCluster1.addSolutionPair(pair1);
-                } else {
-                    existingCluster1.addSolution(sol2);
-                    existingCluster1.addSolutionPair(pair1);
-                    existingCluster2.addSolution(sol1);
-                    existingCluster2.addSolutionPair(pair1);
-                }
-            }
-            if (cluster != null) {
-                cluster.addSolutionPair(pair1);
-                for (SimilarSolutionPair pair2 : similarSolutionPairs) {
-                    if (pair1 == pair2) continue;
-                    if (cluster.containsSolution(pair2.getFirstSolution())) {
-                        cluster.addSolution(pair2.getSecondSolution());
-                        cluster.addSolutionPair(pair2);
-                    } else if (cluster.containsSolution(pair2.getSecondSolution())) {
-                        cluster.addSolution(pair2.getFirstSolution());
-                        cluster.addSolutionPair(pair2);
-                    }
-                }
+                cluster.addSolutionPair(pair);
                 similarSolutionClusters.add(cluster);
             }
+            // If only first solution is in an existing cluster
+            else if (similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol1)) &&
+                     similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol2))) {
+                SimilarSolutionCluster existingCluster = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol1)).findAny().get();
+                existingCluster.addSolution(sol2);
+                existingCluster.addSolutionPair(pair);
+            }
+            // If only second solution is in an existing cluster
+            else if (similarSolutionClusters.stream().noneMatch(c -> c.containsSolution(sol1)) &&
+                     similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol2))) {
+                SimilarSolutionCluster existingCluster = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol2)).findAny().get();
+                existingCluster.addSolution(sol1);
+                existingCluster.addSolutionPair(pair);
+            }
+            // If both are in an existing cluster
+            else if (similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol1)) &&
+                     similarSolutionClusters.stream().anyMatch(c -> c.containsSolution(sol2))) {
+                SimilarSolutionCluster existingCluster1 = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol1)).findAny().get();
+                SimilarSolutionCluster existingCluster2 = similarSolutionClusters.stream().filter(x -> x.getSolutions().contains(sol2)).findAny().get();
+                // If both are in the same cluster
+                if (existingCluster1 == existingCluster2) {
+                    existingCluster1.addSolutionPair(pair);
+                }
+                // If in a different cluster, then we join the two clusters
+                else {
+                    existingCluster1.addSolutionPair(pair);
+                    existingCluster2.getSolutions().forEach(existingCluster1::addSolution);
+                    existingCluster2.getSolutionPairs().forEach(existingCluster1::addSolutionPair);
+                    similarSolutionClusters.remove(existingCluster2);
+                }
+            }
         }
+        // Create cluster names
         for (SimilarSolutionCluster cluster : similarSolutionClusters) {
             cluster.createName();
         }

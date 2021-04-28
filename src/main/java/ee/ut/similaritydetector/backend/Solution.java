@@ -147,4 +147,8 @@ public class Solution {
         sourceCodeHTMLLight = new File(lightHTMLPath);
     }
 
+    @Override
+    public String toString() {
+        return author + " - " + exerciseName;
+    }
 }

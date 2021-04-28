@@ -82,7 +82,7 @@ public class Exercise {
         if (averageSolutionLength > 100)
             lengthMultiplier = averageSolutionLength / 100;
 
-        similarityThreshold = Math.pow(0.985, lengthMultiplier);
+        similarityThreshold = Math.pow(0.98, lengthMultiplier); //Math.exp(-0.0175 * lengthMultiplier);
         System.out.println(name + " - Used similarity threshold: " +similarityThreshold);
     }
 

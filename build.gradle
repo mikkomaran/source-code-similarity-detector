@@ -29,7 +29,7 @@ dependencies {
     implementation 'org.python:jython-standalone:2.7.2'
     /* Pygments version 2.5.2 is the last version that supports Python 2,
     *  so it's the last version compatible with Jython,
-    *  because the latter doesn't support Python 3 yet */
+    *  because the latter doesn't support Python 3 (yet?) */
     implementation 'org.pygments:pygments:2.5.2'
 }
 
