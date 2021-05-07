@@ -77,6 +77,7 @@ public class CodeViewController {
     public void removeCodePane(CodePaneController codePaneController) {
         Platform.runLater(() -> openCodePanes.remove(codePaneController));
         Platform.runLater(() -> codeSplitPane.getItems().remove(codePaneController.getRoot()));
+        Platform.runLater(this::resizeCodePanes);
     }
 
     public List<CodePaneController> getOpenCodePanes() {
