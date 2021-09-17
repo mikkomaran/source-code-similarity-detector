@@ -184,7 +184,7 @@ public class MenuBarController {
     @FXML
     private void showAboutInfo() {
         ResourceBundle langBundle = ResourceBundle.getBundle("ee.ut.similaritydetector.language.menu_bar", UserPreferences.getInstance().getLocale());
-        showAlert( langBundle.getString("app_name") + " v2.1",
+        showAlert( langBundle.getString("app_name") + " v2.2",
                 "Mikko Maran\n" + "2021",
                 Alert.AlertType.INFORMATION);
     }
