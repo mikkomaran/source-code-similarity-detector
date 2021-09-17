@@ -26,7 +26,11 @@
                   </SplitPane>
                </center>
                <left>
-                  <VBox fx:id="solutionClusterView" />
+                  <ScrollPane fx:id="solutionClusterScrollPane">
+                     <content>
+                        <VBox fx:id="solutionClusterView" />
+                     </content>
+                  </ScrollPane>
                </left>
                <top>
                    <fx:include fx:id="menuBar" source="menu_bar.fxml" />

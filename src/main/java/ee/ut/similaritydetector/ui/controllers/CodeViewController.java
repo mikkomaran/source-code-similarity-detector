@@ -42,6 +42,8 @@ public class CodeViewController {
     @FXML
     private MenuBarController menuBarController;
     @FXML
+    private ScrollPane solutionClusterScrollPane;
+    @FXML
     private VBox solutionClusterView;
     @FXML
     private SplitPane codeSplitPane;
@@ -114,14 +116,14 @@ public class CodeViewController {
      */
     private void hideClusterPane(){
         Duration duration = Duration.millis(300);
-        solutionClusterView.setPrefWidth(solutionClusterView.getWidth());
-        solutionClusterView.setMinWidth(solutionClusterView.getWidth());
+        solutionClusterScrollPane.setPrefWidth(solutionClusterScrollPane.getWidth());
+        solutionClusterScrollPane.setMinWidth(solutionClusterScrollPane.getWidth());
         Timeline timeline = new Timeline(
                 new KeyFrame(duration,
-                    new KeyValue(solutionClusterView.maxWidthProperty(), 0, Interpolator.EASE_OUT),
-                    new KeyValue(solutionClusterView.minWidthProperty(), 0, Interpolator.EASE_OUT)));
+                    new KeyValue(solutionClusterScrollPane.maxWidthProperty(), 0, Interpolator.EASE_OUT),
+                    new KeyValue(solutionClusterScrollPane.minWidthProperty(), 0, Interpolator.EASE_OUT)));
         timeline.setOnFinished(event -> {
-            solutionClusterView.setVisible(false);
+            solutionClusterScrollPane.setVisible(false);
             hideSideBarButton.setOnAction(e -> Platform.runLater(this::openClusterPane));
         });
         hideSideBarButton.setOnAction(e -> {});
@@ -137,9 +139,9 @@ public class CodeViewController {
         Duration duration = Duration.millis(300);
         Timeline timeline = new Timeline(
                 new KeyFrame(duration,
-                        new KeyValue(solutionClusterView.maxWidthProperty(), solutionClusterView.getPrefWidth(), Interpolator.EASE_OUT),
-                        new KeyValue(solutionClusterView.minWidthProperty(), solutionClusterView.getPrefWidth(), Interpolator.EASE_OUT)));
-        solutionClusterView.setVisible(true);
+                        new KeyValue(solutionClusterScrollPane.maxWidthProperty(), solutionClusterScrollPane.getPrefWidth(), Interpolator.EASE_OUT),
+                        new KeyValue(solutionClusterScrollPane.minWidthProperty(), solutionClusterScrollPane.getPrefWidth(), Interpolator.EASE_OUT)));
+        solutionClusterScrollPane.setVisible(true);
         timeline.setOnFinished(event -> hideSideBarButton.setOnAction(e -> Platform.runLater(this::hideClusterPane)));
         hideSideBarButton.setOnAction(e -> {});
         timeline.play();
